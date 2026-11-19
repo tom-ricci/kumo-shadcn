@@ -1,7 +1,8 @@
 name: Deploy to GitHub Pages
 
 # Publishes public/ (the built registry) to GitHub Pages. Does nothing until
-# Pages is enabled with source "GitHub Actions" in the repository settings.
+# Pages is enabled with source "GitHub Actions" in the repository settings
+# (manual runs always run, so the first deploy can be started by hand).
 # Pushes made by the update workflow use GITHUB_TOKEN and do not trigger
 # "push" runs, so this also runs after each successful update run.
 on:
@@ -23,8 +24,9 @@ concurrency:
 jobs:
   deploy:
     if: >-
-      github.event.repository.has_pages &&
-      (github.event_name != 'workflow_run' || github.event.workflow_run.conclusion == 'success')
+      github.event_name == 'workflow_dispatch' ||
+      (github.event.repository.has_pages &&
+       (github.event_name != 'workflow_run' || github.event.workflow_run.conclusion == 'success'))
     runs-on: ubuntu-latest
     timeout-minutes: 10
     permissions:
