@@ -1,0 +1,55 @@
+name: Update Kumo
+
+# Daily: bump @cloudflare/kumo to the latest release, regenerate the registry,
+# build and type-check it, and commit to main when anything changed.
+on:
+  schedule:
+    - cron: "23 6 * * *"
+  workflow_dispatch:
+
+permissions: {}
+
+concurrency:
+  group: update-kumo
+  cancel-in-progress: false
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version: 22
+
+      # Install scripts stay off: a freshly published package never runs code here.
+      - run: npm ci --ignore-scripts
+
+      - name: Bump @cloudflare/kumo to latest
+        run: npm install --ignore-scripts --save-dev --save-exact @cloudflare/kumo@latest
+
+      # Reads Kumo's package.json and .d.ts files as text; never imports Kumo.
+      - name: Generate, build and type-check
+        run: npm run registry
+
+      - name: Commit and push
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          if [ -z "$(git status --porcelain)" ]; then
+            echo "Registry is up to date."
+            exit 0
+          fi
+          version=$(node -p "require('./node_modules/@cloudflare/kumo/package.json').version")
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A
+          git commit -m "chore: update @cloudflare/kumo to ${version}"
+          auth=$(printf 'x-access-token:%s' "$GH_TOKEN" | base64 -w0)
+          git -c http.extraheader="AUTHORIZATION: basic ${auth}" push origin HEAD:${{ github.ref_name }}
