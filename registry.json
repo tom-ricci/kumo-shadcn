@@ -1,0 +1,1052 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry.json",
+  "name": "kumo",
+  "homepage": "https://github.com/tom-ricci/kumo-shadcn",
+  "items": [
+    {
+      "name": "kumo",
+      "type": "registry:style",
+      "title": "Kumo setup",
+      "description": "Installs @cloudflare/kumo and its peer dependencies and adds Kumo's Tailwind v4 styles to your CSS. Every component item includes this setup too.",
+      "dependencies": [
+        "@cloudflare/kumo",
+        "@phosphor-icons/react"
+      ],
+      "css": {
+        "@source \"../node_modules/@cloudflare/kumo/dist/**/*.{js,jsx,ts,tsx}\"": {},
+        "@import \"@cloudflare/kumo/styles/tailwind\"": {}
+      },
+      "docs": "Kumo needs Tailwind CSS v4. Your Tailwind CSS file now has @import \"@cloudflare/kumo/styles/tailwind\" and @source \"../node_modules/@cloudflare/kumo/dist/**/*.{js,jsx,ts,tsx}\". That @source path assumes the CSS file is one folder below node_modules (app/globals.css, src/index.css); fix it if yours is deeper. See https://github.com/tom-ricci/kumo-shadcn#styles"
+    },
+    {
+      "name": "autocomplete",
+      "type": "registry:ui",
+      "title": "Autocomplete",
+      "description": "Kumo Autocomplete: re-exports Autocomplete, KUMO_AUTOCOMPLETE_DEFAULT_VARIANTS, KUMO_AUTOCOMPLETE_VARIANTS, autocompleteVariants from @cloudflare/kumo/components/autocomplete.",
+      "dependencies": [
+        "@cloudflare/kumo",
+        "@phosphor-icons/react"
+      ],
+      "css": {
+        "@source \"../node_modules/@cloudflare/kumo/dist/**/*.{js,jsx,ts,tsx}\"": {},
+        "@import \"@cloudflare/kumo/styles/tailwind\"": {}
+      },
+      "docs": "Kumo needs Tailwind CSS v4. Your Tailwind CSS file now has @import \"@cloudflare/kumo/styles/tailwind\" and @source \"../node_modules/@cloudflare/kumo/dist/**/*.{js,jsx,ts,tsx}\". That @source path assumes the CSS file is one folder below node_modules (app/globals.css, src/index.css); fix it if yours is deeper. See https://github.com/tom-ricci/kumo-shadcn#styles",
+      "files": [
+        {
+          "path": "registry/kumo/autocomplete.tsx",
+          "type": "registry:ui"
+        }
+      ]
+    },
+    {
+      "name": "badge",
+      "type": "registry:ui",
+      "title": "Badge",
+      "description": "Kumo Badge: re-exports Badge, KUMO_BADGE_BASE_STYLES from @cloudflare/kumo/components/badge.",
+      "dependencies": [
+        "@cloudflare/kumo",
+        "@phosphor-icons/react"
+      ],
+      "css": {
+        "@source \"../node_modules/@cloudflare/kumo/dist/**/*.{js,jsx,ts,tsx}\"": {},
+        "@import \"@cloudflare/kumo/styles/tailwind\"": {}
+      },
+      "docs": "Kumo needs Tailwind CSS v4. Your Tailwind CSS file now has @import \"@cloudflare/kumo/styles/tailwind\" and @source \"../node_modules/@cloudflare/kumo/dist/**/*.{js,jsx,ts,tsx}\". That @source path assumes the CSS file is one folder below node_modules (app/globals.css, src/index.css); fix it if yours is deeper. See https://github.com/tom-ricci/kumo-shadcn#styles",
+      "files": [
+        {
+          "path": "registry/kumo/badge.tsx",
+          "type": "registry:ui"
+        }
+      ]
+    },
+    {
+      "name": "banner",
+      "type": "registry:ui",
+      "title": "Banner",
+      "description": "Kumo Banner: re-exports Banner, BannerVariant from @cloudflare/kumo/components/banner.",
+      "dependencies": [
+        "@cloudflare/kumo",
+        "@phosphor-icons/react"
+      ],
+      "css": {
+        "@source \"../node_modules/@cloudflare/kumo/dist/**/*.{js,jsx,ts,tsx}\"": {},
+        "@import \"@cloudflare/kumo/styles/tailwind\"": {}
+      },
+      "docs": "Kumo needs Tailwind CSS v4. Your Tailwind CSS file now has @import \"@cloudflare/kumo/styles/tailwind\" and @source \"../node_modules/@cloudflare/kumo/dist/**/*.{js,jsx,ts,tsx}\". That @source path assumes the CSS file is one folder below node_modules (app/globals.css, src/index.css); fix it if yours is deeper. See https://github.com/tom-ricci/kumo-shadcn#styles",
+      "files": [
+        {
+          "path": "registry/kumo/banner.tsx",
+          "type": "registry:ui"
+        }
+      ]
+    },
+    {
+      "name": "breadcrumbs",
+      "type": "registry:ui",
+      "title": "Breadcrumbs",
+      "description": "Kumo Breadcrumbs: re-exports Breadcrumbs, KUMO_BREADCRUMBS_DEFAULT_VARIANTS, KUMO_BREADCRUMBS_VARIANTS, breadcrumbsVariants from @cloudflare/kumo/components/breadcrumbs.",
+      "dependencies": [
+        "@cloudflare/kumo",
+        "@phosphor-icons/react"
+      ],
+      "css": {
+        "@source \"../node_modules/@cloudflare/kumo/dist/**/*.{js,jsx,ts,tsx}\"": {},
+        "@import \"@cloudflare/kumo/styles/tailwind\"": {}
+      },
+      "docs": "Kumo needs Tailwind CSS v4. Your Tailwind CSS file now has @import \"@cloudflare/kumo/styles/tailwind\" and @source \"../node_modules/@cloudflare/kumo/dist/**/*.{js,jsx,ts,tsx}\". That @source path assumes the CSS file is one folder below node_modules (app/globals.css, src/index.css); fix it if yours is deeper. See https://github.com/tom-ricci/kumo-shadcn#styles",
+      "files": [
+        {
+          "path": "registry/kumo/breadcrumbs.tsx",
+          "type": "registry:ui"
+        }
+      ]
+    },
+    {
+      "name": "button",
+      "type": "registry:ui",
+      "title": "Button",
+      "description": "Kumo Button: re-exports Button, LinkButton, RefreshButton, buttonVariants from @cloudflare/kumo/components/button.",
+      "dependencies": [
+        "@cloudflare/kumo",
+        "@phosphor-icons/react"
+      ],
+      "css": {
+        "@source \"../node_modules/@cloudflare/kumo/dist/**/*.{js,jsx,ts,tsx}\"": {},
+        "@import \"@cloudflare/kumo/styles/tailwind\"": {}
+      },
+      "docs": "Kumo needs Tailwind CSS v4. Your Tailwind CSS file now has @import \"@cloudflare/kumo/styles/tailwind\" and @source \"../node_modules/@cloudflare/kumo/dist/**/*.{js,jsx,ts,tsx}\". That @source path assumes the CSS file is one folder below node_modules (app/globals.css, src/index.css); fix it if yours is deeper. See https://github.com/tom-ricci/kumo-shadcn#styles",
+      "files": [
+        {
+          "path": "registry/kumo/button.tsx",
+          "type": "registry:ui"
+        }
+      ]
+    },
+    {
+      "name": "button-group",
+      "type": "registry:ui",
+      "title": "ButtonGroup",
+      "description": "Kumo ButtonGroup: re-exports ButtonGroup, KUMO_BUTTON_GROUP_DEFAULT_VARIANTS, KUMO_BUTTON_GROUP_STYLING, KUMO_BUTTON_GROUP_VARIANTS from @cloudflare/kumo/components/button-group.",
+      "dependencies": [
+        "@cloudflare/kumo",
+        "@phosphor-icons/react"
+      ],
+      "css": {
+        "@source \"../node_modules/@cloudflare/kumo/dist/**/*.{js,jsx,ts,tsx}\"": {},
+        "@import \"@cloudflare/kumo/styles/tailwind\"": {}
+      },
+      "docs": "Kumo needs Tailwind CSS v4. Your Tailwind CSS file now has @import \"@cloudflare/kumo/styles/tailwind\" and @source \"../node_modules/@cloudflare/kumo/dist/**/*.{js,jsx,ts,tsx}\". That @source path assumes the CSS file is one folder below node_modules (app/globals.css, src/index.css); fix it if yours is deeper. See https://github.com/tom-ricci/kumo-shadcn#styles",
+      "files": [
+        {
+          "path": "registry/kumo/button-group.tsx",
+          "type": "registry:ui"
+        }
+      ]
+    },
+    {
+      "name": "chart",
+      "type": "registry:ui",
+      "title": "Chart",
+      "description": "Kumo Chart: re-exports BubbleMap, Chart, ChartLegend, ChartPalette, ChoroplethMap, GlobeMap, SankeyChart, TimeseriesChart from @cloudflare/kumo/components/chart.",
+      "dependencies": [
+        "@cloudflare/kumo",
+        "@phosphor-icons/react",
+        "echarts"
+      ],
+      "css": {
+        "@source \"../node_modules/@cloudflare/kumo/dist/**/*.{js,jsx,ts,tsx}\"": {},
+        "@import \"@cloudflare/kumo/styles/tailwind\"": {}
+      },
+      "docs": "Kumo needs Tailwind CSS v4. Your Tailwind CSS file now has @import \"@cloudflare/kumo/styles/tailwind\" and @source \"../node_modules/@cloudflare/kumo/dist/**/*.{js,jsx,ts,tsx}\". That @source path assumes the CSS file is one folder below node_modules (app/globals.css, src/index.css); fix it if yours is deeper. See https://github.com/tom-ricci/kumo-shadcn#styles",
+      "files": [
+        {
+          "path": "registry/kumo/chart.tsx",
+          "type": "registry:ui"
+        }
+      ]
+    },
+    {
+      "name": "checkbox",
+      "type": "registry:ui",
+      "title": "Checkbox",
+      "description": "Kumo Checkbox: re-exports Checkbox, KUMO_CHECKBOX_DEFAULT_VARIANTS, KUMO_CHECKBOX_VARIANTS from @cloudflare/kumo/components/checkbox.",
+      "dependencies": [
+        "@cloudflare/kumo",
+        "@phosphor-icons/react"
+      ],
+      "css": {
+        "@source \"../node_modules/@cloudflare/kumo/dist/**/*.{js,jsx,ts,tsx}\"": {},
+        "@import \"@cloudflare/kumo/styles/tailwind\"": {}
+      },
+      "docs": "Kumo needs Tailwind CSS v4. Your Tailwind CSS file now has @import \"@cloudflare/kumo/styles/tailwind\" and @source \"../node_modules/@cloudflare/kumo/dist/**/*.{js,jsx,ts,tsx}\". That @source path assumes the CSS file is one folder below node_modules (app/globals.css, src/index.css); fix it if yours is deeper. See https://github.com/tom-ricci/kumo-shadcn#styles",
+      "files": [
+        {
+          "path": "registry/kumo/checkbox.tsx",
+          "type": "registry:ui"
+        }
+      ]
+    },
+    {
+      "name": "clipboard-text",
+      "type": "registry:ui",
+      "title": "ClipboardText",
+      "description": "Kumo ClipboardText: re-exports ClipboardText from @cloudflare/kumo/components/clipboard-text.",
+      "dependencies": [
+        "@cloudflare/kumo",
+        "@phosphor-icons/react"
+      ],
+      "css": {
+        "@source \"../node_modules/@cloudflare/kumo/dist/**/*.{js,jsx,ts,tsx}\"": {},
+        "@import \"@cloudflare/kumo/styles/tailwind\"": {}
+      },
+      "docs": "Kumo needs Tailwind CSS v4. Your Tailwind CSS file now has @import \"@cloudflare/kumo/styles/tailwind\" and @source \"../node_modules/@cloudflare/kumo/dist/**/*.{js,jsx,ts,tsx}\". That @source path assumes the CSS file is one folder below node_modules (app/globals.css, src/index.css); fix it if yours is deeper. See https://github.com/tom-ricci/kumo-shadcn#styles",
+      "files": [
+        {
+          "path": "registry/kumo/clipboard-text.tsx",
+          "type": "registry:ui"
+        }
+      ]
+    },
+    {
+      "name": "cloudflare-logo",
+      "type": "registry:ui",
+      "title": "CloudflareLogo",
+      "description": "Kumo CloudflareLogo: re-exports CloudflareLogo, KUMO_CLOUDFLARE_LOGO_DEFAULT_VARIANTS, KUMO_CLOUDFLARE_LOGO_VARIANTS, PoweredByCloudflare, generateCloudflareLogoSvg from @cloudflare/kumo/components/cloudflare-logo.",
+      "dependencies": [
+        "@cloudflare/kumo",
+        "@phosphor-icons/react"
+      ],
+      "css": {
+        "@source \"../node_modules/@cloudflare/kumo/dist/**/*.{js,jsx,ts,tsx}\"": {},
+        "@import \"@cloudflare/kumo/styles/tailwind\"": {}
+      },
+      "docs": "Kumo needs Tailwind CSS v4. Your Tailwind CSS file now has @import \"@cloudflare/kumo/styles/tailwind\" and @source \"../node_modules/@cloudflare/kumo/dist/**/*.{js,jsx,ts,tsx}\". That @source path assumes the CSS file is one folder below node_modules (app/globals.css, src/index.css); fix it if yours is deeper. See https://github.com/tom-ricci/kumo-shadcn#styles",
+      "files": [
+        {
+          "path": "registry/kumo/cloudflare-logo.tsx",
+          "type": "registry:ui"
+        }
+      ]
+    },
+    {
+      "name": "code",
+      "type": "registry:ui",
+      "title": "Code",
+      "description": "Kumo Code: re-exports Code, CodeBlock from @cloudflare/kumo/components/code.",
+      "dependencies": [
+        "@cloudflare/kumo",
+        "@phosphor-icons/react"
+      ],
+      "css": {
+        "@source \"../node_modules/@cloudflare/kumo/dist/**/*.{js,jsx,ts,tsx}\"": {},
+        "@import \"@cloudflare/kumo/styles/tailwind\"": {}
+      },
+      "docs": "Kumo needs Tailwind CSS v4. Your Tailwind CSS file now has @import \"@cloudflare/kumo/styles/tailwind\" and @source \"../node_modules/@cloudflare/kumo/dist/**/*.{js,jsx,ts,tsx}\". That @source path assumes the CSS file is one folder below node_modules (app/globals.css, src/index.css); fix it if yours is deeper. See https://github.com/tom-ricci/kumo-shadcn#styles",
+      "files": [
+        {
+          "path": "registry/kumo/code.tsx",
+          "type": "registry:ui"
+        }
+      ]
+    },
+    {
+      "name": "collapsible",
+      "type": "registry:ui",
+      "title": "Collapsible",
+      "description": "Kumo Collapsible: re-exports Collapsible from @cloudflare/kumo/components/collapsible.",
+      "dependencies": [
+        "@cloudflare/kumo",
+        "@phosphor-icons/react"
+      ],
+      "css": {
+        "@source \"../node_modules/@cloudflare/kumo/dist/**/*.{js,jsx,ts,tsx}\"": {},
+        "@import \"@cloudflare/kumo/styles/tailwind\"": {}
+      },
+      "docs": "Kumo needs Tailwind CSS v4. Your Tailwind CSS file now has @import \"@cloudflare/kumo/styles/tailwind\" and @source \"../node_modules/@cloudflare/kumo/dist/**/*.{js,jsx,ts,tsx}\". That @source path assumes the CSS file is one folder below node_modules (app/globals.css, src/index.css); fix it if yours is deeper. See https://github.com/tom-ricci/kumo-shadcn#styles",
+      "files": [
+        {
+          "path": "registry/kumo/collapsible.tsx",
+          "type": "registry:ui"
+        }
+      ]
+    },
+    {
+      "name": "combobox",
+      "type": "registry:ui",
+      "title": "Combobox",
+      "description": "Kumo Combobox: re-exports Combobox from @cloudflare/kumo/components/combobox.",
+      "dependencies": [
+        "@cloudflare/kumo",
+        "@phosphor-icons/react"
+      ],
+      "css": {
+        "@source \"../node_modules/@cloudflare/kumo/dist/**/*.{js,jsx,ts,tsx}\"": {},
+        "@import \"@cloudflare/kumo/styles/tailwind\"": {}
+      },
+      "docs": "Kumo needs Tailwind CSS v4. Your Tailwind CSS file now has @import \"@cloudflare/kumo/styles/tailwind\" and @source \"../node_modules/@cloudflare/kumo/dist/**/*.{js,jsx,ts,tsx}\". That @source path assumes the CSS file is one folder below node_modules (app/globals.css, src/index.css); fix it if yours is deeper. See https://github.com/tom-ricci/kumo-shadcn#styles",
+      "files": [
+        {
+          "path": "registry/kumo/combobox.tsx",
+          "type": "registry:ui"
+        }
+      ]
+    },
+    {
+      "name": "command-palette",
+      "type": "registry:ui",
+      "title": "CommandPalette",
+      "description": "Kumo CommandPalette: re-exports CommandPalette, KUMO_COMMAND_PALETTE_DEFAULT_VARIANTS, KUMO_COMMAND_PALETTE_VARIANTS from @cloudflare/kumo/components/command-palette.",
+      "dependencies": [
+        "@cloudflare/kumo",
+        "@phosphor-icons/react"
+      ],
+      "css": {
+        "@source \"../node_modules/@cloudflare/kumo/dist/**/*.{js,jsx,ts,tsx}\"": {},
+        "@import \"@cloudflare/kumo/styles/tailwind\"": {}
+      },
+      "docs": "Kumo needs Tailwind CSS v4. Your Tailwind CSS file now has @import \"@cloudflare/kumo/styles/tailwind\" and @source \"../node_modules/@cloudflare/kumo/dist/**/*.{js,jsx,ts,tsx}\". That @source path assumes the CSS file is one folder below node_modules (app/globals.css, src/index.css); fix it if yours is deeper. See https://github.com/tom-ricci/kumo-shadcn#styles",
+      "files": [
+        {
+          "path": "registry/kumo/command-palette.tsx",
+          "type": "registry:ui"
+        }
+      ]
+    },
+    {
+      "name": "date-picker",
+      "type": "registry:ui",
+      "title": "DatePicker",
+      "description": "Kumo DatePicker: re-exports DatePicker from @cloudflare/kumo/components/date-picker.",
+      "dependencies": [
+        "@cloudflare/kumo",
+        "@phosphor-icons/react"
+      ],
+      "css": {
+        "@source \"../node_modules/@cloudflare/kumo/dist/**/*.{js,jsx,ts,tsx}\"": {},
+        "@import \"@cloudflare/kumo/styles/tailwind\"": {}
+      },
+      "docs": "Kumo needs Tailwind CSS v4. Your Tailwind CSS file now has @import \"@cloudflare/kumo/styles/tailwind\" and @source \"../node_modules/@cloudflare/kumo/dist/**/*.{js,jsx,ts,tsx}\". That @source path assumes the CSS file is one folder below node_modules (app/globals.css, src/index.css); fix it if yours is deeper. See https://github.com/tom-ricci/kumo-shadcn#styles",
+      "files": [
+        {
+          "path": "registry/kumo/date-picker.tsx",
+          "type": "registry:ui"
+        }
+      ]
+    },
+    {
+      "name": "date-range-picker",
+      "type": "registry:ui",
+      "title": "DateRangePicker",
+      "description": "Kumo DateRangePicker: re-exports DateRangePicker from @cloudflare/kumo/components/date-range-picker.",
+      "dependencies": [
+        "@cloudflare/kumo",
+        "@phosphor-icons/react"
+      ],
+      "css": {
+        "@source \"../node_modules/@cloudflare/kumo/dist/**/*.{js,jsx,ts,tsx}\"": {},
+        "@import \"@cloudflare/kumo/styles/tailwind\"": {}
+      },
+      "docs": "Kumo needs Tailwind CSS v4. Your Tailwind CSS file now has @import \"@cloudflare/kumo/styles/tailwind\" and @source \"../node_modules/@cloudflare/kumo/dist/**/*.{js,jsx,ts,tsx}\". That @source path assumes the CSS file is one folder below node_modules (app/globals.css, src/index.css); fix it if yours is deeper. See https://github.com/tom-ricci/kumo-shadcn#styles",
+      "files": [
+        {
+          "path": "registry/kumo/date-range-picker.tsx",
+          "type": "registry:ui"
+        }
+      ]
+    },
+    {
+      "name": "dialog",
+      "type": "registry:ui",
+      "title": "Dialog",
+      "description": "Kumo Dialog: re-exports Dialog, DialogClose, DialogDescription, DialogRoot, DialogTitle, DialogTrigger from @cloudflare/kumo/components/dialog.",
+      "dependencies": [
+        "@cloudflare/kumo",
+        "@phosphor-icons/react"
+      ],
+      "css": {
+        "@source \"../node_modules/@cloudflare/kumo/dist/**/*.{js,jsx,ts,tsx}\"": {},
+        "@import \"@cloudflare/kumo/styles/tailwind\"": {}
+      },
+      "docs": "Kumo needs Tailwind CSS v4. Your Tailwind CSS file now has @import \"@cloudflare/kumo/styles/tailwind\" and @source \"../node_modules/@cloudflare/kumo/dist/**/*.{js,jsx,ts,tsx}\". That @source path assumes the CSS file is one folder below node_modules (app/globals.css, src/index.css); fix it if yours is deeper. See https://github.com/tom-ricci/kumo-shadcn#styles",
+      "files": [
+        {
+          "path": "registry/kumo/dialog.tsx",
+          "type": "registry:ui"
+        }
+      ]
+    },
+    {
+      "name": "dropdown",
+      "type": "registry:ui",
+      "title": "Dropdown",
+      "description": "Kumo Dropdown: re-exports DropdownMenu from @cloudflare/kumo/components/dropdown.",
+      "dependencies": [
+        "@cloudflare/kumo",
+        "@phosphor-icons/react"
+      ],
+      "css": {
+        "@source \"../node_modules/@cloudflare/kumo/dist/**/*.{js,jsx,ts,tsx}\"": {},
+        "@import \"@cloudflare/kumo/styles/tailwind\"": {}
+      },
+      "docs": "Kumo needs Tailwind CSS v4. Your Tailwind CSS file now has @import \"@cloudflare/kumo/styles/tailwind\" and @source \"../node_modules/@cloudflare/kumo/dist/**/*.{js,jsx,ts,tsx}\". That @source path assumes the CSS file is one folder below node_modules (app/globals.css, src/index.css); fix it if yours is deeper. See https://github.com/tom-ricci/kumo-shadcn#styles",
+      "files": [
+        {
+          "path": "registry/kumo/dropdown.tsx",
+          "type": "registry:ui"
+        }
+      ]
+    },
+    {
+      "name": "empty",
+      "type": "registry:ui",
+      "title": "Empty",
+      "description": "Kumo Empty: re-exports Empty, KUMO_EMPTY_DEFAULT_VARIANTS, KUMO_EMPTY_VARIANTS, emptyVariants from @cloudflare/kumo/components/empty.",
+      "dependencies": [
+        "@cloudflare/kumo",
+        "@phosphor-icons/react"
+      ],
+      "css": {
+        "@source \"../node_modules/@cloudflare/kumo/dist/**/*.{js,jsx,ts,tsx}\"": {},
+        "@import \"@cloudflare/kumo/styles/tailwind\"": {}
+      },
+      "docs": "Kumo needs Tailwind CSS v4. Your Tailwind CSS file now has @import \"@cloudflare/kumo/styles/tailwind\" and @source \"../node_modules/@cloudflare/kumo/dist/**/*.{js,jsx,ts,tsx}\". That @source path assumes the CSS file is one folder below node_modules (app/globals.css, src/index.css); fix it if yours is deeper. See https://github.com/tom-ricci/kumo-shadcn#styles",
+      "files": [
+        {
+          "path": "registry/kumo/empty.tsx",
+          "type": "registry:ui"
+        }
+      ]
+    },
+    {
+      "name": "field",
+      "type": "registry:ui",
+      "title": "Field",
+      "description": "Kumo Field: re-exports Field, KUMO_FIELD_DEFAULT_VARIANTS, KUMO_FIELD_VARIANTS, fieldVariants, normalizeFieldError from @cloudflare/kumo/components/field.",
+      "dependencies": [
+        "@cloudflare/kumo",
+        "@phosphor-icons/react"
+      ],
+      "css": {
+        "@source \"../node_modules/@cloudflare/kumo/dist/**/*.{js,jsx,ts,tsx}\"": {},
+        "@import \"@cloudflare/kumo/styles/tailwind\"": {}
+      },
+      "docs": "Kumo needs Tailwind CSS v4. Your Tailwind CSS file now has @import \"@cloudflare/kumo/styles/tailwind\" and @source \"../node_modules/@cloudflare/kumo/dist/**/*.{js,jsx,ts,tsx}\". That @source path assumes the CSS file is one folder below node_modules (app/globals.css, src/index.css); fix it if yours is deeper. See https://github.com/tom-ricci/kumo-shadcn#styles",
+      "files": [
+        {
+          "path": "registry/kumo/field.tsx",
+          "type": "registry:ui"
+        }
+      ]
+    },
+    {
+      "name": "flow",
+      "type": "registry:ui",
+      "title": "Flow",
+      "description": "Kumo Flow: re-exports Flow from @cloudflare/kumo/components/flow.",
+      "dependencies": [
+        "@cloudflare/kumo",
+        "@phosphor-icons/react"
+      ],
+      "css": {
+        "@source \"../node_modules/@cloudflare/kumo/dist/**/*.{js,jsx,ts,tsx}\"": {},
+        "@import \"@cloudflare/kumo/styles/tailwind\"": {}
+      },
+      "docs": "Kumo needs Tailwind CSS v4. Your Tailwind CSS file now has @import \"@cloudflare/kumo/styles/tailwind\" and @source \"../node_modules/@cloudflare/kumo/dist/**/*.{js,jsx,ts,tsx}\". That @source path assumes the CSS file is one folder below node_modules (app/globals.css, src/index.css); fix it if yours is deeper. See https://github.com/tom-ricci/kumo-shadcn#styles",
+      "files": [
+        {
+          "path": "registry/kumo/flow.tsx",
+          "type": "registry:ui"
+        }
+      ]
+    },
+    {
+      "name": "grid",
+      "type": "registry:ui",
+      "title": "Grid",
+      "description": "Kumo Grid: re-exports Grid, GridItem, KUMO_GRID_DEFAULT_VARIANTS, KUMO_GRID_VARIANTS, gridItemVariants, gridVariants from @cloudflare/kumo/components/grid.",
+      "dependencies": [
+        "@cloudflare/kumo",
+        "@phosphor-icons/react"
+      ],
+      "css": {
+        "@source \"../node_modules/@cloudflare/kumo/dist/**/*.{js,jsx,ts,tsx}\"": {},
+        "@import \"@cloudflare/kumo/styles/tailwind\"": {}
+      },
+      "docs": "Kumo needs Tailwind CSS v4. Your Tailwind CSS file now has @import \"@cloudflare/kumo/styles/tailwind\" and @source \"../node_modules/@cloudflare/kumo/dist/**/*.{js,jsx,ts,tsx}\". That @source path assumes the CSS file is one folder below node_modules (app/globals.css, src/index.css); fix it if yours is deeper. See https://github.com/tom-ricci/kumo-shadcn#styles",
+      "files": [
+        {
+          "path": "registry/kumo/grid.tsx",
+          "type": "registry:ui"
+        }
+      ]
+    },
+    {
+      "name": "inline-copy-text",
+      "type": "registry:ui",
+      "title": "InlineCopyText",
+      "description": "Kumo InlineCopyText: re-exports InlineCopyText, KUMO_INLINE_COPY_TEXT_DEFAULT_VARIANTS, KUMO_INLINE_COPY_TEXT_STYLING, KUMO_INLINE_COPY_TEXT_VARIANTS from @cloudflare/kumo/components/inline-copy-text.",
+      "dependencies": [
+        "@cloudflare/kumo",
+        "@phosphor-icons/react"
+      ],
+      "css": {
+        "@source \"../node_modules/@cloudflare/kumo/dist/**/*.{js,jsx,ts,tsx}\"": {},
+        "@import \"@cloudflare/kumo/styles/tailwind\"": {}
+      },
+      "docs": "Kumo needs Tailwind CSS v4. Your Tailwind CSS file now has @import \"@cloudflare/kumo/styles/tailwind\" and @source \"../node_modules/@cloudflare/kumo/dist/**/*.{js,jsx,ts,tsx}\". That @source path assumes the CSS file is one folder below node_modules (app/globals.css, src/index.css); fix it if yours is deeper. See https://github.com/tom-ricci/kumo-shadcn#styles",
+      "files": [
+        {
+          "path": "registry/kumo/inline-copy-text.tsx",
+          "type": "registry:ui"
+        }
+      ]
+    },
+    {
+      "name": "input",
+      "type": "registry:ui",
+      "title": "Input",
+      "description": "Kumo Input: re-exports Input, InputArea, InputGroup, KUMO_INPUT_GROUP_DEFAULT_VARIANTS, KUMO_INPUT_GROUP_VARIANTS, KumoInputGroupFocusMode, KumoInputGroupVariantsProps, Textarea, inputVariants from @cloudflare/kumo/components/input.",
+      "dependencies": [
+        "@cloudflare/kumo",
+        "@phosphor-icons/react"
+      ],
+      "css": {
+        "@source \"../node_modules/@cloudflare/kumo/dist/**/*.{js,jsx,ts,tsx}\"": {},
+        "@import \"@cloudflare/kumo/styles/tailwind\"": {}
+      },
+      "docs": "Kumo needs Tailwind CSS v4. Your Tailwind CSS file now has @import \"@cloudflare/kumo/styles/tailwind\" and @source \"../node_modules/@cloudflare/kumo/dist/**/*.{js,jsx,ts,tsx}\". That @source path assumes the CSS file is one folder below node_modules (app/globals.css, src/index.css); fix it if yours is deeper. See https://github.com/tom-ricci/kumo-shadcn#styles",
+      "files": [
+        {
+          "path": "registry/kumo/input.tsx",
+          "type": "registry:ui"
+        }
+      ]
+    },
+    {
+      "name": "input-group",
+      "type": "registry:ui",
+      "title": "InputGroup",
+      "description": "Kumo InputGroup: re-exports InputGroup, KUMO_INPUT_GROUP_DEFAULT_VARIANTS, KUMO_INPUT_GROUP_VARIANTS from @cloudflare/kumo/components/input-group.",
+      "dependencies": [
+        "@cloudflare/kumo",
+        "@phosphor-icons/react"
+      ],
+      "css": {
+        "@source \"../node_modules/@cloudflare/kumo/dist/**/*.{js,jsx,ts,tsx}\"": {},
+        "@import \"@cloudflare/kumo/styles/tailwind\"": {}
+      },
+      "docs": "Kumo needs Tailwind CSS v4. Your Tailwind CSS file now has @import \"@cloudflare/kumo/styles/tailwind\" and @source \"../node_modules/@cloudflare/kumo/dist/**/*.{js,jsx,ts,tsx}\". That @source path assumes the CSS file is one folder below node_modules (app/globals.css, src/index.css); fix it if yours is deeper. See https://github.com/tom-ricci/kumo-shadcn#styles",
+      "files": [
+        {
+          "path": "registry/kumo/input-group.tsx",
+          "type": "registry:ui"
+        }
+      ]
+    },
+    {
+      "name": "label",
+      "type": "registry:ui",
+      "title": "Label",
+      "description": "Kumo Label: re-exports KUMO_LABEL_DEFAULT_VARIANTS, KUMO_LABEL_VARIANTS, Label, labelContentVariants, labelVariants from @cloudflare/kumo/components/label.",
+      "dependencies": [
+        "@cloudflare/kumo",
+        "@phosphor-icons/react"
+      ],
+      "css": {
+        "@source \"../node_modules/@cloudflare/kumo/dist/**/*.{js,jsx,ts,tsx}\"": {},
+        "@import \"@cloudflare/kumo/styles/tailwind\"": {}
+      },
+      "docs": "Kumo needs Tailwind CSS v4. Your Tailwind CSS file now has @import \"@cloudflare/kumo/styles/tailwind\" and @source \"../node_modules/@cloudflare/kumo/dist/**/*.{js,jsx,ts,tsx}\". That @source path assumes the CSS file is one folder below node_modules (app/globals.css, src/index.css); fix it if yours is deeper. See https://github.com/tom-ricci/kumo-shadcn#styles",
+      "files": [
+        {
+          "path": "registry/kumo/label.tsx",
+          "type": "registry:ui"
+        }
+      ]
+    },
+    {
+      "name": "layer-card",
+      "type": "registry:ui",
+      "title": "LayerCard",
+      "description": "Kumo LayerCard: re-exports LayerCard from @cloudflare/kumo/components/layer-card.",
+      "dependencies": [
+        "@cloudflare/kumo",
+        "@phosphor-icons/react"
+      ],
+      "css": {
+        "@source \"../node_modules/@cloudflare/kumo/dist/**/*.{js,jsx,ts,tsx}\"": {},
+        "@import \"@cloudflare/kumo/styles/tailwind\"": {}
+      },
+      "docs": "Kumo needs Tailwind CSS v4. Your Tailwind CSS file now has @import \"@cloudflare/kumo/styles/tailwind\" and @source \"../node_modules/@cloudflare/kumo/dist/**/*.{js,jsx,ts,tsx}\". That @source path assumes the CSS file is one folder below node_modules (app/globals.css, src/index.css); fix it if yours is deeper. See https://github.com/tom-ricci/kumo-shadcn#styles",
+      "files": [
+        {
+          "path": "registry/kumo/layer-card.tsx",
+          "type": "registry:ui"
+        }
+      ]
+    },
+    {
+      "name": "layer-dialog",
+      "type": "registry:ui",
+      "title": "LayerDialog",
+      "description": "Kumo LayerDialog: re-exports LayerDialog from @cloudflare/kumo/components/layer-dialog.",
+      "dependencies": [
+        "@cloudflare/kumo",
+        "@phosphor-icons/react"
+      ],
+      "css": {
+        "@source \"../node_modules/@cloudflare/kumo/dist/**/*.{js,jsx,ts,tsx}\"": {},
+        "@import \"@cloudflare/kumo/styles/tailwind\"": {}
+      },
+      "docs": "Kumo needs Tailwind CSS v4. Your Tailwind CSS file now has @import \"@cloudflare/kumo/styles/tailwind\" and @source \"../node_modules/@cloudflare/kumo/dist/**/*.{js,jsx,ts,tsx}\". That @source path assumes the CSS file is one folder below node_modules (app/globals.css, src/index.css); fix it if yours is deeper. See https://github.com/tom-ricci/kumo-shadcn#styles",
+      "files": [
+        {
+          "path": "registry/kumo/layer-dialog.tsx",
+          "type": "registry:ui"
+        }
+      ]
+    },
+    {
+      "name": "link",
+      "type": "registry:ui",
+      "title": "Link",
+      "description": "Kumo Link: re-exports the component from @cloudflare/kumo/components/link.",
+      "dependencies": [
+        "@cloudflare/kumo",
+        "@phosphor-icons/react"
+      ],
+      "css": {
+        "@source \"../node_modules/@cloudflare/kumo/dist/**/*.{js,jsx,ts,tsx}\"": {},
+        "@import \"@cloudflare/kumo/styles/tailwind\"": {}
+      },
+      "docs": "Kumo needs Tailwind CSS v4. Your Tailwind CSS file now has @import \"@cloudflare/kumo/styles/tailwind\" and @source \"../node_modules/@cloudflare/kumo/dist/**/*.{js,jsx,ts,tsx}\". That @source path assumes the CSS file is one folder below node_modules (app/globals.css, src/index.css); fix it if yours is deeper. See https://github.com/tom-ricci/kumo-shadcn#styles",
+      "files": [
+        {
+          "path": "registry/kumo/link.tsx",
+          "type": "registry:ui"
+        }
+      ]
+    },
+    {
+      "name": "loader",
+      "type": "registry:ui",
+      "title": "Loader",
+      "description": "Kumo Loader: re-exports Loader, SkeletonLine from @cloudflare/kumo/components/loader.",
+      "dependencies": [
+        "@cloudflare/kumo",
+        "@phosphor-icons/react"
+      ],
+      "css": {
+        "@source \"../node_modules/@cloudflare/kumo/dist/**/*.{js,jsx,ts,tsx}\"": {},
+        "@import \"@cloudflare/kumo/styles/tailwind\"": {}
+      },
+      "docs": "Kumo needs Tailwind CSS v4. Your Tailwind CSS file now has @import \"@cloudflare/kumo/styles/tailwind\" and @source \"../node_modules/@cloudflare/kumo/dist/**/*.{js,jsx,ts,tsx}\". That @source path assumes the CSS file is one folder below node_modules (app/globals.css, src/index.css); fix it if yours is deeper. See https://github.com/tom-ricci/kumo-shadcn#styles",
+      "files": [
+        {
+          "path": "registry/kumo/loader.tsx",
+          "type": "registry:ui"
+        }
+      ]
+    },
+    {
+      "name": "menubar",
+      "type": "registry:ui",
+      "title": "Menubar",
+      "description": "Kumo Menubar: re-exports MenuBar, useMenuNavigation from @cloudflare/kumo/components/menubar.",
+      "dependencies": [
+        "@cloudflare/kumo",
+        "@phosphor-icons/react"
+      ],
+      "css": {
+        "@source \"../node_modules/@cloudflare/kumo/dist/**/*.{js,jsx,ts,tsx}\"": {},
+        "@import \"@cloudflare/kumo/styles/tailwind\"": {}
+      },
+      "docs": "Kumo needs Tailwind CSS v4. Your Tailwind CSS file now has @import \"@cloudflare/kumo/styles/tailwind\" and @source \"../node_modules/@cloudflare/kumo/dist/**/*.{js,jsx,ts,tsx}\". That @source path assumes the CSS file is one folder below node_modules (app/globals.css, src/index.css); fix it if yours is deeper. See https://github.com/tom-ricci/kumo-shadcn#styles",
+      "files": [
+        {
+          "path": "registry/kumo/menubar.tsx",
+          "type": "registry:ui"
+        }
+      ]
+    },
+    {
+      "name": "meter",
+      "type": "registry:ui",
+      "title": "Meter",
+      "description": "Kumo Meter: re-exports Meter from @cloudflare/kumo/components/meter.",
+      "dependencies": [
+        "@cloudflare/kumo",
+        "@phosphor-icons/react"
+      ],
+      "css": {
+        "@source \"../node_modules/@cloudflare/kumo/dist/**/*.{js,jsx,ts,tsx}\"": {},
+        "@import \"@cloudflare/kumo/styles/tailwind\"": {}
+      },
+      "docs": "Kumo needs Tailwind CSS v4. Your Tailwind CSS file now has @import \"@cloudflare/kumo/styles/tailwind\" and @source \"../node_modules/@cloudflare/kumo/dist/**/*.{js,jsx,ts,tsx}\". That @source path assumes the CSS file is one folder below node_modules (app/globals.css, src/index.css); fix it if yours is deeper. See https://github.com/tom-ricci/kumo-shadcn#styles",
+      "files": [
+        {
+          "path": "registry/kumo/meter.tsx",
+          "type": "registry:ui"
+        }
+      ]
+    },
+    {
+      "name": "pagination",
+      "type": "registry:ui",
+      "title": "Pagination",
+      "description": "Kumo Pagination: re-exports Pagination from @cloudflare/kumo/components/pagination.",
+      "dependencies": [
+        "@cloudflare/kumo",
+        "@phosphor-icons/react"
+      ],
+      "css": {
+        "@source \"../node_modules/@cloudflare/kumo/dist/**/*.{js,jsx,ts,tsx}\"": {},
+        "@import \"@cloudflare/kumo/styles/tailwind\"": {}
+      },
+      "docs": "Kumo needs Tailwind CSS v4. Your Tailwind CSS file now has @import \"@cloudflare/kumo/styles/tailwind\" and @source \"../node_modules/@cloudflare/kumo/dist/**/*.{js,jsx,ts,tsx}\". That @source path assumes the CSS file is one folder below node_modules (app/globals.css, src/index.css); fix it if yours is deeper. See https://github.com/tom-ricci/kumo-shadcn#styles",
+      "files": [
+        {
+          "path": "registry/kumo/pagination.tsx",
+          "type": "registry:ui"
+        }
+      ]
+    },
+    {
+      "name": "popover",
+      "type": "registry:ui",
+      "title": "Popover",
+      "description": "Kumo Popover: re-exports KUMO_POPOVER_DEFAULT_VARIANTS, KUMO_POPOVER_VARIANTS, Popover, PopoverClose, PopoverContent, PopoverDescription, PopoverRoot, PopoverTitle, PopoverTrigger from @cloudflare/kumo/components/popover.",
+      "dependencies": [
+        "@cloudflare/kumo",
+        "@phosphor-icons/react"
+      ],
+      "css": {
+        "@source \"../node_modules/@cloudflare/kumo/dist/**/*.{js,jsx,ts,tsx}\"": {},
+        "@import \"@cloudflare/kumo/styles/tailwind\"": {}
+      },
+      "docs": "Kumo needs Tailwind CSS v4. Your Tailwind CSS file now has @import \"@cloudflare/kumo/styles/tailwind\" and @source \"../node_modules/@cloudflare/kumo/dist/**/*.{js,jsx,ts,tsx}\". That @source path assumes the CSS file is one folder below node_modules (app/globals.css, src/index.css); fix it if yours is deeper. See https://github.com/tom-ricci/kumo-shadcn#styles",
+      "files": [
+        {
+          "path": "registry/kumo/popover.tsx",
+          "type": "registry:ui"
+        }
+      ]
+    },
+    {
+      "name": "radio",
+      "type": "registry:ui",
+      "title": "Radio",
+      "description": "Kumo Radio: re-exports KUMO_RADIO_DEFAULT_VARIANTS, KUMO_RADIO_VARIANTS, Radio, RadioGroup, radioVariants from @cloudflare/kumo/components/radio.",
+      "dependencies": [
+        "@cloudflare/kumo",
+        "@phosphor-icons/react"
+      ],
+      "css": {
+        "@source \"../node_modules/@cloudflare/kumo/dist/**/*.{js,jsx,ts,tsx}\"": {},
+        "@import \"@cloudflare/kumo/styles/tailwind\"": {}
+      },
+      "docs": "Kumo needs Tailwind CSS v4. Your Tailwind CSS file now has @import \"@cloudflare/kumo/styles/tailwind\" and @source \"../node_modules/@cloudflare/kumo/dist/**/*.{js,jsx,ts,tsx}\". That @source path assumes the CSS file is one folder below node_modules (app/globals.css, src/index.css); fix it if yours is deeper. See https://github.com/tom-ricci/kumo-shadcn#styles",
+      "files": [
+        {
+          "path": "registry/kumo/radio.tsx",
+          "type": "registry:ui"
+        }
+      ]
+    },
+    {
+      "name": "select",
+      "type": "registry:ui",
+      "title": "Select",
+      "description": "Kumo Select: re-exports Select from @cloudflare/kumo/components/select.",
+      "dependencies": [
+        "@cloudflare/kumo",
+        "@phosphor-icons/react"
+      ],
+      "css": {
+        "@source \"../node_modules/@cloudflare/kumo/dist/**/*.{js,jsx,ts,tsx}\"": {},
+        "@import \"@cloudflare/kumo/styles/tailwind\"": {}
+      },
+      "docs": "Kumo needs Tailwind CSS v4. Your Tailwind CSS file now has @import \"@cloudflare/kumo/styles/tailwind\" and @source \"../node_modules/@cloudflare/kumo/dist/**/*.{js,jsx,ts,tsx}\". That @source path assumes the CSS file is one folder below node_modules (app/globals.css, src/index.css); fix it if yours is deeper. See https://github.com/tom-ricci/kumo-shadcn#styles",
+      "files": [
+        {
+          "path": "registry/kumo/select.tsx",
+          "type": "registry:ui"
+        }
+      ]
+    },
+    {
+      "name": "sensitive-input",
+      "type": "registry:ui",
+      "title": "SensitiveInput",
+      "description": "Kumo SensitiveInput: re-exports KUMO_SENSITIVE_INPUT_DEFAULT_VARIANTS, KUMO_SENSITIVE_INPUT_VARIANTS, SensitiveInput from @cloudflare/kumo/components/sensitive-input.",
+      "dependencies": [
+        "@cloudflare/kumo",
+        "@phosphor-icons/react"
+      ],
+      "css": {
+        "@source \"../node_modules/@cloudflare/kumo/dist/**/*.{js,jsx,ts,tsx}\"": {},
+        "@import \"@cloudflare/kumo/styles/tailwind\"": {}
+      },
+      "docs": "Kumo needs Tailwind CSS v4. Your Tailwind CSS file now has @import \"@cloudflare/kumo/styles/tailwind\" and @source \"../node_modules/@cloudflare/kumo/dist/**/*.{js,jsx,ts,tsx}\". That @source path assumes the CSS file is one folder below node_modules (app/globals.css, src/index.css); fix it if yours is deeper. See https://github.com/tom-ricci/kumo-shadcn#styles",
+      "files": [
+        {
+          "path": "registry/kumo/sensitive-input.tsx",
+          "type": "registry:ui"
+        }
+      ]
+    },
+    {
+      "name": "sidebar",
+      "type": "registry:ui",
+      "title": "Sidebar",
+      "description": "Kumo Sidebar: re-exports KUMO_SIDEBAR_DEFAULT_VARIANTS, KUMO_SIDEBAR_STYLING, KUMO_SIDEBAR_VARIANTS, Sidebar, SidebarCollapsible, SidebarCollapsibleContent, SidebarCollapsibleTrigger, SidebarContent, SidebarFooter, SidebarGroup, SidebarGroupLabel, SidebarHeader, SidebarLoading, SidebarMenu, SidebarMenuBadge, SidebarMenuButton, SidebarMenuChevron, SidebarMenuItem, SidebarMenuSub, SidebarMenuSubButton, SidebarMenuSubItem, SidebarProvider, SidebarRail, SidebarResizeHandle, SidebarRoot, SidebarSeparator, SidebarSlidingView, SidebarSlidingViews, SidebarTrigger, useSidebar from @cloudflare/kumo/components/sidebar.",
+      "dependencies": [
+        "@cloudflare/kumo",
+        "@phosphor-icons/react"
+      ],
+      "css": {
+        "@source \"../node_modules/@cloudflare/kumo/dist/**/*.{js,jsx,ts,tsx}\"": {},
+        "@import \"@cloudflare/kumo/styles/tailwind\"": {}
+      },
+      "docs": "Kumo needs Tailwind CSS v4. Your Tailwind CSS file now has @import \"@cloudflare/kumo/styles/tailwind\" and @source \"../node_modules/@cloudflare/kumo/dist/**/*.{js,jsx,ts,tsx}\". That @source path assumes the CSS file is one folder below node_modules (app/globals.css, src/index.css); fix it if yours is deeper. See https://github.com/tom-ricci/kumo-shadcn#styles",
+      "files": [
+        {
+          "path": "registry/kumo/sidebar.tsx",
+          "type": "registry:ui"
+        }
+      ]
+    },
+    {
+      "name": "slider",
+      "type": "registry:ui",
+      "title": "Slider",
+      "description": "Kumo Slider: re-exports KUMO_SLIDER_DEFAULT_VARIANTS, KUMO_SLIDER_VARIANTS, Slider, sliderVariants from @cloudflare/kumo/components/slider.",
+      "dependencies": [
+        "@cloudflare/kumo",
+        "@phosphor-icons/react"
+      ],
+      "css": {
+        "@source \"../node_modules/@cloudflare/kumo/dist/**/*.{js,jsx,ts,tsx}\"": {},
+        "@import \"@cloudflare/kumo/styles/tailwind\"": {}
+      },
+      "docs": "Kumo needs Tailwind CSS v4. Your Tailwind CSS file now has @import \"@cloudflare/kumo/styles/tailwind\" and @source \"../node_modules/@cloudflare/kumo/dist/**/*.{js,jsx,ts,tsx}\". That @source path assumes the CSS file is one folder below node_modules (app/globals.css, src/index.css); fix it if yours is deeper. See https://github.com/tom-ricci/kumo-shadcn#styles",
+      "files": [
+        {
+          "path": "registry/kumo/slider.tsx",
+          "type": "registry:ui"
+        }
+      ]
+    },
+    {
+      "name": "surface",
+      "type": "registry:ui",
+      "title": "Surface",
+      "description": "Kumo Surface: re-exports Surface from @cloudflare/kumo/components/surface.",
+      "dependencies": [
+        "@cloudflare/kumo",
+        "@phosphor-icons/react"
+      ],
+      "css": {
+        "@source \"../node_modules/@cloudflare/kumo/dist/**/*.{js,jsx,ts,tsx}\"": {},
+        "@import \"@cloudflare/kumo/styles/tailwind\"": {}
+      },
+      "docs": "Kumo needs Tailwind CSS v4. Your Tailwind CSS file now has @import \"@cloudflare/kumo/styles/tailwind\" and @source \"../node_modules/@cloudflare/kumo/dist/**/*.{js,jsx,ts,tsx}\". That @source path assumes the CSS file is one folder below node_modules (app/globals.css, src/index.css); fix it if yours is deeper. See https://github.com/tom-ricci/kumo-shadcn#styles",
+      "files": [
+        {
+          "path": "registry/kumo/surface.tsx",
+          "type": "registry:ui"
+        }
+      ]
+    },
+    {
+      "name": "switch",
+      "type": "registry:ui",
+      "title": "Switch",
+      "description": "Kumo Switch: re-exports KUMO_SWITCH_DEFAULT_VARIANTS, KUMO_SWITCH_VARIANTS, Switch from @cloudflare/kumo/components/switch.",
+      "dependencies": [
+        "@cloudflare/kumo",
+        "@phosphor-icons/react"
+      ],
+      "css": {
+        "@source \"../node_modules/@cloudflare/kumo/dist/**/*.{js,jsx,ts,tsx}\"": {},
+        "@import \"@cloudflare/kumo/styles/tailwind\"": {}
+      },
+      "docs": "Kumo needs Tailwind CSS v4. Your Tailwind CSS file now has @import \"@cloudflare/kumo/styles/tailwind\" and @source \"../node_modules/@cloudflare/kumo/dist/**/*.{js,jsx,ts,tsx}\". That @source path assumes the CSS file is one folder below node_modules (app/globals.css, src/index.css); fix it if yours is deeper. See https://github.com/tom-ricci/kumo-shadcn#styles",
+      "files": [
+        {
+          "path": "registry/kumo/switch.tsx",
+          "type": "registry:ui"
+        }
+      ]
+    },
+    {
+      "name": "table",
+      "type": "registry:ui",
+      "title": "Table",
+      "description": "Kumo Table: re-exports KUMO_TABLE_DEFAULT_VARIANTS, KUMO_TABLE_VARIANTS, Table from @cloudflare/kumo/components/table.",
+      "dependencies": [
+        "@cloudflare/kumo",
+        "@phosphor-icons/react"
+      ],
+      "css": {
+        "@source \"../node_modules/@cloudflare/kumo/dist/**/*.{js,jsx,ts,tsx}\"": {},
+        "@import \"@cloudflare/kumo/styles/tailwind\"": {}
+      },
+      "docs": "Kumo needs Tailwind CSS v4. Your Tailwind CSS file now has @import \"@cloudflare/kumo/styles/tailwind\" and @source \"../node_modules/@cloudflare/kumo/dist/**/*.{js,jsx,ts,tsx}\". That @source path assumes the CSS file is one folder below node_modules (app/globals.css, src/index.css); fix it if yours is deeper. See https://github.com/tom-ricci/kumo-shadcn#styles",
+      "files": [
+        {
+          "path": "registry/kumo/table.tsx",
+          "type": "registry:ui"
+        }
+      ]
+    },
+    {
+      "name": "table-of-contents",
+      "type": "registry:ui",
+      "title": "TableOfContents",
+      "description": "Kumo TableOfContents: re-exports KUMO_TABLE_OF_CONTENTS_DEFAULT_VARIANTS, KUMO_TABLE_OF_CONTENTS_VARIANTS, TableOfContents, useTableOfContentsActiveId from @cloudflare/kumo/components/table-of-contents.",
+      "dependencies": [
+        "@cloudflare/kumo",
+        "@phosphor-icons/react"
+      ],
+      "css": {
+        "@source \"../node_modules/@cloudflare/kumo/dist/**/*.{js,jsx,ts,tsx}\"": {},
+        "@import \"@cloudflare/kumo/styles/tailwind\"": {}
+      },
+      "docs": "Kumo needs Tailwind CSS v4. Your Tailwind CSS file now has @import \"@cloudflare/kumo/styles/tailwind\" and @source \"../node_modules/@cloudflare/kumo/dist/**/*.{js,jsx,ts,tsx}\". That @source path assumes the CSS file is one folder below node_modules (app/globals.css, src/index.css); fix it if yours is deeper. See https://github.com/tom-ricci/kumo-shadcn#styles",
+      "files": [
+        {
+          "path": "registry/kumo/table-of-contents.tsx",
+          "type": "registry:ui"
+        }
+      ]
+    },
+    {
+      "name": "tabs",
+      "type": "registry:ui",
+      "title": "Tabs",
+      "description": "Kumo Tabs: re-exports Tabs from @cloudflare/kumo/components/tabs.",
+      "dependencies": [
+        "@cloudflare/kumo",
+        "@phosphor-icons/react"
+      ],
+      "css": {
+        "@source \"../node_modules/@cloudflare/kumo/dist/**/*.{js,jsx,ts,tsx}\"": {},
+        "@import \"@cloudflare/kumo/styles/tailwind\"": {}
+      },
+      "docs": "Kumo needs Tailwind CSS v4. Your Tailwind CSS file now has @import \"@cloudflare/kumo/styles/tailwind\" and @source \"../node_modules/@cloudflare/kumo/dist/**/*.{js,jsx,ts,tsx}\". That @source path assumes the CSS file is one folder below node_modules (app/globals.css, src/index.css); fix it if yours is deeper. See https://github.com/tom-ricci/kumo-shadcn#styles",
+      "files": [
+        {
+          "path": "registry/kumo/tabs.tsx",
+          "type": "registry:ui"
+        }
+      ]
+    },
+    {
+      "name": "tag-input",
+      "type": "registry:ui",
+      "title": "TagInput",
+      "description": "Kumo TagInput: re-exports TagInput from @cloudflare/kumo/components/tag-input.",
+      "dependencies": [
+        "@cloudflare/kumo",
+        "@phosphor-icons/react"
+      ],
+      "css": {
+        "@source \"../node_modules/@cloudflare/kumo/dist/**/*.{js,jsx,ts,tsx}\"": {},
+        "@import \"@cloudflare/kumo/styles/tailwind\"": {}
+      },
+      "docs": "Kumo needs Tailwind CSS v4. Your Tailwind CSS file now has @import \"@cloudflare/kumo/styles/tailwind\" and @source \"../node_modules/@cloudflare/kumo/dist/**/*.{js,jsx,ts,tsx}\". That @source path assumes the CSS file is one folder below node_modules (app/globals.css, src/index.css); fix it if yours is deeper. See https://github.com/tom-ricci/kumo-shadcn#styles",
+      "files": [
+        {
+          "path": "registry/kumo/tag-input.tsx",
+          "type": "registry:ui"
+        }
+      ]
+    },
+    {
+      "name": "text",
+      "type": "registry:ui",
+      "title": "Text",
+      "description": "Kumo Text: re-exports Text from @cloudflare/kumo/components/text.",
+      "dependencies": [
+        "@cloudflare/kumo",
+        "@phosphor-icons/react"
+      ],
+      "css": {
+        "@source \"../node_modules/@cloudflare/kumo/dist/**/*.{js,jsx,ts,tsx}\"": {},
+        "@import \"@cloudflare/kumo/styles/tailwind\"": {}
+      },
+      "docs": "Kumo needs Tailwind CSS v4. Your Tailwind CSS file now has @import \"@cloudflare/kumo/styles/tailwind\" and @source \"../node_modules/@cloudflare/kumo/dist/**/*.{js,jsx,ts,tsx}\". That @source path assumes the CSS file is one folder below node_modules (app/globals.css, src/index.css); fix it if yours is deeper. See https://github.com/tom-ricci/kumo-shadcn#styles",
+      "files": [
+        {
+          "path": "registry/kumo/text.tsx",
+          "type": "registry:ui"
+        }
+      ]
+    },
+    {
+      "name": "toast",
+      "type": "registry:ui",
+      "title": "Toast",
+      "description": "Kumo Toast: re-exports Toast, ToastProvider, Toasty, createKumoToastManager, useKumoToastManager from @cloudflare/kumo/components/toast.",
+      "dependencies": [
+        "@cloudflare/kumo",
+        "@phosphor-icons/react"
+      ],
+      "css": {
+        "@source \"../node_modules/@cloudflare/kumo/dist/**/*.{js,jsx,ts,tsx}\"": {},
+        "@import \"@cloudflare/kumo/styles/tailwind\"": {}
+      },
+      "docs": "Kumo needs Tailwind CSS v4. Your Tailwind CSS file now has @import \"@cloudflare/kumo/styles/tailwind\" and @source \"../node_modules/@cloudflare/kumo/dist/**/*.{js,jsx,ts,tsx}\". That @source path assumes the CSS file is one folder below node_modules (app/globals.css, src/index.css); fix it if yours is deeper. See https://github.com/tom-ricci/kumo-shadcn#styles",
+      "files": [
+        {
+          "path": "registry/kumo/toast.tsx",
+          "type": "registry:ui"
+        }
+      ]
+    },
+    {
+      "name": "toolbar",
+      "type": "registry:ui",
+      "title": "Toolbar",
+      "description": "Kumo Toolbar: re-exports KUMO_TOOLBAR_DEFAULT_VARIANTS, KUMO_TOOLBAR_VARIANTS, Toolbar from @cloudflare/kumo/components/toolbar.",
+      "dependencies": [
+        "@cloudflare/kumo",
+        "@phosphor-icons/react"
+      ],
+      "css": {
+        "@source \"../node_modules/@cloudflare/kumo/dist/**/*.{js,jsx,ts,tsx}\"": {},
+        "@import \"@cloudflare/kumo/styles/tailwind\"": {}
+      },
+      "docs": "Kumo needs Tailwind CSS v4. Your Tailwind CSS file now has @import \"@cloudflare/kumo/styles/tailwind\" and @source \"../node_modules/@cloudflare/kumo/dist/**/*.{js,jsx,ts,tsx}\". That @source path assumes the CSS file is one folder below node_modules (app/globals.css, src/index.css); fix it if yours is deeper. See https://github.com/tom-ricci/kumo-shadcn#styles",
+      "files": [
+        {
+          "path": "registry/kumo/toolbar.tsx",
+          "type": "registry:ui"
+        }
+      ]
+    },
+    {
+      "name": "tooltip",
+      "type": "registry:ui",
+      "title": "Tooltip",
+      "description": "Kumo Tooltip: re-exports Tooltip, TooltipProvider from @cloudflare/kumo/components/tooltip.",
+      "dependencies": [
+        "@cloudflare/kumo",
+        "@phosphor-icons/react"
+      ],
+      "css": {
+        "@source \"../node_modules/@cloudflare/kumo/dist/**/*.{js,jsx,ts,tsx}\"": {},
+        "@import \"@cloudflare/kumo/styles/tailwind\"": {}
+      },
+      "docs": "Kumo needs Tailwind CSS v4. Your Tailwind CSS file now has @import \"@cloudflare/kumo/styles/tailwind\" and @source \"../node_modules/@cloudflare/kumo/dist/**/*.{js,jsx,ts,tsx}\". That @source path assumes the CSS file is one folder below node_modules (app/globals.css, src/index.css); fix it if yours is deeper. See https://github.com/tom-ricci/kumo-shadcn#styles",
+      "files": [
+        {
+          "path": "registry/kumo/tooltip.tsx",
+          "type": "registry:ui"
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,23 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "collapsible",
+  "title": "Collapsible",
+  "description": "Kumo Collapsible: re-exports Collapsible from @cloudflare/kumo/components/collapsible.",
+  "dependencies": [
+    "@cloudflare/kumo",
+    "@phosphor-icons/react"
+  ],
+  "files": [
+    {
+      "path": "registry/kumo/collapsible.tsx",
+      "content": "// Kumo Collapsible, installed from the kumo-shadcn registry (https://github.com/tom-ricci/kumo-shadcn).\n// The component itself lives in the @cloudflare/kumo npm package, so updating\n// that package updates it. This file only re-exports it.\nexport * from \"@cloudflare/kumo/components/collapsible\";\n",
+      "type": "registry:ui"
+    }
+  ],
+  "css": {
+    "@source \"../node_modules/@cloudflare/kumo/dist/**/*.{js,jsx,ts,tsx}\"": {},
+    "@import \"@cloudflare/kumo/styles/tailwind\"": {}
+  },
+  "docs": "Kumo needs Tailwind CSS v4. Your Tailwind CSS file now has @import \"@cloudflare/kumo/styles/tailwind\" and @source \"../node_modules/@cloudflare/kumo/dist/**/*.{js,jsx,ts,tsx}\". That @source path assumes the CSS file is one folder below node_modules (app/globals.css, src/index.css); fix it if yours is deeper. See https://github.com/tom-ricci/kumo-shadcn#styles",
+  "type": "registry:ui"
+}
