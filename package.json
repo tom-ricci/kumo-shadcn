@@ -1,0 +1,21 @@
+{
+  "name": "kumo-shadcn",
+  "private": true,
+  "type": "module",
+  "license": "MIT",
+  "scripts": {
+    "generate": "node scripts/generate.mjs",
+    "build": "shadcn build",
+    "typecheck": "tsc -p tsconfig.json",
+    "registry": "npm run generate && npm run build && npm run typecheck"
+  },
+  "devDependencies": {
+    "@cloudflare/kumo": "2.19.0",
+    "@phosphor-icons/react": "2.1.10",
+    "@types/react": "19.3.0",
+    "react": "19.3.1",
+    "react-dom": "19.3.1",
+    "shadcn": "4.23.0",
+    "typescript": "6.0.3"
+  }
+}
