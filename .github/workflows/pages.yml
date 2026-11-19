@@ -1,0 +1,48 @@
+name: Deploy to GitHub Pages
+
+# Publishes public/ (the built registry) to GitHub Pages. Does nothing until
+# Pages is enabled with source "GitHub Actions" in the repository settings.
+# Pushes made by the update workflow use GITHUB_TOKEN and do not trigger
+# "push" runs, so this also runs after each successful update run.
+on:
+  push:
+    branches: [main]
+    paths: ["public/**"]
+  workflow_run:
+    workflows: ["Update Kumo"]
+    types: [completed]
+    branches: [main]
+  workflow_dispatch:
+
+permissions: {}
+
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    if: >-
+      github.event.repository.has_pages &&
+      (github.event_name != 'workflow_run' || github.event.workflow_run.conclusion == 'success')
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    permissions:
+      contents: read
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          ref: main
+          persist-credentials: false
+
+      - uses: actions/upload-pages-artifact@fc324d3547104276b827a68afc52ff2a11cc49c9 # v5.0.0
+        with:
+          path: public
+
+      - id: deployment
+        uses: actions/deploy-pages@368f82528645a54fb793d4d04e342629a3f51346 # v5.0.1
