@@ -93,7 +93,7 @@ mkdirSync(outDir, { recursive: true });
 const items = [
   {
     name: "kumo",
-    type: "registry:style",
+    type: "registry:item",
     title: "Kumo setup",
     description:
       "Installs @cloudflare/kumo and its peer dependencies and adds Kumo's Tailwind v4 styles to your CSS. Every component item includes this setup too.",

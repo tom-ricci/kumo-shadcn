@@ -12,5 +12,5 @@
     "@import \"@cloudflare/kumo/styles/tailwind\"": {}
   },
   "docs": "Kumo needs Tailwind CSS v4. Your Tailwind CSS file now has @import \"@cloudflare/kumo/styles/tailwind\" and @source \"../node_modules/@cloudflare/kumo/dist/**/*.{js,jsx,ts,tsx}\". That @source path assumes the CSS file is one folder below node_modules (app/globals.css, src/index.css); fix it if yours is deeper. See https://github.com/tom-ricci/kumo-shadcn#styles",
-  "type": "registry:style"
+  "type": "registry:item"
 }
