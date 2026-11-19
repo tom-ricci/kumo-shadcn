@@ -95,8 +95,9 @@ The registry is static JSON, so any static host works. The raw GitHub URLs above
 To serve it from a nicer URL:
 
 - **GitHub Pages**: in the repository settings, under Pages, set the source to "GitHub Actions".
-  `.github/workflows/pages.yml` then publishes `public/` after every push to `main` and after every
-  update run. Items will be at `https://tom-ricci.github.io/kumo-shadcn/r/<name>.json`.
+  Then run the "Deploy to GitHub Pages" workflow once from the Actions tab. After that,
+  `.github/workflows/pages.yml` republishes `public/` after every push to `main` that changes it and
+  after every update run. Items will be at `https://tom-ricci.github.io/kumo-shadcn/r/<name>.json`.
 - **Cloudflare Pages**: create a Pages project connected to this repository, with no build command and
   `public` as the output directory.
 
