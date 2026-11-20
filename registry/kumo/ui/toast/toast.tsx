@@ -2,7 +2,8 @@
 
 // Kumo, packages/kumo/src/components/toast/toast.tsx from https://github.com/cloudflare/kumo
 // (release cloudflare/kumo@2.19.0), copied by the kumo-shadcn registry (https://github.com/tom-ricci/kumo-shadcn).
-// Changes from Kumo's file: import paths, and the "use client" line Kumo's build adds.
+// Changes from Kumo's file, all mechanical: import paths; `type` on type-only imports; `// @ts-ignore`
+// above lines that only stricter app tsconfigs reject; the "use client" line Kumo's build adds.
 // Unofficial; not affiliated with or endorsed by Cloudflare.
 //
 // MIT License Copyright (c) 2026 Cloudflare, Inc.
@@ -29,14 +30,14 @@
 
 import {
   Toast,
-  ToastManagerAddOptions,
-  ToastManagerUpdateOptions,
-  ToastObject,
+  type ToastManagerAddOptions,
+  type ToastManagerUpdateOptions,
+  type ToastObject,
 } from "@base-ui/react/toast";
 import type React from "react";
 import { cn } from "@/lib/kumo/cn";
 import { resolveVariant } from "@/lib/kumo/resolve-variant";
-import { Button, ButtonProps } from "@/components/ui/button/index";
+import { Button, type ButtonProps } from "@/components/ui/button/button";
 import {
   usePortalContainer,
   type PortalContainer,

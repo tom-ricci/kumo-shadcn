@@ -1,7 +1,11 @@
 {
   "compilerOptions": {
     "target": "ES2022",
-    "lib": ["ES2023", "DOM", "DOM.Iterable"],
+    "lib": [
+      "ES2023",
+      "DOM",
+      "DOM.Iterable"
+    ],
     "module": "ESNext",
     "moduleResolution": "Bundler",
     "jsx": "react-jsx",
@@ -10,11 +14,27 @@
     "skipLibCheck": true,
     "types": [],
     "paths": {
-      "@/components/ui/*": ["./registry/kumo/ui/*"],
-      "@/components/*": ["./registry/kumo/blocks/*"],
-      "@/lib/kumo/*": ["./registry/kumo/lib/kumo/*"],
-      "@/app/(create)/components/icon-placeholder": ["./registry/icon-placeholder.tsx"]
-    }
+      "@/components/ui/*": [
+        "./registry/kumo/ui/*"
+      ],
+      "@/components/*": [
+        "./registry/kumo/blocks/*"
+      ],
+      "@/lib/kumo/*": [
+        "./registry/kumo/lib/kumo/*"
+      ],
+      "@/app/(create)/components/icon-placeholder": [
+        "./registry/icon-placeholder.tsx"
+      ]
+    },
+    "verbatimModuleSyntax": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "erasableSyntaxOnly": true,
+    "noFallthroughCasesInSwitch": true
   },
-  "include": ["registry/**/*.ts", "registry/**/*.tsx"]
+  "include": [
+    "registry/**/*.ts",
+    "registry/**/*.tsx"
+  ]
 }

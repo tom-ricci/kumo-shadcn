@@ -2,7 +2,8 @@
 
 // Kumo, packages/kumo/src/components/pagination/pagination.tsx from https://github.com/cloudflare/kumo
 // (release cloudflare/kumo@2.19.0), copied by the kumo-shadcn registry (https://github.com/tom-ricci/kumo-shadcn).
-// Changes from Kumo's file: import paths, and the "use client" line Kumo's build adds.
+// Changes from Kumo's file, all mechanical: import paths; `type` on type-only imports; `// @ts-ignore`
+// above lines that only stricter app tsconfigs reject; the "use client" line Kumo's build adds.
 // Unofficial; not affiliated with or endorsed by Cloudflare.
 //
 // MIT License Copyright (c) 2026 Cloudflare, Inc.
@@ -36,7 +37,7 @@ import {
   type KeyboardEvent,
   type ReactNode,
 } from "react";
-import { InputGroup } from "@/components/ui/input-group/index";
+import { InputGroup } from "@/components/ui/input-group/input-group";
 import {
   CaretDoubleLeftIcon,
   CaretDoubleRightIcon,
@@ -45,7 +46,7 @@ import {
 } from "@/lib/kumo/icons";
 import { cn } from "@/lib/kumo/cn";
 import { resolveVariant } from "@/lib/kumo/resolve-variant";
-import { Select } from "@/components/ui/select/index";
+import { Select } from "@/components/ui/select/select";
 
 const DEFAULT_PAGE_SIZE_OPTIONS = [25, 50, 100, 250] as const;
 

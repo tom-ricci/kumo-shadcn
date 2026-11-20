@@ -2,7 +2,8 @@
 
 // Kumo, packages/kumo/src/components/empty/empty.tsx from https://github.com/cloudflare/kumo
 // (release cloudflare/kumo@2.19.0), copied by the kumo-shadcn registry (https://github.com/tom-ricci/kumo-shadcn).
-// Changes from Kumo's file: import paths, and the "use client" line Kumo's build adds.
+// Changes from Kumo's file, all mechanical: import paths; `type` on type-only imports; `// @ts-ignore`
+// above lines that only stricter app tsconfigs reject; the "use client" line Kumo's build adds.
 // Unofficial; not affiliated with or endorsed by Cloudflare.
 //
 // MIT License Copyright (c) 2026 Cloudflare, Inc.
@@ -29,8 +30,8 @@
 
 import { CheckIcon, CopyIcon } from "@/lib/kumo/icons";
 import { useCallback } from "react";
-import { Button } from "@/components/ui/button/index";
-import { Text } from "@/components/ui/text/index";
+import { Button } from "@/components/ui/button/button";
+import { Text } from "@/components/ui/text/text";
 import { cn } from "@/lib/kumo/cn";
 import { resolveVariant } from "@/lib/kumo/resolve-variant";
 import { useCopyFeedback } from "@/lib/kumo/use-copy-feedback";

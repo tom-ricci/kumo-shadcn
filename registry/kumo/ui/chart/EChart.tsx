@@ -2,7 +2,8 @@
 
 // Kumo, packages/kumo/src/components/chart/EChart.tsx from https://github.com/cloudflare/kumo
 // (release cloudflare/kumo@2.19.0), copied by the kumo-shadcn registry (https://github.com/tom-ricci/kumo-shadcn).
-// Changes from Kumo's file: import paths, and the "use client" line Kumo's build adds.
+// Changes from Kumo's file, all mechanical: import paths; `type` on type-only imports; `// @ts-ignore`
+// above lines that only stricter app tsconfigs reject; the "use client" line Kumo's build adds.
 // Unofficial; not affiliated with or endorsed by Cloudflare.
 //
 // MIT License Copyright (c) 2026 Cloudflare, Inc.
@@ -34,7 +35,7 @@ import type {
   TooltipComponentOption,
 } from "echarts";
 import { forwardRef, useEffect, useRef } from "react";
-import { cn } from "@/lib/kumo/index";
+import { cn } from "@/lib/kumo/cn";
 import { CHART_DARK_COLORS, CHART_LIGHT_COLORS } from "./Color";
 
 /** Parameters passed to mouse event handlers on chart elements */

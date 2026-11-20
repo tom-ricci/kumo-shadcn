@@ -2,7 +2,8 @@
 
 // Kumo, packages/kumo/src/components/command-palette/command-palette.tsx from https://github.com/cloudflare/kumo
 // (release cloudflare/kumo@2.19.0), copied by the kumo-shadcn registry (https://github.com/tom-ricci/kumo-shadcn).
-// Changes from Kumo's file: import paths, and the "use client" line Kumo's build adds.
+// Changes from Kumo's file, all mechanical: import paths; `type` on type-only imports; `// @ts-ignore`
+// above lines that only stricter app tsconfigs reject; the "use client" line Kumo's build adds.
 // Unofficial; not affiliated with or endorsed by Cloudflare.
 //
 // MIT License Copyright (c) 2026 Cloudflare, Inc.
@@ -44,9 +45,9 @@ import {
   CaretRightIcon,
 } from "@/lib/kumo/icons";
 
-import { LayerCard } from "@/components/ui/layer-card/index";
-import { Loader } from "@/components/ui/loader/index";
-import { cn } from "@/lib/kumo/index";
+import { LayerCard } from "@/components/ui/layer-card/layer-card";
+import { Loader } from "@/components/ui/loader/loader";
+import { cn } from "@/lib/kumo/cn";
 import {
   usePortalContainer,
   type PortalContainer,

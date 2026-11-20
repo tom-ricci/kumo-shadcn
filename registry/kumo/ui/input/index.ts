@@ -2,7 +2,8 @@
 
 // Kumo, packages/kumo/src/components/input/index.ts from https://github.com/cloudflare/kumo
 // (release cloudflare/kumo@2.19.0), copied by the kumo-shadcn registry (https://github.com/tom-ricci/kumo-shadcn).
-// Changes from Kumo's file: import paths, and the "use client" line Kumo's build adds.
+// Changes from Kumo's file, all mechanical: import paths; `type` on type-only imports; `// @ts-ignore`
+// above lines that only stricter app tsconfigs reject; the "use client" line Kumo's build adds.
 // Unofficial; not affiliated with or endorsed by Cloudflare.
 //
 // MIT License Copyright (c) 2026 Cloudflare, Inc.
@@ -32,11 +33,7 @@ export { InputArea, Textarea, type InputAreaProps } from "./input-area";
 
 // Re-export InputGroup from its new dedicated directory so that the subpath
 // `@cloudflare/kumo/components/input` continues to resolve InputGroup.
-export {
-  InputGroup,
-  KUMO_INPUT_GROUP_VARIANTS,
-  KUMO_INPUT_GROUP_DEFAULT_VARIANTS,
-} from "@/components/ui/input-group/index";
+export { InputGroup, KUMO_INPUT_GROUP_VARIANTS, KUMO_INPUT_GROUP_DEFAULT_VARIANTS } from "@/components/ui/input-group/input-group";
 
 // Backward-compatible type aliases — the old `input-group.tsx` exported these
 // names. External consumers importing from `@cloudflare/kumo/components/input`

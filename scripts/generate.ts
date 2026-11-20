@@ -160,13 +160,14 @@ interface Copied {
 }
 const iconImports = new Set<string>();
 
-function moduleSpecifiers(sf: ts.SourceFile): { node: ts.StringLiteralLike; decl?: ts.ImportDeclaration; sideEffect: boolean }[] {
-  const found: { node: ts.StringLiteralLike; decl?: ts.ImportDeclaration; sideEffect: boolean }[] = [];
+type Found = { node: ts.StringLiteralLike; decl?: ts.ImportDeclaration; reexport?: ts.ExportDeclaration; sideEffect: boolean };
+function moduleSpecifiers(sf: ts.SourceFile): Found[] {
+  const found: Found[] = [];
   const visit = (node: ts.Node) => {
     if (ts.isImportDeclaration(node) && ts.isStringLiteral(node.moduleSpecifier)) {
       found.push({ node: node.moduleSpecifier, decl: node, sideEffect: !node.importClause });
     } else if (ts.isExportDeclaration(node) && node.moduleSpecifier && ts.isStringLiteral(node.moduleSpecifier)) {
-      found.push({ node: node.moduleSpecifier, sideEffect: false });
+      found.push({ node: node.moduleSpecifier, reexport: node, sideEffect: false });
     } else if (ts.isImportEqualsDeclaration(node) && ts.isExternalModuleReference(node.moduleReference)) {
       fail(`unknown import pattern: import = require() in ${sf.fileName}`);
     } else if (ts.isCallExpression(node) && (node.expression.kind === ts.SyntaxKind.ImportKeyword || (ts.isIdentifier(node.expression) && node.expression.text === "require"))) {
@@ -193,6 +194,48 @@ function typesPackage(name: string): string | undefined {
   return range ? `${types}@${range}` : undefined;
 }
 
+// Which file defines `name`, following `export ... from` in index files.
+// The shadcn CLI shortens ".../button/index" to ".../button" on install,
+// which a flat components/ui/button.tsx (shadcn's own) would shadow, so
+// imports across items point at the defining file instead of the barrel.
+const parsed = new Map<string, ts.SourceFile>();
+function parse(file: string): ts.SourceFile {
+  let sf = parsed.get(file);
+  if (!sf) parsed.set(file, (sf = ts.createSourceFile(file, readFileSync(file, "utf8"), ts.ScriptTarget.Latest, true, file.endsWith(".tsx") ? ts.ScriptKind.TSX : ts.ScriptKind.TS)));
+  return sf;
+}
+const isBarrel = (file: string) => /\/index\.tsx?$/.test(file);
+function originOf(file: string, name: string, seen = new Set<string>()): string | undefined {
+  if (seen.has(file)) return undefined;
+  seen.add(file);
+  if (!isBarrel(file)) return file;
+  for (const st of parse(file).statements) {
+    if (!ts.isExportDeclaration(st) || !st.moduleSpecifier || !ts.isStringLiteral(st.moduleSpecifier)) {
+      // Something defined in the barrel itself (Kumo has a few type aliases).
+      if (ts.canHaveModifiers(st) && ts.getModifiers(st)?.some((m) => m.kind === ts.SyntaxKind.ExportKeyword)) {
+        const declared = (st as { name?: ts.Identifier }).name?.text;
+        if (declared === name) return file;
+      }
+      continue;
+    }
+    const target = st.moduleSpecifier.text.startsWith(".") ? resolveRelative(file, st.moduleSpecifier.text) : undefined;
+    if (!st.exportClause) {
+      if (target) {
+        const hit = originOf(target, name, seen);
+        if (hit) return hit;
+      }
+      continue;
+    }
+    if (!ts.isNamedExports(st.exportClause)) continue;
+    const el = st.exportClause.elements.find((e) => e.name.text === name);
+    if (!el) continue;
+    if (!target) fail(`unknown import pattern: ${relative(src, file)} re-exports ${name} from a package`);
+    if (el.propertyName && el.propertyName.text !== name) fail(`unknown import pattern: ${relative(src, file)} renames ${el.propertyName.text} to ${name}`);
+    return originOf(target, name, new Set()) ?? fail(`cannot find where ${name} is defined (from ${relative(src, file)})`);
+  }
+  return undefined;
+}
+
 function copyFile(file: string): Copied {
   const area = areaOf(file)!;
   const where = posix(relative(src, file));
@@ -204,7 +247,7 @@ function copyFile(file: string): Copied {
   const replaceSpec = (node: ts.StringLiteralLike, spec: string) =>
     edits.push({ start: node.getStart(sf) + 1, end: node.getEnd() - 1, text: spec });
 
-  for (const { node, decl, sideEffect } of moduleSpecifiers(sf)) {
+  for (const { node, decl, reexport, sideEffect } of moduleSpecifiers(sf)) {
     const spec = node.text;
     if (sideEffect && !spec.startsWith(".")) fail(`unknown import pattern: side-effect import "${spec}" in ${where}`);
     if (spec.startsWith(".")) {
@@ -212,8 +255,28 @@ function copyFile(file: string): Copied {
       const targetArea = areaOf(target)!;
       copied.localFiles.add(target);
       if (targetArea.kind === area.kind && targetArea.item === area.item) continue; // same item: keep relative
-      replaceSpec(node, aliasPath(targetArea));
       copied.registryDependencies.add(targetArea.item);
+      if (!isBarrel(target)) {
+        replaceSpec(node, aliasPath(targetArea));
+        continue;
+      }
+      // A barrel of another item: group the names by defining file.
+      const owner = decl ?? reexport;
+      const clause = decl ? decl.importClause?.namedBindings : reexport?.exportClause;
+      if (!owner || !clause || (decl?.importClause?.name) || !(ts.isNamedImports(clause) || ts.isNamedExports(clause)))
+        fail(`unknown import pattern: only named imports from another item's index are supported (${where}: "${spec}")`);
+      const groups = new Map<string, string[]>();
+      for (const el of clause.elements as ts.NodeArray<ts.ImportSpecifier | ts.ExportSpecifier>) {
+        const name = (el.propertyName ?? el.name).text;
+        const origin = originOf(target, name) ?? fail(`cannot find where ${name} is defined (imported in ${where} from "${spec}")`);
+        copied.localFiles.add(origin);
+        const key = aliasPath(areaOf(origin)!);
+        groups.set(key, [...(groups.get(key) ?? []), el.getText(sf)]);
+      }
+      const kw = decl ? "import" : "export";
+      const typeOnly = (decl ? decl.importClause?.isTypeOnly : reexport?.isTypeOnly) ? " type" : "";
+      const text = [...groups].map(([path, names]) => `${kw}${typeOnly} { ${names.join(", ")} } from "${path}";`).join("\n");
+      edits.push({ start: owner.getStart(sf), end: owner.getEnd(), text });
     } else if (PHOSPHOR.has(spec)) {
       const bindings = decl?.importClause;
       if (!decl || !bindings || bindings.name || !bindings.namedBindings || !ts.isNamedImports(bindings.namedBindings))
@@ -270,7 +333,8 @@ function sourceHeader(where: string, notes: string[]): string {
   return [
     `// Kumo, packages/kumo/src/${where} from https://github.com/cloudflare/kumo`,
     `// (release ${release.replace("@", "")}), copied by the kumo-shadcn registry (${HOMEPAGE}).`,
-    "// Changes from Kumo's file: import paths, and the \"use client\" line Kumo's build adds.",
+    "// Changes from Kumo's file, all mechanical: import paths; `type` on type-only imports; `// @ts-ignore`",
+    "// above lines that only stricter app tsconfigs reject; the \"use client\" line Kumo's build adds.",
     ...notes.map((n) => `// Also changed: ${n}.`),
     "// Unofficial; not affiliated with or endorsed by Cloudflare.",
     "//",
@@ -512,6 +576,83 @@ function themeCss(blocks: TokenBlock[]): CssObject {
 }
 
 // ---------------------------------------------------------------------------
+// Type-only imports. Kumo imports some types without `type` (e.g.
+// `import { Button, ButtonProps }`). Kumo's own build copes; an app with
+// verbatimModuleSyntax (Vite's default tsconfig) or a bundler that keeps the
+// import does not. The type checker marks those names `type`, nothing else.
+function markTypeOnlyImports(files: string[]): number {
+  const config = ts.parseJsonConfigFileContent(ts.readConfigFile(join(root, "tsconfig.json"), ts.sys.readFile).config, ts.sys, root);
+  const program = ts.createProgram(files, { ...config.options, noEmit: true });
+  const checker = program.getTypeChecker();
+  const isTypeOnly = (id: ts.Identifier) => {
+    const symbol = checker.getSymbolAtLocation(id);
+    if (!symbol || !(symbol.flags & ts.SymbolFlags.Alias)) return false;
+    const target = checker.getAliasedSymbol(symbol);
+    if (!target.declarations?.length) fail(`cannot resolve ${id.text} in ${relative(root, id.getSourceFile().fileName)}; is its package in devDependencies?`);
+    return !(target.flags & ts.SymbolFlags.Value);
+  };
+  let changed = 0;
+  for (const file of files) {
+    const sf = program.getSourceFile(file)!;
+    const inserts: number[] = [];
+    for (const st of sf.statements) {
+      const clause = ts.isImportDeclaration(st) && !st.importClause?.isTypeOnly ? st.importClause?.namedBindings
+        : ts.isExportDeclaration(st) && st.moduleSpecifier && !st.isTypeOnly ? st.exportClause : undefined;
+      if (!clause || !(ts.isNamedImports(clause) || ts.isNamedExports(clause))) continue;
+      for (const el of clause.elements as ts.NodeArray<ts.ImportSpecifier | ts.ExportSpecifier>)
+        if (!el.isTypeOnly && ts.isIdentifier(el.name) && isTypeOnly(el.name)) inserts.push(el.getStart(sf));
+    }
+    if (!inserts.length) continue;
+    let text = sf.text;
+    for (const at of inserts.sort((a, b) => b - a)) text = `${text.slice(0, at)}type ${text.slice(at)}`;
+    writeFileSync(file, text);
+    changed += inserts.length;
+  }
+  return changed;
+}
+
+// Kumo compiles with its own tsconfig. App templates can be stricter: the
+// Vite template shadcn uses sets erasableSyntaxOnly (no enums, no runtime
+// namespaces) and noUnusedLocals/Parameters. For exactly those diagnostics
+// the generator adds a `// @ts-ignore` line above the line; the code itself
+// is unchanged. Any other type error fails generation.
+const STRICT_APP_CODES = new Map([
+  [1294, "erasableSyntaxOnly"],
+  ...[6133, 6138, 6192, 6196, 6198, 6199, 6205].map((c) => [c, "noUnusedLocals/noUnusedParameters"] as [number, string]),
+]);
+function typeCheck(files: string[]) {
+  const config = ts.parseJsonConfigFileContent(ts.readConfigFile(join(root, "tsconfig.json"), ts.sys.readFile).config, ts.sys, root);
+  const program = ts.createProgram(files, { ...config.options, noEmit: true });
+  return [...program.getSyntacticDiagnostics(), ...program.getSemanticDiagnostics(), ...program.getGlobalDiagnostics()];
+}
+const formatDiagnostic = (d: ts.Diagnostic) =>
+  `${d.file ? `${relative(root, d.file.fileName)}(${d.file.getLineAndCharacterOfPosition(d.start ?? 0).line + 1}): ` : ""}TS${d.code} ${ts.flattenDiagnosticMessageText(d.messageText, " ")}`;
+function suppressStrictAppDiagnostics(files: string[]): number {
+  const byFile = new Map<string, Map<number, Set<string>>>();
+  for (const d of typeCheck(files)) {
+    const why = STRICT_APP_CODES.get(d.code);
+    if (!why || !d.file || !d.file.fileName.startsWith(outDir)) fail(`type error in the generated registry: ${formatDiagnostic(d)}`);
+    const line = d.file.getLineAndCharacterOfPosition(d.start ?? 0).line;
+    const lines = byFile.get(d.file.fileName) ?? new Map<number, Set<string>>();
+    lines.set(line, (lines.get(line) ?? new Set()).add(why));
+    byFile.set(d.file.fileName, lines);
+  }
+  let count = 0;
+  for (const [file, lines] of byFile) {
+    const text = readFileSync(file, "utf8").split("\n");
+    for (const [line, whys] of [...lines].sort(([a], [b]) => b - a)) {
+      const indent = text[line].match(/^\s*/)![0];
+      text.splice(line, 0, `${indent}// @ts-ignore -- kumo-shadcn: Kumo's code, rejected only by ${[...whys].join(", ")}`);
+      count++;
+    }
+    writeFileSync(file, text.join("\n"));
+  }
+  const left = typeCheck(files);
+  if (left.length) fail(`type errors after adding @ts-ignore lines:\n${left.map(formatDiagnostic).join("\n")}`);
+  return count;
+}
+
+// ---------------------------------------------------------------------------
 // Build
 
 rmSync(outDir, { recursive: true, force: true });
@@ -560,6 +701,11 @@ declare var process: NodeJS.Process;
 `,
   );
 writeFileSync(join(root, shimPath), iconShim());
+
+const generatedFiles = [...copies.values()].map((c) => join(root, outPath(c.area)));
+const extraFiles = [join(root, shimPath), ...(needsProcessEnv ? [join(root, processEnvPath)] : [])];
+const typeFixes = markTypeOnlyImports([...generatedFiles, ...extraFiles]);
+const ignores = suppressStrictAppDiagnostics([...generatedFiles, ...extraFiles]);
 
 // Tokens and themes
 const lightKumo = kumoThemeBlocks("theme-kumo.css");
@@ -704,5 +850,6 @@ writeFileSync(
 writeFileSync(join(root, "registry", "kumo", "VERSION"), `${release}\n`);
 const counts = { ui: 0, block: 0 };
 for (const cs of groups.values()) if (cs[0].area.kind !== "lib") counts[cs[0].area.kind]++;
+console.log(`Marked ${typeFixes} type-only import names; added ${ignores} @ts-ignore lines for strict app tsconfigs.`);
 console.log(`Generated ${counts.ui} components, ${counts.block} blocks, ${libCopies.length} helper files and ${iconImports.size} icon names from ${release}.`);
 if (bound.fallbacks.length) console.log(`notice: new Kumo tokens with no kumo-binding mapping yet (they use Kumo's value): ${bound.fallbacks.join(", ")}`);

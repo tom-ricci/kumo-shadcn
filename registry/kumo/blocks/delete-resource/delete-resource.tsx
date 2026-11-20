@@ -2,7 +2,8 @@
 
 // Kumo, packages/kumo/src/blocks/delete-resource/delete-resource.tsx from https://github.com/cloudflare/kumo
 // (release cloudflare/kumo@2.19.0), copied by the kumo-shadcn registry (https://github.com/tom-ricci/kumo-shadcn).
-// Changes from Kumo's file: import paths, and the "use client" line Kumo's build adds.
+// Changes from Kumo's file, all mechanical: import paths; `type` on type-only imports; `// @ts-ignore`
+// above lines that only stricter app tsconfigs reject; the "use client" line Kumo's build adds.
 // Unofficial; not affiliated with or endorsed by Cloudflare.
 //
 // MIT License Copyright (c) 2026 Cloudflare, Inc.
@@ -28,14 +29,9 @@
 // THE SOFTWARE.
 
 import { useState, useCallback, useEffect, useRef } from "react";
-import {
-  Dialog,
-  DialogRoot,
-  DialogTitle,
-  DialogClose,
-} from "@/components/ui/dialog/index";
-import { Input } from "@/components/ui/input/index";
-import { Button } from "@/components/ui/button/index";
+import { Dialog, DialogRoot, DialogTitle, DialogClose } from "@/components/ui/dialog/dialog";
+import { Input } from "@/components/ui/input/input";
+import { Button } from "@/components/ui/button/button";
 import { cn } from "@/lib/kumo/cn";
 import {
   CheckIcon,
@@ -43,7 +39,7 @@ import {
   WarningCircleIcon,
   XIcon,
 } from "@/lib/kumo/icons";
-import { Banner } from "@/components/ui/banner/index";
+import { Banner } from "@/components/ui/banner/banner";
 import { useCopyFeedback } from "@/lib/kumo/use-copy-feedback";
 
 export const KUMO_DELETE_RESOURCE_VARIANTS = {

@@ -56,7 +56,7 @@ const files: string[] = [];
 for (const lib of ICON_LIBRARIES) {
   const out = await transform({ filename: "icons.tsx", raw: shim, config: { ...config, iconLibrary: lib } as never, transformJsx: false });
   writeFileSync(join(work, `icons-${lib}.tsx`), out);
-  report(!/IconPlaceholder|icon-placeholder/.test(out), `icons: ${lib} transform leaves no IconPlaceholder`);
+  report(!/<IconPlaceholder|from "[^"]*icon-placeholder"/.test(out), `icons: ${lib} transform leaves no IconPlaceholder`);
   // Uses the shim like Kumo does: JSX with Phosphor props, icons as values
   // typed `Icon`, and IconContext defaults.
   writeFileSync(

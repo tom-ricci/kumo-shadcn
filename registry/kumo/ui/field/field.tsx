@@ -2,7 +2,8 @@
 
 // Kumo, packages/kumo/src/components/field/field.tsx from https://github.com/cloudflare/kumo
 // (release cloudflare/kumo@2.19.0), copied by the kumo-shadcn registry (https://github.com/tom-ricci/kumo-shadcn).
-// Changes from Kumo's file: import paths, and the "use client" line Kumo's build adds.
+// Changes from Kumo's file, all mechanical: import paths; `type` on type-only imports; `// @ts-ignore`
+// above lines that only stricter app tsconfigs reject; the "use client" line Kumo's build adds.
 // Unofficial; not affiliated with or endorsed by Cloudflare.
 //
 // MIT License Copyright (c) 2026 Cloudflare, Inc.
@@ -30,7 +31,7 @@
 import { Field as FieldBase } from "@base-ui/react/field";
 import type { ReactNode } from "react";
 import { cn } from "@/lib/kumo/cn";
-import { Label } from "@/components/ui/label/index";
+import { Label } from "@/components/ui/label/label";
 
 /**
  * Normalizes an error prop that may be a string or structured object
