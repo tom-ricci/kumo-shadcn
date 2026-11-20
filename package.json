@@ -4,10 +4,14 @@
   "type": "module",
   "license": "MIT",
   "scripts": {
-    "generate": "node scripts/generate.mjs",
+    "fetch-kumo": "scripts/fetch-kumo.sh .kumo",
+    "generate": "node scripts/generate.ts --kumo .kumo",
     "build": "shadcn build",
-    "typecheck": "tsc -p tsconfig.json",
-    "registry": "npm run generate && npm run build && npm run typecheck"
+    "typecheck": "tsc -p tsconfig.json && tsc -p tsconfig.scripts.json",
+    "check-icons": "node scripts/check-icons.ts",
+    "registry": "npm run generate && npm run build && npm run typecheck && npm run check-icons",
+    "verify": "scripts/verify.sh",
+    "compare-themes": "node scripts/compare-themes.ts"
   },
   "devDependencies": {
     "@base-ui/react": "1.9.0",
@@ -31,6 +35,10 @@
     "react-day-picker": "9.14.0",
     "react-dom": "19.3.1",
     "shadcn": "4.23.0",
+    "tailwindcss": "4.3.4",
     "typescript": "6.0.3"
+  },
+  "engines": {
+    "node": ">=22.18"
   }
 }

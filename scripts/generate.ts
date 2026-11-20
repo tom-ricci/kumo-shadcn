@@ -848,6 +848,8 @@ writeFileSync(
   `${JSON.stringify({ $schema: "https://ui.shadcn.com/schema/registry.json", name: "kumo", homepage: HOMEPAGE, items }, null, 2)}\n`,
 );
 writeFileSync(join(root, "registry", "kumo", "VERSION"), `${release}\n`);
+// Kumo's license, next to the files copied from it (each also has it inline).
+writeFileSync(join(root, "registry", "kumo", "LICENSE-KUMO"), `${licenseText}\n`);
 const counts = { ui: 0, block: 0 };
 for (const cs of groups.values()) if (cs[0].area.kind !== "lib") counts[cs[0].area.kind]++;
 console.log(`Marked ${typeFixes} type-only import names; added ${ignores} @ts-ignore lines for strict app tsconfigs.`);

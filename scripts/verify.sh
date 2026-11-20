@@ -14,7 +14,8 @@ set -uo pipefail
 SHADCN="shadcn@4.23.0"
 framework=$1 icons=$2 theme=$3 aliases=${4:-default}
 repo=$(cd "$(dirname "$0")/.." && pwd)
-work=${5:-$repo/.check/apps}
+# Outside the repository, so the apps can't resolve this repo's node_modules.
+work=${5:-${RUNNER_TEMP:-${TMPDIR:-/tmp}}/kumo-shadcn-verify}
 name="$framework-$icons-$theme${aliases/default/}"
 name=${name//custom-aliases/-custom}
 app="$work/$name"
@@ -48,6 +49,12 @@ node -e '
 const fs = require("fs"); const c = JSON.parse(fs.readFileSync("components.json", "utf8"));
 c.iconLibrary = process.argv[1]; c.aliases.ui = process.argv[2]; c.aliases.lib = process.argv[3];
 fs.writeFileSync("components.json", JSON.stringify(c, null, 2));' "$icons" "$ui_alias" "$lib_alias"
+# shadcn init installs the icon library's packages; do the same for the one
+# picked here (the list is the CLI's own, from shadcn/icons).
+mapfile -t icon_packages < <(node --input-type=module -e '
+const { iconLibraries } = await import(process.cwd() + "/node_modules/shadcn/dist/icons/index.js");
+console.log(iconLibraries[process.argv[1]].packages.join("\n"));' "$icons")
+step "install ${icon_packages[*]}" npm install "${icon_packages[@]}" || exit 1
 src=.; [ -d src ] && src=src
 dir() { echo "$src/${1#@/}"; }
 

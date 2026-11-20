@@ -3,8 +3,7 @@
 // Demo page for scripts/verify.sh: renders a sample of Kumo components and
 // imports every installed item (kumo-all.ts, written by the script), so the
 // type check and the production build cover all of them.
-// ?dark on the URL switches to dark mode with shadcn's .dark class.
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { Badge } from "@/components/ui/badge/index";
 import { Banner } from "@/components/ui/banner/index";
 import { Button } from "@/components/ui/button/index";
@@ -24,9 +23,6 @@ export function KumoDemo() {
   const [on, setOn] = useState(true);
   const [checked, setChecked] = useState(true);
   const [page, setPage] = useState(2);
-  useEffect(() => {
-    document.documentElement.classList.toggle("dark", new URLSearchParams(window.location.search).has("dark"));
-  }, []);
   return (
     <div className="min-h-screen bg-kumo-canvas p-8 text-kumo-default" data-kumo-modules={kumoModules.length}>
       <div className="mx-auto grid max-w-3xl gap-6">

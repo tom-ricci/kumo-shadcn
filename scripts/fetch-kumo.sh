@@ -1,0 +1,26 @@
+#!/usr/bin/env bash
+# Downloads the source of the latest Kumo release (github.com/cloudflare/kumo)
+# into <dir> and prints its tag. The monorepo releases several packages, so
+# only tags named @cloudflare/kumo@<version> count; drafts and prereleases
+# are skipped. KUMO_TAG=<tag> pins a release instead.
+#
+#   scripts/fetch-kumo.sh <dir>
+set -euo pipefail
+dir=${1:?usage: scripts/fetch-kumo.sh <dir>}
+auth=()
+[ -n "${GH_TOKEN:-}" ] && auth=(-H "Authorization: Bearer $GH_TOKEN")
+
+tag=${KUMO_TAG:-$(curl -fsSL "${auth[@]}" "https://api.github.com/repos/cloudflare/kumo/releases?per_page=100" | node -e '
+let s = ""; process.stdin.on("data", (d) => (s += d)).on("end", () => {
+  const prefix = "@cloudflare/kumo@";
+  const v = (t) => t.slice(prefix.length).split(".").map(Number);
+  const tags = JSON.parse(s).filter((r) => !r.draft && !r.prerelease && r.tag_name.startsWith(prefix) && /^\d+\.\d+\.\d+$/.test(r.tag_name.slice(prefix.length))).map((r) => r.tag_name);
+  if (!tags.length) { console.error("no @cloudflare/kumo release found"); process.exit(1); }
+  tags.sort((a, b) => { const [x, y] = [v(a), v(b)]; return x[0] - y[0] || x[1] - y[1] || x[2] - y[2]; });
+  console.log(tags.at(-1));
+});')}
+
+rm -rf "$dir" && mkdir -p "$dir"
+curl -fsSL "${auth[@]}" "https://codeload.github.com/cloudflare/kumo/tar.gz/refs/tags/$tag" | tar -xz --strip-components=1 -C "$dir"
+[ -f "$dir/packages/kumo/package.json" ] || { echo "no packages/kumo in $tag" >&2; exit 1; }
+echo "$tag"
