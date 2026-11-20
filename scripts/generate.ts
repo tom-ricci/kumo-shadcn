@@ -125,13 +125,53 @@ const SOURCE_PATCHES: { file: string; find: string; replace: string; why: string
     // (kumo-cloudflare) set them; unset, they are Kumo's defaults.
     file: "components/sidebar/sidebar.tsx",
     find: "[--sidebar-active-bg:var(--color-kumo-tint)] [--sidebar-bg:var(--color-kumo-base)]",
-    replace: "[--sidebar-active-bg:var(--kumo-sidebar-active-bg,var(--color-kumo-tint))] [--sidebar-bg:var(--kumo-sidebar-bg,var(--color-kumo-base))]",
-    why: "the sidebar's default colors read --kumo-sidebar-bg and --kumo-sidebar-active-bg first",
+    replace: "[--sidebar-active-bg:var(--kumo-sidebar-active-bg,var(--kumo-highlight,var(--color-kumo-tint)))] [--sidebar-bg:var(--kumo-sidebar-bg,var(--color-kumo-base))]",
+    why: "the sidebar's default colors read --kumo-sidebar-bg and --kumo-sidebar-active-bg (then --kumo-highlight) first",
   },
 ];
 const appliedPatches = new Set<string>();
+
+// The highlight hook. Interactive-state backgrounds that use Kumo's tint
+// (hover, highlighted, selected, open, ...) read --kumo-highlight first, so
+// a theme can give every hover/selected background one shade
+// (kumo-cloudflare does). Unset, they are Kumo's tint. Only class tokens
+// whose variant chain has one of these states and whose utility is exactly
+// bg-kumo-tint change; static tint, semantic tints and other tokens don't.
+// scripts/expected-highlights.txt lists every match; a difference fails
+// generation, so new occurrences get reviewed.
+const HIGHLIGHT_STATES = new Set([
+  "hover", "group-hover", "data-highlighted", "data-[highlighted]", "data-active", "data-[active]",
+  "aria-selected", "data-selected", "data-[selected]", "data-[state=open]", "data-popup-open", "focus-visible", "active",
+]);
+const HIGHLIGHT_UTILITY = "bg-(--kumo-highlight,var(--color-kumo-tint))";
+const highlightHits: string[] = [];
+function variantsOf(prefix: string): string[] {
+  const out: string[] = [];
+  let depth = 0, cur = "";
+  for (const ch of prefix) {
+    if (ch === "[" || ch === "(") depth++;
+    if (ch === "]" || ch === ")") depth--;
+    if (ch === ":" && depth === 0) {
+      out.push(cur);
+      cur = "";
+    } else cur += ch;
+  }
+  return out;
+}
+function hookHighlights(where: string, text: string): string {
+  return text.replace(/(?<=^|[\s"'`])((?:[^\s"'`:]*(?:\[[^\]\s]*\])?[^\s"'`:]*:)+)bg-kumo-tint(?=[\s"'`]|$)/gm, (token, prefix: string, offset: number) => {
+    const states = variantsOf(prefix).map((v) => v.replace(/\/.*$/, ""));
+    if (!states.some((v) => HIGHLIGHT_STATES.has(v))) return token;
+    highlightHits.push(`${where}:${text.slice(0, offset).split("\n").length} ${token}`);
+    return `${prefix}${HIGHLIGHT_UTILITY}`;
+  });
+}
+
 function patchSource(where: string, text: string): { text: string; notes: string[] } {
   const notes: string[] = [];
+  const hooked = hookHighlights(where, text);
+  if (hooked !== text) notes.push("hover/selected backgrounds that use Kumo's tint read --kumo-highlight first");
+  text = hooked;
   for (const p of SOURCE_PATCHES.filter((p) => p.file === where)) {
     const count = text.split(p.find).length - 1;
     if (count !== 1) fail(`source patch for ${where} matched ${count} times (expected 1): ${p.find}`);
@@ -673,6 +713,16 @@ while (pending.length) {
 }
 
 for (const p of SOURCE_PATCHES) if (!appliedPatches.has(p.find)) fail(`source patch target ${p.file} not found`);
+{
+  const expectedFile = join(root, "scripts", "expected-highlights.txt");
+  const expected = readFileSync(expectedFile, "utf8").split("\n").filter((l) => l.trim() && !l.startsWith("#"));
+  const found = sorted(highlightHits);
+  console.log(`Highlight hook on ${found.length} interactive tint backgrounds:\n${found.map((h) => `  ${h}`).join("\n")}`);
+  const strip = (l: string) => l.replace(/:\d+ /, " "); // compare without line numbers
+  const [want, got] = [sorted(expected.map(strip)), sorted(found.map(strip))];
+  if (want.join("\n") !== got.join("\n"))
+    fail(`highlight hook matches differ from scripts/expected-highlights.txt. Review them, then update the file.\n  new: ${got.filter((g) => !want.includes(g)).join(", ") || "-"}\n  gone: ${want.filter((w) => !got.includes(w)).join(", ") || "-"}`);
+}
 for (const c of copies.values()) {
   const out = join(root, outPath(c.area));
   mkdirSync(dirname(out), { recursive: true });

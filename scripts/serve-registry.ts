@@ -3,18 +3,17 @@
 // built, except that the production base URL in registryDependencies is
 // rewritten to this server, so the verified files are the published ones.
 //
-//   node scripts/serve-registry.ts [port]
+//   node scripts/serve-registry.ts [port]   (0 or none: a free port; prints the URL)
 import { readFile } from "node:fs/promises";
 import { createServer } from "node:http";
 import { join, normalize, resolve, dirname } from "node:path";
 import { fileURLToPath } from "node:url";
 
 const root = resolve(dirname(fileURLToPath(import.meta.url)), "..", "public", "r");
-const port = Number(process.argv[2] ?? 4873);
 const PROD = "https://raw.githubusercontent.com/tom-ricci/kumo-shadcn/main/public/r";
-const local = `http://127.0.0.1:${port}/r`;
+let local = "";
 
-createServer(async (req, res) => {
+const server = createServer(async (req, res) => {
   const path = normalize(decodeURIComponent(new URL(req.url ?? "/", local).pathname)).replace(/^\/r\//, "");
   try {
     if (path.includes("..") || !path.endsWith(".json")) throw new Error("not found");
@@ -23,4 +22,8 @@ createServer(async (req, res) => {
   } catch {
     res.writeHead(404).end("not found");
   }
-}).listen(port, "127.0.0.1", () => console.log(`registry at ${local}`));
+});
+server.listen(Number(process.argv[2] ?? 0), "127.0.0.1", () => {
+  local = `http://127.0.0.1:${(server.address() as { port: number }).port}/r`;
+  console.log(`registry at ${local}`);
+});

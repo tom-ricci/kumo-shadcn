@@ -4,6 +4,7 @@
 // (release cloudflare/kumo@2.19.0), copied by the kumo-shadcn registry (https://github.com/tom-ricci/kumo-shadcn).
 // Changes from Kumo's file, all mechanical: import paths; `type` on type-only imports; `// @ts-ignore`
 // above lines that only stricter app tsconfigs reject; the "use client" line Kumo's build adds.
+// Also changed: hover/selected backgrounds that use Kumo's tint read --kumo-highlight first.
 // Unofficial; not affiliated with or endorsed by Cloudflare.
 //
 // MIT License Copyright (c) 2026 Cloudflare, Inc.
@@ -129,7 +130,7 @@ const autoInsetClasses =
 const menuRowClasses = cn(
   "relative flex cursor-default items-center gap-2 rounded-md px-2 py-1.5 text-base outline-hidden select-none", // base styles
   "focus:text-kumo-default focus-visible:ring-2 focus-visible:ring-kumo-brand", // focus state
-  "data-highlighted:bg-kumo-tint", // highlight state
+  "data-highlighted:bg-(--kumo-highlight,var(--color-kumo-tint))", // highlight state
   "data-disabled:pointer-events-none data-disabled:opacity-50", // disabled state
   autoInsetClasses,
 );
@@ -170,7 +171,7 @@ const DropdownMenuSubTrigger = React.forwardRef<
     data-kumo-part="submenu-trigger"
     className={cn(
       menuRowClasses,
-      "data-popup-open:bg-kumo-tint", // keep highlighted while the submenu is open
+      "data-popup-open:bg-(--kumo-highlight,var(--color-kumo-tint))", // keep highlighted while the submenu is open
       inset && "pl-8", // conditional inset
       className,
     )}

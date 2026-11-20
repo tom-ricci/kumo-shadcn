@@ -4,6 +4,7 @@
 // (release cloudflare/kumo@2.19.0), copied by the kumo-shadcn registry (https://github.com/tom-ricci/kumo-shadcn).
 // Changes from Kumo's file, all mechanical: import paths; `type` on type-only imports; `// @ts-ignore`
 // above lines that only stricter app tsconfigs reject; the "use client" line Kumo's build adds.
+// Also changed: hover/selected backgrounds that use Kumo's tint read --kumo-highlight first.
 // Unofficial; not affiliated with or endorsed by Cloudflare.
 //
 // MIT License Copyright (c) 2026 Cloudflare, Inc.
@@ -687,7 +688,7 @@ function Option<T>({ children, value, disabled, className }: OptionProps<T>) {
       className={cn(
         "group mx-1.5 flex cursor-pointer items-center justify-between gap-2 rounded px-2 py-1.5 text-base outline-none focus-visible:outline-hidden",
         "focus-visible:z-50 focus-visible:ring-2 focus-visible:ring-kumo-brand focus-visible:ring-inset",
-        "data-highlighted:bg-kumo-tint",
+        "data-highlighted:bg-(--kumo-highlight,var(--color-kumo-tint))",
         "data-[disabled]:pointer-events-none data-[disabled]:cursor-not-allowed data-[disabled]:opacity-50",
         className,
       )}

@@ -38,17 +38,21 @@ export const kumoTheme: KumoTheme = {
   extras: { light: {}, dark: {} },
 };
 
-// The Cloudflare dashboard's look. Checked against the CSS the dashboard
-// ships (November 2026): its token values equal Kumo's, and the only app-wide
-// difference is the main sidebar's colors. Kumo's Sidebar reads these two
-// variables through a hook the generator adds (see SOURCE_PATCHES).
+// The Cloudflare dashboard's look, and where it is going. Measured in
+// November 2026 from the live dashboard's CSS and a survey of 49 dashboard
+// pages: its theme tokens equal Kumo's; its sidebar uses the canvas color;
+// and every newly migrated hover/selected background uses one shade whatever
+// the surface (light 96.5% = Kumo's neutral-125, dark 21% = neutral-900),
+// replacing Kumo's tint (97% / 26.9%). kumo-cloudflare applies that shade to
+// every interactive state through --kumo-highlight, which the generator
+// hooks into Kumo's components (see hookHighlights in generate.ts).
 export const kumoCloudflare: KumoTheme = {
   name: "kumo-cloudflare",
   title: "Kumo theme, Cloudflare dashboard variant",
-  description: "Kumo's own colors with the Cloudflare dashboard's sidebar (canvas background; recessed, or control in dark mode, for the active item). Install one theme item: kumo-theme, kumo-cloudflare or kumo-binding.",
+  description: "Kumo's own colors with the Cloudflare dashboard's direction: one highlight shade for every hover and selected background, and a canvas-colored sidebar. Install one theme item: kumo-theme, kumo-cloudflare or kumo-binding.",
   extras: {
-    light: { "--kumo-sidebar-bg": "var(--color-kumo-canvas)", "--kumo-sidebar-active-bg": "var(--color-kumo-recessed)" },
-    dark: { "--kumo-sidebar-bg": "var(--color-kumo-canvas)", "--kumo-sidebar-active-bg": "var(--color-kumo-control)" },
+    light: { "--kumo-highlight": "var(--color-kumo-neutral-125, oklch(96.5% 0 0))", "--kumo-sidebar-bg": "var(--color-kumo-canvas)" },
+    dark: { "--kumo-highlight": "var(--color-neutral-900, oklch(20.5% 0 0))", "--kumo-sidebar-bg": "var(--color-kumo-canvas)" },
   },
 };
 

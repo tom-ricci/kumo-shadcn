@@ -77,7 +77,8 @@ item. Install exactly one:
 
 - **`kumo-theme`**: Kumo's own look, with Kumo's colors and type scale, as Kumo ships them. It also
   includes Kumo's `fedramp` theme (`data-theme="fedramp"`).
-- **`kumo-cloudflare`**: like `kumo-theme`, plus the Cloudflare dashboard's sidebar colors (see below).
+- **`kumo-cloudflare`**: like `kumo-theme`, plus the direction of the Cloudflare dashboard's design: one
+  highlight shade for hover and selected states, and a canvas-colored sidebar (see below).
 - **`kumo-binding`**: derives Kumo's colors from your shadcn variables, so Kumo components match your
   theme and your other shadcn components.
 
@@ -95,15 +96,26 @@ item. The CLI adds rules but doesn't remove them.
 
 ### kumo-cloudflare
 
-Kumo has no "Cloudflare dashboard" theme. In November 2026 we compared the CSS the Cloudflare dashboard
-ships with Kumo's: every theme token has Kumo's value. The one app-wide difference is the main sidebar,
-which uses the canvas color for its background, and the recessed color (control in dark mode) for the
-active item. Kumo's default is the base and tint colors. `kumo-cloudflare` is `kumo-theme` plus those
-two settings. (The dashboard also has a few one-off overrides on single pages. They are left out.)
+Kumo has no "Cloudflare dashboard" theme. This one follows where the dashboard's design is going. It is
+based on measurements from November 2026: the CSS the live dashboard loads, and a survey of 49
+dashboard pages.
 
-Kumo's sidebar sets these colors with classes on its own element, which a stylesheet can't override.
-So the registry's copy of `sidebar.tsx` reads `--kumo-sidebar-bg` and `--kumo-sidebar-active-bg` first,
-and falls back to Kumo's defaults. Only `kumo-cloudflare` sets them.
+- The dashboard's theme tokens all have Kumo's values.
+- The main sidebar uses the canvas color for its background (Kumo: base).
+- The dashboard is moving all hover and selected backgrounds to one highlight shade: light 96.5%, dark
+  21%, whatever surface they sit on. Kumo uses its tint color for these (97% / 26.9%). The dashboard has
+  done this first in the sidebar, popovers and dialog lists. `kumo-cloudflare` applies it to every
+  interactive state now.
+
+To make that possible, the registry's copies of Kumo's components read a `--kumo-highlight` variable
+first wherever a hover, highlighted, selected or open state uses the tint color (10 places in Kumo
+2.19.0, listed in [`scripts/expected-highlights.txt`](scripts/expected-highlights.txt)). The sidebar also
+reads `--kumo-sidebar-bg` and `--kumo-sidebar-active-bg`. Only `kumo-cloudflare` sets these, so with
+`kumo-theme` or `kumo-binding` the components look exactly as Kumo ships them. You can also set
+`--kumo-highlight` yourself.
+
+The dashboard has a few other overrides on single pages (a tinted notice, table striping, a scoped brand
+color). They are left out.
 
 ### kumo-binding
 
@@ -187,7 +199,8 @@ in [`scripts/icons.ts`](scripts/icons.ts).
 A workflow ([`update.yml`](.github/workflows/update.yml)) runs every day. It takes the source of the
 latest Kumo release, regenerates the registry, and installs every item with the real shadcn CLI into fresh
 Vite and Next.js apps (lucide, tabler and hugeicons; all three themes; default and custom aliases). Each
-app must pass `tsc --noEmit` and a production build. Only then does it commit the new registry to `main`.
+app must pass `tsc --noEmit` and a production build. In the Vite apps, a headless Chrome also hovers a
+button, a dropdown item and a sidebar item and checks their backgrounds against the theme. Only then does it commit the new registry to `main`.
 If anything fails, nothing is published and the run fails.
 
 So when Kumo adds or changes a component, the next `shadcn add` gives you the new version. Like any
@@ -209,7 +222,7 @@ PostCSS. It never runs Kumo's code, and it uses no AI. For each component it:
 Kumo's class names and logic are not changed. The only other edits are mechanical, and each file's
 header lists them: `type` on imports that are only types; `// @ts-ignore` above the few lines that only
 stricter app settings reject (Kumo's `enum`s under `erasableSyntaxOnly`, one unused parameter); a
-`"use client"` line; and the sidebar hook above.
+`"use client"` line; and the highlight and sidebar hooks above.
 
 The generator stops with an error instead of guessing: on an icon with no mapping
 (`unmapped icon: X`), an import it can't place, a package Kumo doesn't declare, or a type error.

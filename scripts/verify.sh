@@ -24,7 +24,6 @@ name="$framework-$icons-$theme${aliases/default/}"
 name=${name//custom-aliases/-custom}
 [ -n "$only" ] && name="$name-only-${only//,/-}"
 app="$work/$name"
-port=$((4873 + RANDOM % 1000))
 # Third-party packages install without running their install scripts.
 export npm_config_ignore_scripts=true npm_config_audit=false npm_config_fund=false npm_config_update_notifier=false
 export NEXT_TELEMETRY_DISABLED=1
@@ -38,10 +37,12 @@ step() { # step <description> <command...>: run, log, PASS/FAIL
 }
 
 mkdir -p "$work" && rm -rf "$app"
-node "$repo/scripts/serve-registry.ts" "$port" >"$work/$name.server.log" 2>&1 &
+node "$repo/scripts/serve-registry.ts" 0 >"$work/$name.server.log" 2>&1 &
 server=$!
 trap 'kill $server 2>/dev/null' EXIT
-for _ in $(seq 50); do curl -sf "http://127.0.0.1:$port/r/kumo-base.json" >/dev/null && break; sleep 0.1; done
+port=
+for _ in $(seq 100); do port=$(sed -n 's#^registry at http://127.0.0.1:\([0-9]*\)/r$#\1#p' "$work/$name.server.log"); [ -n "$port" ] && break; sleep 0.1; done
+[ -n "$port" ] || { echo "FAIL $name: registry server did not start"; exit 1; }
 
 # 1. Fresh app, the way the shadcn docs make one.
 step "shadcn init -t $framework" bash -c "cd '$work' && npx -y $SHADCN init -t $framework -n '$name' -d -y" || exit 1
@@ -115,5 +116,12 @@ fi
 if [ -n "$css" ] && grep -q "bg-kumo-base" $css && grep -q -- "--kumo-base:" $css && grep -q "@keyframes skeleton" $css; then
   pass "built CSS has Kumo utilities, $theme tokens and keyframes"
 else fail "built CSS is missing Kumo utilities, tokens or keyframes"; fi
+
+# 6. Hover/selected backgrounds in a real browser (needs $CHROMIUM), for the
+# themes whose values are known: Kumo's tint, or kumo-cloudflare's highlight.
+if [ "$framework" = vite ] && [ -z "$only" ] && [ "$theme" != kumo-binding ] && [ -n "${CHROMIUM:-}" ]; then
+  if node "$repo/scripts/check-highlight.ts" "$work/$name-shots" "$app/dist=$theme" >"$work/$name.highlight.log" 2>&1; then :; else failed=1; fi
+  cat "$work/$name.highlight.log"
+fi
 
 exit $failed

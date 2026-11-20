@@ -92,6 +92,7 @@ jobs:
           # One item on its own, as users add them (input and input-group
           # depend on each other).
           - vite lucide kumo-binding default input
+          - vite lucide kumo-cloudflare default
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
@@ -107,8 +108,12 @@ jobs:
         with:
           name: registry
 
-      # shadcn init + add every item + tsc --noEmit + production build.
+      # shadcn init + add every item + tsc --noEmit + production build, and for
+      # Vite apps with kumo-theme / kumo-cloudflare, hover and selected
+      # backgrounds in a real browser (the runner's Chrome).
       - name: Install every item into a fresh app (${{ matrix.app }})
+        env:
+          CHROMIUM: google-chrome
         run: scripts/verify.sh ${{ matrix.app }}
 
   publish:

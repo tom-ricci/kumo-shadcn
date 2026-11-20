@@ -4,7 +4,7 @@
 // (release cloudflare/kumo@2.19.0), copied by the kumo-shadcn registry (https://github.com/tom-ricci/kumo-shadcn).
 // Changes from Kumo's file, all mechanical: import paths; `type` on type-only imports; `// @ts-ignore`
 // above lines that only stricter app tsconfigs reject; the "use client" line Kumo's build adds.
-// Also changed: the sidebar's default colors read --kumo-sidebar-bg and --kumo-sidebar-active-bg first.
+// Also changed: the sidebar's default colors read --kumo-sidebar-bg and --kumo-sidebar-active-bg (then --kumo-highlight) first.
 // Unofficial; not affiliated with or endorsed by Cloudflare.
 //
 // MIT License Copyright (c) 2026 Cloudflare, Inc.
@@ -651,7 +651,7 @@ function SidebarProvider({
           } as CSSProperties
         }
         className={cn(
-          "group/sidebar-wrapper relative isolate flex w-full [--sidebar-active-bg:var(--kumo-sidebar-active-bg,var(--color-kumo-tint))] [--sidebar-bg:var(--kumo-sidebar-bg,var(--color-kumo-base))]",
+          "group/sidebar-wrapper relative isolate flex w-full [--sidebar-active-bg:var(--kumo-sidebar-active-bg,var(--kumo-highlight,var(--color-kumo-tint)))] [--sidebar-bg:var(--kumo-sidebar-bg,var(--color-kumo-base))]",
           !contained && !isMobile && "min-h-svh",
           "has-data-[variant=inset]:bg-kumo-recessed",
           isResizing && "select-none",

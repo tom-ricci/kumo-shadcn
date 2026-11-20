@@ -2,7 +2,7 @@
   "$schema": "https://ui.shadcn.com/schema/registry-item.json",
   "name": "kumo-cloudflare",
   "title": "Kumo theme, Cloudflare dashboard variant",
-  "description": "Kumo's own colors with the Cloudflare dashboard's sidebar (canvas background; recessed, or control in dark mode, for the active item). Install one theme item: kumo-theme, kumo-cloudflare or kumo-binding. From @cloudflare/kumo@2.19.0.",
+  "description": "Kumo's own colors with the Cloudflare dashboard's direction: one highlight shade for every hover and selected background, and a canvas-colored sidebar. Install one theme item: kumo-theme, kumo-cloudflare or kumo-binding. From @cloudflare/kumo@2.19.0.",
   "registryDependencies": [
     "https://raw.githubusercontent.com/tom-ricci/kumo-shadcn/main/public/r/kumo-base.json"
   ],
@@ -75,8 +75,8 @@
         "--kumo-badge-blue": "var(--color-blue-600, oklch(54.6% 0.245 262.881))",
         "--kumo-badge-neutral": "var(--color-neutral-500, oklch(55.6% 0 0))",
         "--kumo-badge-inverted": "var(--color-neutral-950, oklch(14.5% 0 0))",
-        "--kumo-sidebar-bg": "var(--color-kumo-canvas)",
-        "--kumo-sidebar-active-bg": "var(--color-kumo-recessed)"
+        "--kumo-highlight": "var(--color-kumo-neutral-125, oklch(96.5% 0 0))",
+        "--kumo-sidebar-bg": "var(--color-kumo-canvas)"
       },
       ":root[data-mode=\"dark\"], [data-mode=\"dark\"]:not([data-theme]), [data-mode=\"dark\"] [data-theme=\"kumo\"], [data-theme=\"kumo\"][data-mode=\"dark\"], [data-theme=\"kumo\"] [data-mode=\"dark\"], :root.dark, .dark:not([data-theme]), .dark [data-theme=\"kumo\"], [data-theme=\"kumo\"].dark, [data-theme=\"kumo\"] .dark": {
         "--kumo-text-default": "var(--color-neutral-100, oklch(97% 0 0))",
@@ -133,8 +133,8 @@
         "--kumo-badge-blue": "var(--color-blue-700, oklch(48.8% 0.243 264.376))",
         "--kumo-badge-neutral": "var(--color-neutral-600, oklch(43.9% 0 0))",
         "--kumo-badge-inverted": "var(--color-white, #fff)",
-        "--kumo-sidebar-bg": "var(--color-kumo-canvas)",
-        "--kumo-sidebar-active-bg": "var(--color-kumo-control)"
+        "--kumo-highlight": "var(--color-neutral-900, oklch(20.5% 0 0))",
+        "--kumo-sidebar-bg": "var(--color-kumo-canvas)"
       },
       "[data-theme=\"fedramp\"]": {
         "--kumo-canvas": "#5b697c",

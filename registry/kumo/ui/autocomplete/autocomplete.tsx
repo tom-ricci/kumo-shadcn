@@ -4,6 +4,7 @@
 // (release cloudflare/kumo@2.19.0), copied by the kumo-shadcn registry (https://github.com/tom-ricci/kumo-shadcn).
 // Changes from Kumo's file, all mechanical: import paths; `type` on type-only imports; `// @ts-ignore`
 // above lines that only stricter app tsconfigs reject; the "use client" line Kumo's build adds.
+// Also changed: hover/selected backgrounds that use Kumo's tint read --kumo-highlight first.
 // Unofficial; not affiliated with or endorsed by Cloudflare.
 //
 // MIT License Copyright (c) 2026 Cloudflare, Inc.
@@ -270,7 +271,7 @@ function Item({
       {...props}
       className={cn(
         "group mx-1.5 grid cursor-pointer grid-cols-[1fr_16px] gap-2 rounded px-2 py-1.5 text-base",
-        "data-highlighted:bg-kumo-tint data-selected:font-medium",
+        "data-highlighted:bg-(--kumo-highlight,var(--color-kumo-tint)) data-selected:font-medium",
         className,
       )}
     >

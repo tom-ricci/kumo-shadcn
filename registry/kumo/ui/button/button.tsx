@@ -4,6 +4,7 @@
 // (release cloudflare/kumo@2.19.0), copied by the kumo-shadcn registry (https://github.com/tom-ricci/kumo-shadcn).
 // Changes from Kumo's file, all mechanical: import paths; `type` on type-only imports; `// @ts-ignore`
 // above lines that only stricter app tsconfigs reject; the "use client" line Kumo's build adds.
+// Also changed: hover/selected backgrounds that use Kumo's tint read --kumo-highlight first.
 // Unofficial; not affiliated with or endorsed by Cloudflare.
 //
 // MIT License Copyright (c) 2026 Cloudflare, Inc.
@@ -89,11 +90,11 @@ export const KUMO_BUTTON_VARIANTS = {
     },
     secondary: {
       classes:
-        "bg-kumo-base !text-kumo-default ring not-disabled:hover:bg-kumo-tint disabled:bg-kumo-base/50 disabled:!text-kumo-default/70 ring-kumo-line data-[state=open]:bg-kumo-base",
+        "bg-kumo-base !text-kumo-default ring not-disabled:hover:bg-(--kumo-highlight,var(--color-kumo-tint)) disabled:bg-kumo-base/50 disabled:!text-kumo-default/70 ring-kumo-line data-[state=open]:bg-kumo-base",
       description: "Default button style for most actions",
     },
     ghost: {
-      classes: "text-kumo-default hover:bg-kumo-tint shadow-none",
+      classes: "text-kumo-default hover:bg-(--kumo-highlight,var(--color-kumo-tint)) shadow-none",
       description: "Minimal button with no background",
     },
     destructive: {
