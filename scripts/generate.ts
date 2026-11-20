@@ -843,6 +843,36 @@ for (const [name, cs] of [...groups].sort(([a], [b]) => cmp(a, b))) {
 }
 for (const item of items) for (const key of ["dependencies", "devDependencies", "registryDependencies"]) if (Array.isArray(item[key]) && !(item[key] as unknown[]).length) delete item[key];
 
+// Every alias import in an item's files must point at a file that the item
+// or its registryDependencies (transitively) install, so that adding one
+// item on its own works.
+{
+  const fileOwner = new Map<string, string>();
+  for (const it of items as { name: string; files?: { target: string }[] }[])
+    for (const f of it.files ?? []) {
+      const m = f.target.match(/^@(ui|components|lib)\/(.+)\.(d\.ts|tsx?)$/)!;
+      const path = m[1] === "ui" ? `@/components/ui/${m[2]}` : m[1] === "components" ? `@/components/${m[2]}` : `@/lib/${m[2]}`;
+      fileOwner.set(path, it.name);
+      if (path.endsWith("/index")) fileOwner.set(path.slice(0, -6), it.name);
+    }
+  const byName = new Map((items as { name: string; registryDependencies?: string[] }[]).map((i) => [i.name, i]));
+  const closure = (name: string, seen = new Set<string>()): Set<string> => {
+    if (seen.has(name)) return seen;
+    seen.add(name);
+    for (const url of byName.get(name)?.registryDependencies ?? []) closure(url.slice(baseUrl.length + 1, -5), seen);
+    return seen;
+  };
+  for (const it of items as { name: string; files?: { path: string }[] }[]) {
+    const reach = closure(it.name);
+    for (const f of it.files ?? [])
+      for (const m of readFileSync(join(root, f.path), "utf8").matchAll(/from "(@\/(?:components|lib)\/[^"]+)"/g)) {
+        const owner = fileOwner.get(m[1]);
+        if (!owner) fail(`${f.path} imports ${m[1]}, which no item installs`);
+        if (!reach.has(owner)) fail(`${f.path} imports ${m[1]} from ${owner}, which ${it.name} does not depend on`);
+      }
+  }
+}
+
 writeFileSync(
   join(root, "registry.json"),
   `${JSON.stringify({ $schema: "https://ui.shadcn.com/schema/registry.json", name: "kumo", homepage: HOMEPAGE, items }, null, 2)}\n`,

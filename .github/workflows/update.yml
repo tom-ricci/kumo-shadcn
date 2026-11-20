@@ -89,6 +89,9 @@ jobs:
           - vite tabler kumo-cloudflare custom-aliases
           - next lucide kumo-binding default
           - next hugeicons kumo-cloudflare default
+          # One item on its own, as users add them (input and input-group
+          # depend on each other).
+          - vite lucide kumo-binding default input
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:

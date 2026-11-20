@@ -30,7 +30,8 @@ The list of items is in [`registry.json`](registry.json). The built item files a
 ## Install
 
 You need a project set up with `npx shadcn@latest init`, Tailwind CSS v4, React 18 or 19, and shadcn CLI
-4.23 or later. Older CLIs don't understand the file targets this registry uses.
+4.23 or later. Older CLIs don't understand the file targets this registry uses. The checks run with
+4.23.0.
 
 1. Add one theme item (see [Themes](#themes)):
 
@@ -81,8 +82,9 @@ item. Install exactly one:
   theme and your other shadcn components.
 
 Dark mode follows shadcn's `.dark` class. `kumo-theme` and `kumo-cloudflare` also keep Kumo's own
-selectors working: `data-mode="dark"` and `data-theme="kumo"` / `data-theme="fedramp"`, on the page or
-on part of it.
+selectors working for colors: `data-mode="dark"` and `data-theme="kumo"` / `data-theme="fedramp"`, on the
+page or on part of it. The few `dark:` classes in Kumo's code (in `Switch`) follow your app's dark
+variant, which is the `.dark` class in a shadcn project.
 
 `kumo-theme` and `kumo-cloudflare` set Kumo's type scale (`text-xs` 12px, `text-sm` 13px, `text-base`
 14px, `text-lg` 16px) for the whole app. That is how Kumo looks, but it also changes your other
@@ -218,7 +220,7 @@ The generator stops with an error instead of guessing: on an icon with no mappin
 npm ci --ignore-scripts
 npm run fetch-kumo      # download the latest Kumo release into .kumo/
 npm run registry        # generate, shadcn build, type-check, check the icon shim
-npm run verify -- vite lucide kumo-theme   # one test app (framework, icon library, theme)
+npm run verify -- vite lucide kumo-theme   # one test app: framework, icon library, theme [aliases] [items]
 ```
 
 ## Hosting
