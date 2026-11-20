@@ -73,7 +73,9 @@ step "shadcn add (${#urls[@]} items)" npx -y $SHADCN add "${urls[@]}" -y -o || e
 
 # 4. Where files landed, and what the CLI rewrote.
 probe=${only%%,*}; probe=${probe:-button}
-[ -f "$(dir "$ui_alias")/$probe/index.ts" ] && [ -f "$(dir "$lib_alias")/kumo/cn.ts" ] && { [ -n "$only" ] || [ -f "$(dir @/components)/delete-resource/index.ts" ]; } \
+probe_dir="$(dir "$ui_alias")/$probe" # a block lands under the components alias
+[ "$(node -p 'require(process.argv[1]).type' "$repo/public/r/$probe.json")" = registry:block ] && probe_dir="$(dir @/components)/$probe"
+[ -f "$probe_dir/index.ts" ] && [ -f "$(dir "$lib_alias")/kumo/cn.ts" ] && { [ -n "$only" ] || [ -f "$(dir @/components)/delete-resource/index.ts" ]; } \
   && pass "files are where components.json aliases say ($ui_alias, $lib_alias)" || fail "files not at the components.json aliases"
 sources=$(find "$src" -path ./node_modules -prune -o -path "$src/node_modules" -prune -o \( -name '*.ts' -o -name '*.tsx' \) -print)
 left=$(grep -lE '<IconPlaceholder|from "[^"]*icon-placeholder"' $sources)
@@ -81,7 +83,7 @@ if [ -n "$left" ]; then fail "IconPlaceholder left in: $(echo $left)"; else pass
 phosphor=$(grep -lE "from ['\"]@phosphor-icons/react" $sources)
 if [ "$icons" != phosphor ] && [ -n "$phosphor" ]; then fail "@phosphor-icons/react still imported in: $(echo $phosphor)"; else pass "icons come from $icons"; fi
 if grep -q '"@cloudflare/kumo"' package.json; then fail "@cloudflare/kumo in package.json"; else pass "no @cloudflare/kumo dependency"; fi
-grep -q "Permission is hereby granted" "$(dir "$ui_alias")/$probe/index.ts" && pass "license header kept" || fail "license header missing"
+grep -q "Permission is hereby granted" "$probe_dir/index.ts" && pass "license header kept" || fail "license header missing"
 
 # 5. Demo page that imports every item, then type check and build.
 node -e '
