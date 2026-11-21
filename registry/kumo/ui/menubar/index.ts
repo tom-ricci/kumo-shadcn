@@ -1,9 +1,11 @@
-"use client";
+/**
+ * @deprecated Use {@link Tabs} with `variant="segmented"` instead. `MenuBar` will be removed in a future release.
+ */
+export { MenuBar } from "./menubar";
 
 // Kumo, packages/kumo/src/components/menubar/index.ts from https://github.com/cloudflare/kumo
 // (release cloudflare/kumo@2.19.0), copied by the kumo-shadcn registry (https://github.com/tom-ricci/kumo-shadcn).
-// Changes from Kumo's file, all mechanical: import paths; `type` on type-only imports; `// @ts-ignore`
-// above lines that only stricter app tsconfigs reject; the "use client" line Kumo's build adds.
+// Changes from Kumo's file: import paths.
 // Unofficial; not affiliated with or endorsed by Cloudflare.
 //
 // MIT License Copyright (c) 2026 Cloudflare, Inc.
@@ -28,8 +30,4 @@
 // FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-/**
- * @deprecated Use {@link Tabs} with `variant="segmented"` instead. `MenuBar` will be removed in a future release.
- */
-export { MenuBar } from "./menubar";
 export { useMenuNavigation } from "./use-menu-navigation";

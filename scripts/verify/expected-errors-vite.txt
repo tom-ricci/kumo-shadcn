@@ -1,0 +1,23 @@
+# Errors a stock `shadcn init -t vite` app reports after adding every item (scripts/verify.sh).
+# One line per error: file and code, or the build result and bundler errors.
+<components>/page-header/page-header.tsx TS1484
+<ui>/banner/banner.tsx TS1294
+<ui>/chart/Color.ts TS1294
+<ui>/chart/Color.ts TS1294
+<ui>/chart/Color.ts TS1294
+<ui>/chart/Color.ts TS1294
+<ui>/chart/Color.ts TS1294
+<ui>/chart/TimeseriesChart.tsx TS1484
+<ui>/chart/TimeseriesChart.tsx TS1484
+<ui>/clipboard-text/clipboard-text.tsx TS6133
+<ui>/date-range-picker/date-range-picker.tsx TS1294
+<ui>/toast/toast.tsx TS1484
+<ui>/toast/toast.tsx TS1484
+<ui>/toast/toast.tsx TS1484
+<ui>/toast/toast.tsx TS1484
+build MISSING_EXPORT "ChartEvents" is not exported by "<ui>/chart/EChart.tsx".
+build MISSING_EXPORT "KumoChartOption" is not exported by "<ui>/chart/EChart.tsx".
+build MISSING_EXPORT "ToastManagerAddOptions" is not exported by "node_modules/@base-ui/react/toast/index.mjs".
+build MISSING_EXPORT "ToastManagerUpdateOptions" is not exported by "node_modules/@base-ui/react/toast/index.mjs".
+build MISSING_EXPORT "ToastObject" is not exported by "node_modules/@base-ui/react/toast/index.mjs".
+build: failed

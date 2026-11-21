@@ -9,9 +9,10 @@
     "build": "shadcn build",
     "typecheck": "tsc -p tsconfig.json && tsc -p tsconfig.scripts.json",
     "check-icons": "node scripts/check-icons.ts",
-    "registry": "npm run generate && npm run build && npm run typecheck && npm run check-icons",
+    "registry": "npm run generate && npm run build && npm run typecheck && npm run check-icons && npm run check-directory",
     "verify": "scripts/verify.sh",
-    "compare-themes": "node scripts/compare-themes.ts"
+    "compare-themes": "node scripts/compare-themes.ts",
+    "check-directory": "node scripts/check-directory.ts"
   },
   "devDependencies": {
     "@base-ui/react": "1.9.0",
@@ -36,7 +37,8 @@
     "react-dom": "19.3.1",
     "shadcn": "4.23.0",
     "tailwindcss": "4.3.4",
-    "typescript": "6.0.3"
+    "typescript": "6.0.3",
+    "wrangler": "4.158.0"
   },
   "engines": {
     "node": ">=22.18"

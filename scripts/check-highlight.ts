@@ -84,8 +84,10 @@ const lightness = (selector: string) =>
     const l = Math.cbrt(0.4122214708*r + 0.5363325363*g + 0.0514459929*b), m = Math.cbrt(0.2119034982*r + 0.6806995451*g + 0.1073969566*b), s = Math.cbrt(0.0883024619*r + 0.2817188376*g + 0.6299787005*b);
     return Math.round((0.2104542553*l + 0.793617785*m - 0.0040720468*s) * 1000) / 10;
   })()`);
-const center = async (selector: string) =>
-  evaluate(`(() => { const r = document.querySelector(${JSON.stringify(selector)}).getBoundingClientRect(); return [r.x + r.width / 2, r.y + r.height / 2]; })()`);
+// Center of an element, or a far corner when it isn't on the page (the
+// reading that follows then fails instead of the script crashing).
+const center = async (selector: string): Promise<number[]> =>
+  (await evaluate(`(() => { const e = document.querySelector(${JSON.stringify(selector)}); if (!e) return null; const r = e.getBoundingClientRect(); return [r.x + r.width / 2, r.y + r.height / 2]; })()`)) ?? [999, 999];
 const mouse = async (type: string, [x, y]: number[]) => cdp("Input.dispatchMouseEvent", { type, x, y, button: "left", clickCount: 1 });
 
 for (const [i, arg] of apps.entries()) {
@@ -111,8 +113,8 @@ for (const [i, arg] of apps.entries()) {
     await mouse("mouseMoved", await center('[data-check="dropdown-item"]'));
     await sleep(500);
     check("dropdown item highlighted", await lightness('[data-check="dropdown-item"]'));
-    const top = await evaluate(`document.querySelector('[data-check="states"]').getBoundingClientRect().top + scrollY`);
-    const shot = await cdp("Page.captureScreenshot", { format: "png", captureBeyondViewport: true, clip: { x: 40, y: top - 24, width: 760, height: 220, scale: 1 } });
+    const top = (await evaluate(`document.querySelector('[data-check="states"]')?.getBoundingClientRect().top + scrollY`)) ?? 24;
+    const shot = await cdp("Page.captureScreenshot", { format: "png", captureBeyondViewport: true, clip: { x: 40, y: Math.max(0, top - 24), width: 760, height: 220, scale: 1 } });
     await writeFile(join(outDir, `${name}-${mode}.png`), Buffer.from(shot.data, "base64"));
   }
 }

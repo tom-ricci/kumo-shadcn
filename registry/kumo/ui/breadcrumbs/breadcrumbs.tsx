@@ -1,9 +1,15 @@
-"use client";
+import {
+  Children,
+  cloneElement,
+  isValidElement,
+  type PropsWithChildren,
+  type ReactElement,
+  type ReactNode,
+} from "react";
 
 // Kumo, packages/kumo/src/components/breadcrumbs/breadcrumbs.tsx from https://github.com/cloudflare/kumo
 // (release cloudflare/kumo@2.19.0), copied by the kumo-shadcn registry (https://github.com/tom-ricci/kumo-shadcn).
-// Changes from Kumo's file, all mechanical: import paths; `type` on type-only imports; `// @ts-ignore`
-// above lines that only stricter app tsconfigs reject; the "use client" line Kumo's build adds.
+// Changes from Kumo's file: import paths.
 // Unofficial; not affiliated with or endorsed by Cloudflare.
 //
 // MIT License Copyright (c) 2026 Cloudflare, Inc.
@@ -28,14 +34,6 @@
 // FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-import {
-  Children,
-  cloneElement,
-  isValidElement,
-  type PropsWithChildren,
-  type ReactElement,
-  type ReactNode,
-} from "react";
 import { CheckIcon, CopyIcon } from "@/lib/kumo/icons";
 import { Button } from "@/components/ui/button/button";
 import { SkeletonLine } from "@/components/ui/loader/skeleton-line";

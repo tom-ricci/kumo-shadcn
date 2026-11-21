@@ -1,9 +1,19 @@
-"use client";
+export {
+  Grid,
+  GridItem,
+  gridVariants,
+  gridItemVariants,
+  KUMO_GRID_VARIANTS,
+  KUMO_GRID_DEFAULT_VARIANTS,
+  type GridProps,
+  type GridItemProps,
+  type KumoGridVariant,
+  type KumoGridGap,
+} from "./grid";
 
 // Kumo, packages/kumo/src/components/grid/index.ts from https://github.com/cloudflare/kumo
 // (release cloudflare/kumo@2.19.0), copied by the kumo-shadcn registry (https://github.com/tom-ricci/kumo-shadcn).
-// Changes from Kumo's file, all mechanical: import paths; `type` on type-only imports; `// @ts-ignore`
-// above lines that only stricter app tsconfigs reject; the "use client" line Kumo's build adds.
+// Changes from Kumo's file: import paths.
 // Unofficial; not affiliated with or endorsed by Cloudflare.
 //
 // MIT License Copyright (c) 2026 Cloudflare, Inc.
@@ -28,15 +38,3 @@
 // FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-export {
-  Grid,
-  GridItem,
-  gridVariants,
-  gridItemVariants,
-  KUMO_GRID_VARIANTS,
-  KUMO_GRID_DEFAULT_VARIANTS,
-  type GridProps,
-  type GridItemProps,
-  type KumoGridVariant,
-  type KumoGridGap,
-} from "./grid";
