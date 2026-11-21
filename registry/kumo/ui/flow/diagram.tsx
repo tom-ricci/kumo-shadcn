@@ -1,8 +1,18 @@
-"use client";
+import {
+  createContext,
+  useCallback,
+  useContext,
+  useEffect,
+  useId,
+  useMemo,
+  useRef,
+  useState,
+  type ReactNode,
+} from "react";
 
 // Kumo, packages/kumo/src/components/flow/diagram.tsx from https://github.com/cloudflare/kumo
 // (release cloudflare/kumo@2.19.0), copied by the kumo-shadcn registry (https://github.com/tom-ricci/kumo-shadcn).
-// Changes from Kumo's file: import paths, and the "use client" line Kumo's build adds.
+// Changes from Kumo's file: import paths.
 // Unofficial; not affiliated with or endorsed by Cloudflare.
 //
 // MIT License Copyright (c) 2026 Cloudflare, Inc.
@@ -27,17 +37,6 @@
 // FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-import {
-  createContext,
-  useCallback,
-  useContext,
-  useEffect,
-  useId,
-  useMemo,
-  useRef,
-  useState,
-  type ReactNode,
-} from "react";
 import {
   motion,
   useMotionTemplate,

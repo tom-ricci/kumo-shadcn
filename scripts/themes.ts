@@ -84,7 +84,7 @@ export const binding: BindingTheme = {
   name: "kumo-binding",
   title: "Kumo binding to your shadcn theme",
   description:
-    "Sets Kumo's color tokens from your shadcn CSS variables (--background, --foreground, --primary, ...), so Kumo components follow your theme. Install one theme item: kumo-theme, kumo-cloudflare or kumo-binding.",
+    "Sets Kumo's color tokens from your shadcn CSS variables (--background, --foreground, --primary, ...), so Kumo components follow your theme. Needs tailwind.cssVariables: true in components.json (with false there are no shadcn variables to read). Install one theme item: kumo-theme, kumo-cloudflare or kumo-binding.",
   extras: { light: status, dark: status },
   keepKumo: [
     "color-kumo-badge-blue",

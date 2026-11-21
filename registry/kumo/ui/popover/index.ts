@@ -1,8 +1,18 @@
-"use client";
+export {
+  Popover,
+  PopoverRoot,
+  PopoverTrigger,
+  PopoverContent,
+  PopoverTitle,
+  PopoverDescription,
+  PopoverClose,
+  KUMO_POPOVER_VARIANTS,
+  KUMO_POPOVER_DEFAULT_VARIANTS,
+} from "./popover";
 
 // Kumo, packages/kumo/src/components/popover/index.ts from https://github.com/cloudflare/kumo
 // (release cloudflare/kumo@2.19.0), copied by the kumo-shadcn registry (https://github.com/tom-ricci/kumo-shadcn).
-// Changes from Kumo's file: import paths, and the "use client" line Kumo's build adds.
+// Changes from Kumo's file: import paths.
 // Unofficial; not affiliated with or endorsed by Cloudflare.
 //
 // MIT License Copyright (c) 2026 Cloudflare, Inc.
@@ -27,17 +37,6 @@
 // FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-export {
-  Popover,
-  PopoverRoot,
-  PopoverTrigger,
-  PopoverContent,
-  PopoverTitle,
-  PopoverDescription,
-  PopoverClose,
-  KUMO_POPOVER_VARIANTS,
-  KUMO_POPOVER_DEFAULT_VARIANTS,
-} from "./popover";
 export type {
   PopoverRootProps,
   PopoverTriggerProps,

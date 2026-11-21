@@ -1,8 +1,15 @@
-"use client";
+import {
+  useRef,
+  useCallback,
+  createContext,
+  useContext,
+  forwardRef,
+  type CSSProperties,
+} from "react";
 
 // Kumo, packages/kumo/src/components/command-palette/command-palette.tsx from https://github.com/cloudflare/kumo
 // (release cloudflare/kumo@2.19.0), copied by the kumo-shadcn registry (https://github.com/tom-ricci/kumo-shadcn).
-// Changes from Kumo's file: import paths, and the "use client" line Kumo's build adds.
+// Changes from Kumo's file: import paths.
 // Unofficial; not affiliated with or endorsed by Cloudflare.
 //
 // MIT License Copyright (c) 2026 Cloudflare, Inc.
@@ -27,14 +34,6 @@
 // FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-import {
-  useRef,
-  useCallback,
-  createContext,
-  useContext,
-  forwardRef,
-  type CSSProperties,
-} from "react";
 import { Autocomplete } from "@base-ui/react/autocomplete";
 import { Dialog as DialogBase } from "@base-ui/react/dialog";
 import {

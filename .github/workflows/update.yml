@@ -101,6 +101,12 @@ jobs:
           # depend on each other).
           - vite lucide kumo-binding default input
           - vite lucide kumo-cloudflare default
+          # Install-time transforms of the shadcn CLI (components.json options).
+          - vite lucide kumo-theme default - rtl
+          - vite hugeicons kumo-cloudflare default - jsx
+          - vite lucide kumo-theme default - no-css-vars
+          - vite lucide kumo-theme default - prefix
+          - next lucide kumo-binding default - no-rsc
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:

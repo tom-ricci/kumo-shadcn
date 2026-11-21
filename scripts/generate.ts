@@ -28,7 +28,7 @@ const DEFAULT_BASE_URL = "https://raw.githubusercontent.com/tom-ricci/kumo-shadc
 const ICON_PLACEHOLDER_IMPORT = "@/app/(create)/components/icon-placeholder";
 
 const { values: args } = parseArgs({
-  options: { kumo: { type: "string" }, "base-url": { type: "string" } },
+  options: { kumo: { type: "string" }, "base-url": { type: "string" }, "deps": { type: "string" } },
 });
 if (!args.kumo) fail("usage: node scripts/generate.ts --kumo <kumo checkout> [--base-url <url>]");
 const root = resolve(dirname(fileURLToPath(import.meta.url)), "..");
@@ -49,6 +49,15 @@ const pascal = (s: string) => s.replace(/(^|-)([a-z0-9])/g, (_, __, c: string) =
 const sorted = <T>(items: Iterable<T>) => [...items].sort();
 const cmp = (a: string, b: string) => (a < b ? -1 : a > b ? 1 : 0);
 const itemUrl = (name: string) => `${baseUrl}/${name}.json`;
+// The registry's namespace (components.json "registries": {"@kumo": "<base>/{name}.json"}).
+export const NAMESPACE = "@kumo";
+// How items refer to each other in registryDependencies: "url" (full item
+// URLs; works with no configuration) or "namespace" (@kumo/<item>; needs the
+// namespace configured, or listed in the shadcn registry directory).
+const depsForm = args.deps ?? "url";
+if (!["url", "namespace"].includes(depsForm)) fail(`--deps must be url or namespace`);
+const depRef = (name: string) => (depsForm === "namespace" ? `${NAMESPACE}/${name}` : itemUrl(name));
+const depName = (ref: string) => (ref.startsWith(`${NAMESPACE}/`) ? ref.slice(NAMESPACE.length + 1) : ref.slice(baseUrl.length + 1, -5));
 
 // ---------------------------------------------------------------------------
 // Source files
@@ -245,9 +254,11 @@ function parse(file: string): ts.SourceFile {
   return sf;
 }
 const isBarrel = (file: string) => /\/index\.tsx?$/.test(file);
-function originOf(file: string, name: string, seen = new Set<string>()): string | undefined {
+let originName = ""; // the name at the origin, after following renames
+function originOf(file: string, name: string, seen = new Set<string>(), followRenames = false): string | undefined {
   if (seen.has(file)) return undefined;
   seen.add(file);
+  originName = name;
   if (!isBarrel(file)) return file;
   for (const st of parse(file).statements) {
     if (!ts.isExportDeclaration(st) || !st.moduleSpecifier || !ts.isStringLiteral(st.moduleSpecifier)) {
@@ -261,7 +272,7 @@ function originOf(file: string, name: string, seen = new Set<string>()): string 
     const target = st.moduleSpecifier.text.startsWith(".") ? resolveRelative(file, st.moduleSpecifier.text) : undefined;
     if (!st.exportClause) {
       if (target) {
-        const hit = originOf(target, name, seen);
+        const hit = originOf(target, name, seen, followRenames);
         if (hit) return hit;
       }
       continue;
@@ -270,8 +281,11 @@ function originOf(file: string, name: string, seen = new Set<string>()): string 
     const el = st.exportClause.elements.find((e) => e.name.text === name);
     if (!el) continue;
     if (!target) fail(`unknown import pattern: ${relative(src, file)} re-exports ${name} from a package`);
-    if (el.propertyName && el.propertyName.text !== name) fail(`unknown import pattern: ${relative(src, file)} renames ${el.propertyName.text} to ${name}`);
-    return originOf(target, name, new Set()) ?? fail(`cannot find where ${name} is defined (from ${relative(src, file)})`);
+    if (el.propertyName && el.propertyName.text !== name) {
+      if (!followRenames) fail(`unknown import pattern: ${relative(src, file)} renames ${el.propertyName.text} to ${name}`);
+      return originOf(target, el.propertyName.text, new Set(), true);
+    }
+    return originOf(target, name, new Set(), followRenames) ?? fail(`cannot find where ${name} is defined (from ${relative(src, file)})`);
   }
   return undefined;
 }
@@ -354,13 +368,15 @@ function copyFile(file: string): Copied {
 
   let body = text;
   for (const e of edits.sort((a, b) => b.start - a.start)) body = body.slice(0, e.start) + e.text + body.slice(e.end);
-  // Kumo's build puts "use client" at the top of every chunk, and so does
-  // this copy. It also keeps the license header: the shadcn CLI strips
-  // comments before the first statement of a file, but not after it.
+  // "use client" stays exactly where Kumo's source has it. The license header
+  // goes right after the first statement (the directive, or usually the
+  // first import): the shadcn CLI strips comments before a file's first
+  // statement when it installs it, but keeps comments after it.
   const first = sf.statements[0];
-  if (first && ts.isExpressionStatement(first) && ts.isStringLiteral(first.expression) && first.expression.text === "use client")
-    body = body.slice(0, first.getFullStart()) + body.slice(first.getEnd()).replace(/^\s*\n/, "");
-  copied.code = `"use client";\n\n${sourceHeader(where, patched.notes)}${body.replace(/^\s+/, "")}`;
+  if (!first) fail(`${where} has no statements`);
+  const shift = edits.filter((e) => e.end <= first.getEnd()).reduce((n, e) => n + e.text.length - (e.end - e.start), 0);
+  const at = first.getEnd() + shift;
+  copied.code = `${body.slice(0, at)}\n\n${sourceHeader(where, patched.notes)}\n${body.slice(at).replace(/^[ \t]*\n/, "")}`;
   return copied;
 }
 
@@ -373,12 +389,11 @@ function sourceHeader(where: string, notes: string[]): string {
   return [
     `// Kumo, packages/kumo/src/${where} from https://github.com/cloudflare/kumo`,
     `// (release ${release.replace("@", "")}), copied by the kumo-shadcn registry (${HOMEPAGE}).`,
-    "// Changes from Kumo's file: import paths, and the \"use client\" line Kumo's build adds.",
+    "// Changes from Kumo's file: import paths.",
     ...notes.map((n) => `// Also changed: ${n}.`),
     "// Unofficial; not affiliated with or endorsed by Cloudflare.",
     "//",
     licenseComment,
-    "",
     "",
   ].join("\n");
 }
@@ -765,7 +780,7 @@ function kumoThemeItem(theme: KumoTheme) {
     type: "registry:theme",
     title: theme.title,
     description: `${theme.description} From ${release}.`,
-    registryDependencies: [itemUrl("kumo-base")],
+    registryDependencies: [depRef("kumo-base")],
     cssVars: { theme: kumoThemeVars },
     css: { "@layer base": themeCss(blocks) },
     docs: docsOneTheme,
@@ -777,7 +792,7 @@ items.push({
   type: "registry:theme",
   title: binding.title,
   description: binding.description,
-  registryDependencies: [itemUrl("kumo-base")],
+  registryDependencies: [depRef("kumo-base")],
   css: bound.css,
   docs: docsOneTheme,
 });
@@ -812,19 +827,65 @@ items.push({
 });
 
 const exported = new Set(Object.keys(kumoPkg.exports ?? {}).filter((k) => k.startsWith("./components/")).map((k) => k.slice(13)));
+
+// Kumo's own component metadata (ai/component-registry.json in the npm
+// package of the same version; scripts/fetch-kumo.sh puts it in .npm-ai/).
+// An entry belongs to the item whose source defines the exported name; an
+// item's primary entry is the one whose kebab-cased name is the item name,
+// or its only entry. Items without one keep generic text.
+type KumoMeta = { name: string; type: string; description?: string; category?: string };
+const kumoMetaFile = join(kumoRepo, ".npm-ai", "component-registry.json");
+if (!existsSync(kumoMetaFile)) fail(`missing ${relative(root, kumoMetaFile)} (run scripts/fetch-kumo.sh)`);
+const kumoMeta = JSON.parse(readFileSync(kumoMetaFile, "utf8")) as { components: Record<string, KumoMeta>; blocks: Record<string, KumoMeta> };
+const kebab = (s: string) => s.replace(/([a-z0-9])([A-Z])/g, "$1-$2").toLowerCase();
+const metaByItem = new Map<string, KumoMeta[]>();
+for (const entry of [...Object.values(kumoMeta.components), ...Object.values(kumoMeta.blocks)].sort((a, b) => cmp(a.name, b.name))) {
+  for (const [item, cs] of groups) {
+    const barrel = cs.find((c) => /^index\.tsx?$/.test(c.area.rel));
+    if (!barrel || barrel.area.kind === "lib") continue;
+    const origin = originOf(join(src, barrel.area.kind === "ui" ? "components" : "blocks", item, barrel.area.rel), entry.name, new Set(), true);
+    if (origin && areaOf(origin)?.item === item && declaresExport(origin, originName)) metaByItem.set(item, [...(metaByItem.get(item) ?? []), entry]);
+  }
+}
+function declaresExport(file: string, name: string): boolean {
+  for (const st of parse(file).statements) {
+    if (ts.isExportDeclaration(st) && !st.moduleSpecifier && st.exportClause && ts.isNamedExports(st.exportClause) && st.exportClause.elements.some((e) => e.name.text === name)) return true;
+    if (!ts.canHaveModifiers(st) || !ts.getModifiers(st)?.some((m) => m.kind === ts.SyntaxKind.ExportKeyword)) continue;
+    if (ts.isVariableStatement(st) && st.declarationList.declarations.some((d) => ts.isIdentifier(d.name) && d.name.text === name)) return true;
+    if ((st as { name?: ts.Identifier }).name?.text === name) return true;
+  }
+  return false;
+}
+const primaryMeta = (item: string) => {
+  const entries = metaByItem.get(item) ?? [];
+  return entries.find((e) => kebab(e.name) === item) ?? (entries.length === 1 ? entries[0] : undefined);
+};
+const titleOf = (name: string) => name.replace(/([a-z0-9])([A-Z])/g, "$1 $2");
 for (const [name, cs] of [...groups].sort(([a], [b]) => cmp(a, b))) {
   if (name === "kumo-utils") continue;
   const kind = cs[0].area.kind;
   if (kind === "ui" && !exported.has(name)) console.warn(`note: components/${name} has no ./components/${name} entry in Kumo's package.json`);
   const regDeps = union(cs, "registryDependencies").filter((d) => d !== name);
+  const meta = primaryMeta(name);
+  const entries = metaByItem.get(name) ?? [];
   items.push({
     name,
     type: kind === "ui" ? "registry:ui" : "registry:block",
-    title: pascal(name),
-    description: `Kumo ${pascal(name)} ${kind === "ui" ? "component" : "block"}, copied from ${release}.`,
+    title: meta ? titleOf(meta.name) : pascal(name),
+    description: meta?.description
+      ? `${meta.description.replace(/\.?$/, ".")} Kumo ${kind === "ui" ? "component" : "block"}, from ${release}.`
+      : `Kumo ${pascal(name)} ${kind === "ui" ? "component" : "block"}, from ${release}.`,
+    ...(meta?.category ? { categories: [kebab(meta.category.replace(/\s+/g, ""))] } : {}),
+    meta: {
+      kumo: {
+        release: kumoPkg.version,
+        source: `packages/kumo/src/${kind === "ui" ? "components" : "blocks"}/${name}`,
+        ...(entries.length ? { components: entries.map((e) => e.name) } : {}),
+      },
+    },
     dependencies: union(cs, "dependencies"),
     devDependencies: union(cs, "devDependencies"),
-    registryDependencies: sorted(new Set(["kumo-base", ...regDeps])).map(itemUrl),
+    registryDependencies: sorted(new Set(["kumo-base", ...regDeps])).map(depRef),
     files: cs.sort(byPath).map((c) => fileEntry(c, kind === "ui" ? "registry:ui" : "registry:component")),
   });
 }
@@ -846,7 +907,7 @@ for (const item of items) for (const key of ["dependencies", "devDependencies", 
   const closure = (name: string, seen = new Set<string>()): Set<string> => {
     if (seen.has(name)) return seen;
     seen.add(name);
-    for (const url of byName.get(name)?.registryDependencies ?? []) closure(url.slice(baseUrl.length + 1, -5), seen);
+    for (const url of byName.get(name)?.registryDependencies ?? []) closure(depName(url), seen);
     return seen;
   };
   for (const it of items as { name: string; files?: { path: string }[] }[]) {

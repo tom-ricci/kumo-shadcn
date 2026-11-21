@@ -816,7 +816,7 @@
       "name": "kumo-binding",
       "type": "registry:theme",
       "title": "Kumo binding to your shadcn theme",
-      "description": "Sets Kumo's color tokens from your shadcn CSS variables (--background, --foreground, --primary, ...), so Kumo components follow your theme. Install one theme item: kumo-theme, kumo-cloudflare or kumo-binding.",
+      "description": "Sets Kumo's color tokens from your shadcn CSS variables (--background, --foreground, --primary, ...), so Kumo components follow your theme. Needs tailwind.cssVariables: true in components.json (with false there are no shadcn variables to read). Install one theme item: kumo-theme, kumo-cloudflare or kumo-binding.",
       "registryDependencies": [
         "https://raw.githubusercontent.com/tom-ricci/kumo-shadcn/main/public/r/kumo-base.json"
       ],
@@ -1028,7 +1028,19 @@
       "name": "autocomplete",
       "type": "registry:ui",
       "title": "Autocomplete",
-      "description": "Kumo Autocomplete component, copied from @cloudflare/kumo@2.19.0.",
+      "description": "Autocomplete — free-form text input with an optional filtered suggestion list. Kumo component, from @cloudflare/kumo@2.19.0.",
+      "categories": [
+        "other"
+      ],
+      "meta": {
+        "kumo": {
+          "release": "2.19.0",
+          "source": "packages/kumo/src/components/autocomplete",
+          "components": [
+            "Autocomplete"
+          ]
+        }
+      },
       "dependencies": [
         "@base-ui/react@^1.9.0"
       ],
@@ -1056,7 +1068,19 @@
       "name": "badge",
       "type": "registry:ui",
       "title": "Badge",
-      "description": "Kumo Badge component, copied from @cloudflare/kumo@2.19.0.",
+      "description": "Small status label for categorizing or highlighting content. Kumo component, from @cloudflare/kumo@2.19.0.",
+      "categories": [
+        "display"
+      ],
+      "meta": {
+        "kumo": {
+          "release": "2.19.0",
+          "source": "packages/kumo/src/components/badge",
+          "components": [
+            "Badge"
+          ]
+        }
+      },
       "registryDependencies": [
         "https://raw.githubusercontent.com/tom-ricci/kumo-shadcn/main/public/r/kumo-base.json",
         "https://raw.githubusercontent.com/tom-ricci/kumo-shadcn/main/public/r/kumo-icons.json",
@@ -1079,7 +1103,19 @@
       "name": "banner",
       "type": "registry:ui",
       "title": "Banner",
-      "description": "Kumo Banner component, copied from @cloudflare/kumo@2.19.0.",
+      "description": "Full-width message bar with an optional trailing CTA slot. Kumo component, from @cloudflare/kumo@2.19.0.",
+      "categories": [
+        "feedback"
+      ],
+      "meta": {
+        "kumo": {
+          "release": "2.19.0",
+          "source": "packages/kumo/src/components/banner",
+          "components": [
+            "Banner"
+          ]
+        }
+      },
       "registryDependencies": [
         "https://raw.githubusercontent.com/tom-ricci/kumo-shadcn/main/public/r/button.json",
         "https://raw.githubusercontent.com/tom-ricci/kumo-shadcn/main/public/r/kumo-base.json",
@@ -1108,7 +1144,19 @@
       "name": "breadcrumbs",
       "type": "registry:ui",
       "title": "Breadcrumbs",
-      "description": "Kumo Breadcrumbs component, copied from @cloudflare/kumo@2.19.0.",
+      "description": "Breadcrumbs component. Kumo component, from @cloudflare/kumo@2.19.0.",
+      "categories": [
+        "display"
+      ],
+      "meta": {
+        "kumo": {
+          "release": "2.19.0",
+          "source": "packages/kumo/src/components/breadcrumbs",
+          "components": [
+            "Breadcrumbs"
+          ]
+        }
+      },
       "registryDependencies": [
         "https://raw.githubusercontent.com/tom-ricci/kumo-shadcn/main/public/r/button.json",
         "https://raw.githubusercontent.com/tom-ricci/kumo-shadcn/main/public/r/kumo-base.json",
@@ -1133,7 +1181,19 @@
       "name": "button",
       "type": "registry:ui",
       "title": "Button",
-      "description": "Kumo Button component, copied from @cloudflare/kumo@2.19.0.",
+      "description": "Primary action trigger. Supports multiple variants, sizes, shapes, icons, and loading state. Kumo component, from @cloudflare/kumo@2.19.0.",
+      "categories": [
+        "action"
+      ],
+      "meta": {
+        "kumo": {
+          "release": "2.19.0",
+          "source": "packages/kumo/src/components/button",
+          "components": [
+            "Button"
+          ]
+        }
+      },
       "registryDependencies": [
         "https://raw.githubusercontent.com/tom-ricci/kumo-shadcn/main/public/r/kumo-base.json",
         "https://raw.githubusercontent.com/tom-ricci/kumo-shadcn/main/public/r/kumo-icons.json",
@@ -1157,8 +1217,20 @@
     {
       "name": "button-group",
       "type": "registry:ui",
-      "title": "ButtonGroup",
-      "description": "Kumo ButtonGroup component, copied from @cloudflare/kumo@2.19.0.",
+      "title": "Button Group",
+      "description": "Joins a small set of tightly-coupled buttons into a single control — most commonly a **split button**: a primary action next to a dropdown trigger for related, secondary actions. Kumo component, from @cloudflare/kumo@2.19.0.",
+      "categories": [
+        "action"
+      ],
+      "meta": {
+        "kumo": {
+          "release": "2.19.0",
+          "source": "packages/kumo/src/components/button-group",
+          "components": [
+            "ButtonGroup"
+          ]
+        }
+      },
       "registryDependencies": [
         "https://raw.githubusercontent.com/tom-ricci/kumo-shadcn/main/public/r/kumo-base.json",
         "https://raw.githubusercontent.com/tom-ricci/kumo-shadcn/main/public/r/kumo-utils.json"
@@ -1180,7 +1252,24 @@
       "name": "chart",
       "type": "registry:ui",
       "title": "Chart",
-      "description": "Kumo Chart component, copied from @cloudflare/kumo@2.19.0.",
+      "description": "Chart — a low-level wrapper around [Apache ECharts](https://echarts.apache.org). Kumo component, from @cloudflare/kumo@2.19.0.",
+      "categories": [
+        "data-visualization"
+      ],
+      "meta": {
+        "kumo": {
+          "release": "2.19.0",
+          "source": "packages/kumo/src/components/chart",
+          "components": [
+            "BubbleMap",
+            "Chart",
+            "ChoroplethMap",
+            "GlobeMap",
+            "SankeyChart",
+            "TimeseriesChart"
+          ]
+        }
+      },
       "dependencies": [
         "@base-ui/react@^1.9.0",
         "d3-geo@^3.1.1",
@@ -1267,7 +1356,19 @@
       "name": "checkbox",
       "type": "registry:ui",
       "title": "Checkbox",
-      "description": "Kumo Checkbox component, copied from @cloudflare/kumo@2.19.0.",
+      "description": "Checkbox component. Kumo component, from @cloudflare/kumo@2.19.0.",
+      "categories": [
+        "input"
+      ],
+      "meta": {
+        "kumo": {
+          "release": "2.19.0",
+          "source": "packages/kumo/src/components/checkbox",
+          "components": [
+            "Checkbox"
+          ]
+        }
+      },
       "dependencies": [
         "@base-ui/react@^1.9.0"
       ],
@@ -1293,8 +1394,20 @@
     {
       "name": "clipboard-text",
       "type": "registry:ui",
-      "title": "ClipboardText",
-      "description": "Kumo ClipboardText component, copied from @cloudflare/kumo@2.19.0.",
+      "title": "Clipboard Text",
+      "description": "Read-only text field with a one-click copy-to-clipboard button. Kumo component, from @cloudflare/kumo@2.19.0.",
+      "categories": [
+        "action"
+      ],
+      "meta": {
+        "kumo": {
+          "release": "2.19.0",
+          "source": "packages/kumo/src/components/clipboard-text",
+          "components": [
+            "ClipboardText"
+          ]
+        }
+      },
       "dependencies": [
         "@base-ui/react@^1.9.0"
       ],
@@ -1321,8 +1434,20 @@
     {
       "name": "cloudflare-logo",
       "type": "registry:ui",
-      "title": "CloudflareLogo",
-      "description": "Kumo CloudflareLogo component, copied from @cloudflare/kumo@2.19.0.",
+      "title": "Cloudflare Logo",
+      "description": "Cloudflare logo component. Kumo component, from @cloudflare/kumo@2.19.0.",
+      "categories": [
+        "other"
+      ],
+      "meta": {
+        "kumo": {
+          "release": "2.19.0",
+          "source": "packages/kumo/src/components/cloudflare-logo",
+          "components": [
+            "CloudflareLogo"
+          ]
+        }
+      },
       "registryDependencies": [
         "https://raw.githubusercontent.com/tom-ricci/kumo-shadcn/main/public/r/kumo-base.json",
         "https://raw.githubusercontent.com/tom-ricci/kumo-shadcn/main/public/r/kumo-utils.json"
@@ -1344,7 +1469,19 @@
       "name": "code",
       "type": "registry:ui",
       "title": "Code",
-      "description": "Kumo Code component, copied from @cloudflare/kumo@2.19.0.",
+      "description": "Code component. Kumo component, from @cloudflare/kumo@2.19.0.",
+      "categories": [
+        "display"
+      ],
+      "meta": {
+        "kumo": {
+          "release": "2.19.0",
+          "source": "packages/kumo/src/components/code",
+          "components": [
+            "Code"
+          ]
+        }
+      },
       "registryDependencies": [
         "https://raw.githubusercontent.com/tom-ricci/kumo-shadcn/main/public/r/kumo-base.json",
         "https://raw.githubusercontent.com/tom-ricci/kumo-shadcn/main/public/r/kumo-utils.json"
@@ -1366,7 +1503,19 @@
       "name": "collapsible",
       "type": "registry:ui",
       "title": "Collapsible",
-      "description": "Kumo Collapsible component, copied from @cloudflare/kumo@2.19.0.",
+      "description": "Collapsible — a composable disclosure component for showing/hiding content. Kumo component, from @cloudflare/kumo@2.19.0.",
+      "categories": [
+        "display"
+      ],
+      "meta": {
+        "kumo": {
+          "release": "2.19.0",
+          "source": "packages/kumo/src/components/collapsible",
+          "components": [
+            "Collapsible"
+          ]
+        }
+      },
       "dependencies": [
         "@base-ui/react@^1.9.0"
       ],
@@ -1392,7 +1541,19 @@
       "name": "combobox",
       "type": "registry:ui",
       "title": "Combobox",
-      "description": "Kumo Combobox component, copied from @cloudflare/kumo@2.19.0.",
+      "description": "Combobox — autocomplete input with filterable dropdown list. Kumo component, from @cloudflare/kumo@2.19.0.",
+      "categories": [
+        "input"
+      ],
+      "meta": {
+        "kumo": {
+          "release": "2.19.0",
+          "source": "packages/kumo/src/components/combobox",
+          "components": [
+            "Combobox"
+          ]
+        }
+      },
       "dependencies": [
         "@base-ui/react@^1.9.0"
       ],
@@ -1419,8 +1580,20 @@
     {
       "name": "command-palette",
       "type": "registry:ui",
-      "title": "CommandPalette",
-      "description": "Kumo CommandPalette component, copied from @cloudflare/kumo@2.19.0.",
+      "title": "Command Palette",
+      "description": "CommandPalette — accessible command palette / spotlight search overlay. Kumo component, from @cloudflare/kumo@2.19.0.",
+      "categories": [
+        "navigation"
+      ],
+      "meta": {
+        "kumo": {
+          "release": "2.19.0",
+          "source": "packages/kumo/src/components/command-palette",
+          "components": [
+            "CommandPalette"
+          ]
+        }
+      },
       "dependencies": [
         "@base-ui/react@^1.9.0"
       ],
@@ -1452,8 +1625,20 @@
     {
       "name": "date-picker",
       "type": "registry:ui",
-      "title": "DatePicker",
-      "description": "Kumo DatePicker component, copied from @cloudflare/kumo@2.19.0.",
+      "title": "Date Picker",
+      "description": "DatePicker — a date selection calendar. Kumo component, from @cloudflare/kumo@2.19.0.",
+      "categories": [
+        "other"
+      ],
+      "meta": {
+        "kumo": {
+          "release": "2.19.0",
+          "source": "packages/kumo/src/components/date-picker",
+          "components": [
+            "DatePicker"
+          ]
+        }
+      },
       "dependencies": [
         "react-day-picker@^9.13.2"
       ],
@@ -1480,7 +1665,13 @@
       "name": "date-range-picker",
       "type": "registry:ui",
       "title": "DateRangePicker",
-      "description": "Kumo DateRangePicker component, copied from @cloudflare/kumo@2.19.0.",
+      "description": "Kumo DateRangePicker component, from @cloudflare/kumo@2.19.0.",
+      "meta": {
+        "kumo": {
+          "release": "2.19.0",
+          "source": "packages/kumo/src/components/date-range-picker"
+        }
+      },
       "registryDependencies": [
         "https://raw.githubusercontent.com/tom-ricci/kumo-shadcn/main/public/r/kumo-base.json",
         "https://raw.githubusercontent.com/tom-ricci/kumo-shadcn/main/public/r/kumo-icons.json",
@@ -1502,8 +1693,20 @@
     {
       "name": "delete-resource",
       "type": "registry:block",
-      "title": "DeleteResource",
-      "description": "Kumo DeleteResource block, copied from @cloudflare/kumo@2.19.0.",
+      "title": "Delete Resource",
+      "description": "DeleteResource component. Kumo block, from @cloudflare/kumo@2.19.0.",
+      "categories": [
+        "other"
+      ],
+      "meta": {
+        "kumo": {
+          "release": "2.19.0",
+          "source": "packages/kumo/src/blocks/delete-resource",
+          "components": [
+            "DeleteResource"
+          ]
+        }
+      },
       "registryDependencies": [
         "https://raw.githubusercontent.com/tom-ricci/kumo-shadcn/main/public/r/banner.json",
         "https://raw.githubusercontent.com/tom-ricci/kumo-shadcn/main/public/r/button.json",
@@ -1530,7 +1733,19 @@
       "name": "dialog",
       "type": "registry:ui",
       "title": "Dialog",
-      "description": "Kumo Dialog component, copied from @cloudflare/kumo@2.19.0.",
+      "description": "Dialog component. Kumo component, from @cloudflare/kumo@2.19.0.",
+      "categories": [
+        "overlay"
+      ],
+      "meta": {
+        "kumo": {
+          "release": "2.19.0",
+          "source": "packages/kumo/src/components/dialog",
+          "components": [
+            "Dialog"
+          ]
+        }
+      },
       "dependencies": [
         "@base-ui/react@^1.9.0"
       ],
@@ -1555,8 +1770,20 @@
     {
       "name": "dropdown",
       "type": "registry:ui",
-      "title": "Dropdown",
-      "description": "Kumo Dropdown component, copied from @cloudflare/kumo@2.19.0.",
+      "title": "Dropdown Menu",
+      "description": "DropdownMenu — accessible dropdown menu anchored to a trigger. Kumo component, from @cloudflare/kumo@2.19.0.",
+      "categories": [
+        "overlay"
+      ],
+      "meta": {
+        "kumo": {
+          "release": "2.19.0",
+          "source": "packages/kumo/src/components/dropdown",
+          "components": [
+            "DropdownMenu"
+          ]
+        }
+      },
       "dependencies": [
         "@base-ui/react@^1.9.0"
       ],
@@ -1582,7 +1809,19 @@
       "name": "empty",
       "type": "registry:ui",
       "title": "Empty",
-      "description": "Kumo Empty component, copied from @cloudflare/kumo@2.19.0.",
+      "description": "Placeholder shown when a list, table, or page has no content to display. Kumo component, from @cloudflare/kumo@2.19.0.",
+      "categories": [
+        "display"
+      ],
+      "meta": {
+        "kumo": {
+          "release": "2.19.0",
+          "source": "packages/kumo/src/components/empty",
+          "components": [
+            "Empty"
+          ]
+        }
+      },
       "registryDependencies": [
         "https://raw.githubusercontent.com/tom-ricci/kumo-shadcn/main/public/r/button.json",
         "https://raw.githubusercontent.com/tom-ricci/kumo-shadcn/main/public/r/kumo-base.json",
@@ -1607,7 +1846,19 @@
       "name": "field",
       "type": "registry:ui",
       "title": "Field",
-      "description": "Kumo Field component, copied from @cloudflare/kumo@2.19.0.",
+      "description": "Form field wrapper that provides a label, optional description, and error display around any form control. Built on Base UI Field primitives. Kumo component, from @cloudflare/kumo@2.19.0.",
+      "categories": [
+        "input"
+      ],
+      "meta": {
+        "kumo": {
+          "release": "2.19.0",
+          "source": "packages/kumo/src/components/field",
+          "components": [
+            "Field"
+          ]
+        }
+      },
       "dependencies": [
         "@base-ui/react@^1.9.0"
       ],
@@ -1633,7 +1884,13 @@
       "name": "flow",
       "type": "registry:ui",
       "title": "Flow",
-      "description": "Kumo Flow component, copied from @cloudflare/kumo@2.19.0.",
+      "description": "Kumo Flow component, from @cloudflare/kumo@2.19.0.",
+      "meta": {
+        "kumo": {
+          "release": "2.19.0",
+          "source": "packages/kumo/src/components/flow"
+        }
+      },
       "dependencies": [
         "motion@^12.34.1"
       ],
@@ -1683,7 +1940,19 @@
       "name": "grid",
       "type": "registry:ui",
       "title": "Grid",
-      "description": "Kumo Grid component, copied from @cloudflare/kumo@2.19.0.",
+      "description": "Responsive CSS grid layout container with preset column configurations. Kumo component, from @cloudflare/kumo@2.19.0.",
+      "categories": [
+        "layout"
+      ],
+      "meta": {
+        "kumo": {
+          "release": "2.19.0",
+          "source": "packages/kumo/src/components/grid",
+          "components": [
+            "Grid"
+          ]
+        }
+      },
       "registryDependencies": [
         "https://raw.githubusercontent.com/tom-ricci/kumo-shadcn/main/public/r/kumo-base.json",
         "https://raw.githubusercontent.com/tom-ricci/kumo-shadcn/main/public/r/kumo-utils.json"
@@ -1704,8 +1973,20 @@
     {
       "name": "inline-copy-text",
       "type": "registry:ui",
-      "title": "InlineCopyText",
-      "description": "Kumo InlineCopyText component, copied from @cloudflare/kumo@2.19.0.",
+      "title": "Inline Copy Text",
+      "description": "Compact, borderless copy control for IDs and other short values displayed inline or inside dense table cells. Kumo component, from @cloudflare/kumo@2.19.0.",
+      "categories": [
+        "action"
+      ],
+      "meta": {
+        "kumo": {
+          "release": "2.19.0",
+          "source": "packages/kumo/src/components/inline-copy-text",
+          "components": [
+            "InlineCopyText"
+          ]
+        }
+      },
       "registryDependencies": [
         "https://raw.githubusercontent.com/tom-ricci/kumo-shadcn/main/public/r/kumo-base.json",
         "https://raw.githubusercontent.com/tom-ricci/kumo-shadcn/main/public/r/kumo-icons.json",
@@ -1729,7 +2010,20 @@
       "name": "input",
       "type": "registry:ui",
       "title": "Input",
-      "description": "Kumo Input component, copied from @cloudflare/kumo@2.19.0.",
+      "description": "Input component. Kumo component, from @cloudflare/kumo@2.19.0.",
+      "categories": [
+        "input"
+      ],
+      "meta": {
+        "kumo": {
+          "release": "2.19.0",
+          "source": "packages/kumo/src/components/input",
+          "components": [
+            "Input",
+            "InputArea"
+          ]
+        }
+      },
       "dependencies": [
         "@base-ui/react@^1.9.0"
       ],
@@ -1760,8 +2054,20 @@
     {
       "name": "input-group",
       "type": "registry:ui",
-      "title": "InputGroup",
-      "description": "Kumo InputGroup component, copied from @cloudflare/kumo@2.19.0.",
+      "title": "Input Group",
+      "description": "InputGroup component. Kumo component, from @cloudflare/kumo@2.19.0.",
+      "categories": [
+        "input"
+      ],
+      "meta": {
+        "kumo": {
+          "release": "2.19.0",
+          "source": "packages/kumo/src/components/input-group",
+          "components": [
+            "InputGroup"
+          ]
+        }
+      },
       "registryDependencies": [
         "https://raw.githubusercontent.com/tom-ricci/kumo-shadcn/main/public/r/button.json",
         "https://raw.githubusercontent.com/tom-ricci/kumo-shadcn/main/public/r/field.json",
@@ -1812,7 +2118,19 @@
       "name": "label",
       "type": "registry:ui",
       "title": "Label",
-      "description": "Kumo Label component, copied from @cloudflare/kumo@2.19.0.",
+      "description": "Label component for form fields. Kumo component, from @cloudflare/kumo@2.19.0.",
+      "categories": [
+        "other"
+      ],
+      "meta": {
+        "kumo": {
+          "release": "2.19.0",
+          "source": "packages/kumo/src/components/label",
+          "components": [
+            "Label"
+          ]
+        }
+      },
       "registryDependencies": [
         "https://raw.githubusercontent.com/tom-ricci/kumo-shadcn/main/public/r/button.json",
         "https://raw.githubusercontent.com/tom-ricci/kumo-shadcn/main/public/r/kumo-base.json",
@@ -1836,8 +2154,20 @@
     {
       "name": "layer-card",
       "type": "registry:ui",
-      "title": "LayerCard",
-      "description": "Kumo LayerCard component, copied from @cloudflare/kumo@2.19.0.",
+      "title": "Layer Card",
+      "description": "LayerCard component. Kumo component, from @cloudflare/kumo@2.19.0.",
+      "categories": [
+        "display"
+      ],
+      "meta": {
+        "kumo": {
+          "release": "2.19.0",
+          "source": "packages/kumo/src/components/layer-card",
+          "components": [
+            "LayerCard"
+          ]
+        }
+      },
       "dependencies": [
         "@base-ui/react@^1.9.0"
       ],
@@ -1861,8 +2191,20 @@
     {
       "name": "layer-dialog",
       "type": "registry:ui",
-      "title": "LayerDialog",
-      "description": "Kumo LayerDialog component, copied from @cloudflare/kumo@2.19.0.",
+      "title": "Layer Dialog",
+      "description": "LayerDialog component. Kumo component, from @cloudflare/kumo@2.19.0.",
+      "categories": [
+        "overlay"
+      ],
+      "meta": {
+        "kumo": {
+          "release": "2.19.0",
+          "source": "packages/kumo/src/components/layer-dialog",
+          "components": [
+            "LayerDialog"
+          ]
+        }
+      },
       "dependencies": [
         "@base-ui/react@^1.9.0"
       ],
@@ -1893,7 +2235,19 @@
       "name": "link",
       "type": "registry:ui",
       "title": "Link",
-      "description": "Kumo Link component, copied from @cloudflare/kumo@2.19.0.",
+      "description": "Link component. Kumo component, from @cloudflare/kumo@2.19.0.",
+      "categories": [
+        "other"
+      ],
+      "meta": {
+        "kumo": {
+          "release": "2.19.0",
+          "source": "packages/kumo/src/components/link",
+          "components": [
+            "Link"
+          ]
+        }
+      },
       "dependencies": [
         "@base-ui/react@^1.9.0"
       ],
@@ -1918,7 +2272,19 @@
       "name": "loader",
       "type": "registry:ui",
       "title": "Loader",
-      "description": "Kumo Loader component, copied from @cloudflare/kumo@2.19.0.",
+      "description": "Animated circular spinner for indicating loading states. Kumo component, from @cloudflare/kumo@2.19.0.",
+      "categories": [
+        "feedback"
+      ],
+      "meta": {
+        "kumo": {
+          "release": "2.19.0",
+          "source": "packages/kumo/src/components/loader",
+          "components": [
+            "Loader"
+          ]
+        }
+      },
       "registryDependencies": [
         "https://raw.githubusercontent.com/tom-ricci/kumo-shadcn/main/public/r/kumo-base.json",
         "https://raw.githubusercontent.com/tom-ricci/kumo-shadcn/main/public/r/kumo-utils.json"
@@ -1944,8 +2310,20 @@
     {
       "name": "menubar",
       "type": "registry:ui",
-      "title": "Menubar",
-      "description": "Kumo Menubar component, copied from @cloudflare/kumo@2.19.0.",
+      "title": "Menu Bar",
+      "description": "MenuBar — horizontal icon-button toolbar with keyboard arrow-key navigation. Kumo component, from @cloudflare/kumo@2.19.0.",
+      "categories": [
+        "navigation"
+      ],
+      "meta": {
+        "kumo": {
+          "release": "2.19.0",
+          "source": "packages/kumo/src/components/menubar",
+          "components": [
+            "MenuBar"
+          ]
+        }
+      },
       "registryDependencies": [
         "https://raw.githubusercontent.com/tom-ricci/kumo-shadcn/main/public/r/kumo-base.json",
         "https://raw.githubusercontent.com/tom-ricci/kumo-shadcn/main/public/r/kumo-icons.json",
@@ -1974,7 +2352,19 @@
       "name": "meter",
       "type": "registry:ui",
       "title": "Meter",
-      "description": "Kumo Meter component, copied from @cloudflare/kumo@2.19.0.",
+      "description": "Progress bar showing a measured value within a known range (e.g. quota usage). Kumo component, from @cloudflare/kumo@2.19.0.",
+      "categories": [
+        "display"
+      ],
+      "meta": {
+        "kumo": {
+          "release": "2.19.0",
+          "source": "packages/kumo/src/components/meter",
+          "components": [
+            "Meter"
+          ]
+        }
+      },
       "dependencies": [
         "@base-ui/react@^1.9.0"
       ],
@@ -1998,8 +2388,20 @@
     {
       "name": "page-header",
       "type": "registry:block",
-      "title": "PageHeader",
-      "description": "Kumo PageHeader block, copied from @cloudflare/kumo@2.19.0.",
+      "title": "Page Header",
+      "description": "PageHeader component. Kumo block, from @cloudflare/kumo@2.19.0.",
+      "categories": [
+        "layout"
+      ],
+      "meta": {
+        "kumo": {
+          "release": "2.19.0",
+          "source": "packages/kumo/src/blocks/page-header",
+          "components": [
+            "PageHeader"
+          ]
+        }
+      },
       "registryDependencies": [
         "https://raw.githubusercontent.com/tom-ricci/kumo-shadcn/main/public/r/kumo-base.json",
         "https://raw.githubusercontent.com/tom-ricci/kumo-shadcn/main/public/r/kumo-utils.json",
@@ -2022,7 +2424,19 @@
       "name": "pagination",
       "type": "registry:ui",
       "title": "Pagination",
-      "description": "Kumo Pagination component, copied from @cloudflare/kumo@2.19.0.",
+      "description": "Pagination component. Kumo component, from @cloudflare/kumo@2.19.0.",
+      "categories": [
+        "navigation"
+      ],
+      "meta": {
+        "kumo": {
+          "release": "2.19.0",
+          "source": "packages/kumo/src/components/pagination",
+          "components": [
+            "Pagination"
+          ]
+        }
+      },
       "registryDependencies": [
         "https://raw.githubusercontent.com/tom-ricci/kumo-shadcn/main/public/r/input-group.json",
         "https://raw.githubusercontent.com/tom-ricci/kumo-shadcn/main/public/r/kumo-base.json",
@@ -2047,7 +2461,19 @@
       "name": "popover",
       "type": "registry:ui",
       "title": "Popover",
-      "description": "Kumo Popover component, copied from @cloudflare/kumo@2.19.0.",
+      "description": "Popover component for displaying accessible popup content anchored to a trigger. Kumo component, from @cloudflare/kumo@2.19.0.",
+      "categories": [
+        "overlay"
+      ],
+      "meta": {
+        "kumo": {
+          "release": "2.19.0",
+          "source": "packages/kumo/src/components/popover",
+          "components": [
+            "Popover"
+          ]
+        }
+      },
       "dependencies": [
         "@base-ui/react@^1.9.0"
       ],
@@ -2072,7 +2498,19 @@
       "name": "radio",
       "type": "registry:ui",
       "title": "Radio",
-      "description": "Kumo Radio component, copied from @cloudflare/kumo@2.19.0.",
+      "description": "Radio — radio button group for single-select choices. Kumo component, from @cloudflare/kumo@2.19.0.",
+      "categories": [
+        "input"
+      ],
+      "meta": {
+        "kumo": {
+          "release": "2.19.0",
+          "source": "packages/kumo/src/components/radio",
+          "components": [
+            "Radio"
+          ]
+        }
+      },
       "dependencies": [
         "@base-ui/react@^1.9.0"
       ],
@@ -2096,8 +2534,20 @@
     {
       "name": "resource-list",
       "type": "registry:block",
-      "title": "ResourceList",
-      "description": "Kumo ResourceList block, copied from @cloudflare/kumo@2.19.0.",
+      "title": "Resource List Page",
+      "description": "ResourceListPage - A layout component for resource list pages. Kumo block, from @cloudflare/kumo@2.19.0.",
+      "categories": [
+        "layout"
+      ],
+      "meta": {
+        "kumo": {
+          "release": "2.19.0",
+          "source": "packages/kumo/src/blocks/resource-list",
+          "components": [
+            "ResourceListPage"
+          ]
+        }
+      },
       "registryDependencies": [
         "https://raw.githubusercontent.com/tom-ricci/kumo-shadcn/main/public/r/kumo-base.json",
         "https://raw.githubusercontent.com/tom-ricci/kumo-shadcn/main/public/r/kumo-utils.json"
@@ -2119,7 +2569,19 @@
       "name": "select",
       "type": "registry:ui",
       "title": "Select",
-      "description": "Kumo Select component, copied from @cloudflare/kumo@2.19.0.",
+      "description": "Select component. Kumo component, from @cloudflare/kumo@2.19.0.",
+      "categories": [
+        "input"
+      ],
+      "meta": {
+        "kumo": {
+          "release": "2.19.0",
+          "source": "packages/kumo/src/components/select",
+          "components": [
+            "Select"
+          ]
+        }
+      },
       "dependencies": [
         "@base-ui/react@^1.9.0"
       ],
@@ -2149,8 +2611,20 @@
     {
       "name": "sensitive-input",
       "type": "registry:ui",
-      "title": "SensitiveInput",
-      "description": "Kumo SensitiveInput component, copied from @cloudflare/kumo@2.19.0.",
+      "title": "Sensitive Input",
+      "description": "Password/secret input that masks its value by default and reveals on click. Includes a built-in copy-to-clipboard button on hover. Kumo component, from @cloudflare/kumo@2.19.0.",
+      "categories": [
+        "other"
+      ],
+      "meta": {
+        "kumo": {
+          "release": "2.19.0",
+          "source": "packages/kumo/src/components/sensitive-input",
+          "components": [
+            "SensitiveInput"
+          ]
+        }
+      },
       "dependencies": [
         "@base-ui/react@^1.9.0"
       ],
@@ -2178,7 +2652,19 @@
       "name": "sidebar",
       "type": "registry:ui",
       "title": "Sidebar",
-      "description": "Kumo Sidebar component, copied from @cloudflare/kumo@2.19.0.",
+      "description": "Sidebar — responsive navigation panel with expand/collapse support. Kumo component, from @cloudflare/kumo@2.19.0.",
+      "categories": [
+        "other"
+      ],
+      "meta": {
+        "kumo": {
+          "release": "2.19.0",
+          "source": "packages/kumo/src/components/sidebar",
+          "components": [
+            "Sidebar"
+          ]
+        }
+      },
       "dependencies": [
         "@base-ui/react@^1.9.0"
       ],
@@ -2207,7 +2693,19 @@
       "name": "slider",
       "type": "registry:ui",
       "title": "Slider",
-      "description": "Kumo Slider component, copied from @cloudflare/kumo@2.19.0.",
+      "description": "Slider component. Kumo component, from @cloudflare/kumo@2.19.0.",
+      "categories": [
+        "input"
+      ],
+      "meta": {
+        "kumo": {
+          "release": "2.19.0",
+          "source": "packages/kumo/src/components/slider",
+          "components": [
+            "Slider"
+          ]
+        }
+      },
       "dependencies": [
         "@base-ui/react@^1.9.0"
       ],
@@ -2232,7 +2730,19 @@
       "name": "surface",
       "type": "registry:ui",
       "title": "Surface",
-      "description": "Kumo Surface component, copied from @cloudflare/kumo@2.19.0.",
+      "description": "Surface component. Kumo component, from @cloudflare/kumo@2.19.0.",
+      "categories": [
+        "layout"
+      ],
+      "meta": {
+        "kumo": {
+          "release": "2.19.0",
+          "source": "packages/kumo/src/components/surface",
+          "components": [
+            "Surface"
+          ]
+        }
+      },
       "registryDependencies": [
         "https://raw.githubusercontent.com/tom-ricci/kumo-shadcn/main/public/r/kumo-base.json",
         "https://raw.githubusercontent.com/tom-ricci/kumo-shadcn/main/public/r/kumo-utils.json",
@@ -2255,7 +2765,19 @@
       "name": "switch",
       "type": "registry:ui",
       "title": "Switch",
-      "description": "Kumo Switch component, copied from @cloudflare/kumo@2.19.0.",
+      "description": "Switch component. Kumo component, from @cloudflare/kumo@2.19.0.",
+      "categories": [
+        "input"
+      ],
+      "meta": {
+        "kumo": {
+          "release": "2.19.0",
+          "source": "packages/kumo/src/components/switch",
+          "components": [
+            "Switch"
+          ]
+        }
+      },
       "dependencies": [
         "@base-ui/react@^1.9.0"
       ],
@@ -2281,7 +2803,19 @@
       "name": "table",
       "type": "registry:ui",
       "title": "Table",
-      "description": "Kumo Table component, copied from @cloudflare/kumo@2.19.0.",
+      "description": "Table — semantic HTML table with styled rows, cells, and selection support. Kumo component, from @cloudflare/kumo@2.19.0.",
+      "categories": [
+        "other"
+      ],
+      "meta": {
+        "kumo": {
+          "release": "2.19.0",
+          "source": "packages/kumo/src/components/table",
+          "components": [
+            "Table"
+          ]
+        }
+      },
       "registryDependencies": [
         "https://raw.githubusercontent.com/tom-ricci/kumo-shadcn/main/public/r/checkbox.json",
         "https://raw.githubusercontent.com/tom-ricci/kumo-shadcn/main/public/r/kumo-base.json",
@@ -2303,8 +2837,20 @@
     {
       "name": "table-of-contents",
       "type": "registry:ui",
-      "title": "TableOfContents",
-      "description": "Kumo TableOfContents component, copied from @cloudflare/kumo@2.19.0.",
+      "title": "Table Of Contents",
+      "description": "TableOfContents — presentational compound component for section navigation. Kumo component, from @cloudflare/kumo@2.19.0.",
+      "categories": [
+        "other"
+      ],
+      "meta": {
+        "kumo": {
+          "release": "2.19.0",
+          "source": "packages/kumo/src/components/table-of-contents",
+          "components": [
+            "TableOfContents"
+          ]
+        }
+      },
       "registryDependencies": [
         "https://raw.githubusercontent.com/tom-ricci/kumo-shadcn/main/public/r/kumo-base.json",
         "https://raw.githubusercontent.com/tom-ricci/kumo-shadcn/main/public/r/kumo-utils.json"
@@ -2331,7 +2877,19 @@
       "name": "tabs",
       "type": "registry:ui",
       "title": "Tabs",
-      "description": "Kumo Tabs component, copied from @cloudflare/kumo@2.19.0.",
+      "description": "Tab navigation component with segmented or underline style. Built on Base UI Tabs with animated active indicator. Kumo component, from @cloudflare/kumo@2.19.0.",
+      "categories": [
+        "navigation"
+      ],
+      "meta": {
+        "kumo": {
+          "release": "2.19.0",
+          "source": "packages/kumo/src/components/tabs",
+          "components": [
+            "Tabs"
+          ]
+        }
+      },
       "dependencies": [
         "@base-ui/react@^1.9.0"
       ],
@@ -2355,8 +2913,20 @@
     {
       "name": "tag-input",
       "type": "registry:ui",
-      "title": "TagInput",
-      "description": "Kumo TagInput component, copied from @cloudflare/kumo@2.19.0.",
+      "title": "Tag Input",
+      "description": "TagInput component. Kumo component, from @cloudflare/kumo@2.19.0.",
+      "categories": [
+        "other"
+      ],
+      "meta": {
+        "kumo": {
+          "release": "2.19.0",
+          "source": "packages/kumo/src/components/tag-input",
+          "components": [
+            "TagInput"
+          ]
+        }
+      },
       "dependencies": [
         "@base-ui/react@^1.9.0"
       ],
@@ -2385,7 +2955,19 @@
       "name": "text",
       "type": "registry:ui",
       "title": "Text",
-      "description": "Kumo Text component, copied from @cloudflare/kumo@2.19.0.",
+      "description": "Text component. Kumo component, from @cloudflare/kumo@2.19.0.",
+      "categories": [
+        "display"
+      ],
+      "meta": {
+        "kumo": {
+          "release": "2.19.0",
+          "source": "packages/kumo/src/components/text",
+          "components": [
+            "Text"
+          ]
+        }
+      },
       "registryDependencies": [
         "https://raw.githubusercontent.com/tom-ricci/kumo-shadcn/main/public/r/kumo-base.json",
         "https://raw.githubusercontent.com/tom-ricci/kumo-shadcn/main/public/r/kumo-utils.json"
@@ -2406,8 +2988,20 @@
     {
       "name": "toast",
       "type": "registry:ui",
-      "title": "Toast",
-      "description": "Kumo Toast component, copied from @cloudflare/kumo@2.19.0.",
+      "title": "Toasty",
+      "description": "Toasty — toast notification provider and viewport. Kumo component, from @cloudflare/kumo@2.19.0.",
+      "categories": [
+        "feedback"
+      ],
+      "meta": {
+        "kumo": {
+          "release": "2.19.0",
+          "source": "packages/kumo/src/components/toast",
+          "components": [
+            "Toasty"
+          ]
+        }
+      },
       "dependencies": [
         "@base-ui/react@^1.9.0"
       ],
@@ -2434,7 +3028,19 @@
       "name": "toolbar",
       "type": "registry:ui",
       "title": "Toolbar",
-      "description": "Kumo Toolbar component, copied from @cloudflare/kumo@2.19.0.",
+      "description": "Toolbar component. Kumo component, from @cloudflare/kumo@2.19.0.",
+      "categories": [
+        "other"
+      ],
+      "meta": {
+        "kumo": {
+          "release": "2.19.0",
+          "source": "packages/kumo/src/components/toolbar",
+          "components": [
+            "Toolbar"
+          ]
+        }
+      },
       "dependencies": [
         "@base-ui/react@^1.9.0"
       ],
@@ -2462,7 +3068,19 @@
       "name": "tooltip",
       "type": "registry:ui",
       "title": "Tooltip",
-      "description": "Kumo Tooltip component, copied from @cloudflare/kumo@2.19.0.",
+      "description": "Accessible popup that shows additional information on hover/focus. Wrap your app or section with `<TooltipProvider>` to enable delay grouping. Kumo component, from @cloudflare/kumo@2.19.0.",
+      "categories": [
+        "overlay"
+      ],
+      "meta": {
+        "kumo": {
+          "release": "2.19.0",
+          "source": "packages/kumo/src/components/tooltip",
+          "components": [
+            "Tooltip"
+          ]
+        }
+      },
       "dependencies": [
         "@base-ui/react@^1.9.0"
       ],

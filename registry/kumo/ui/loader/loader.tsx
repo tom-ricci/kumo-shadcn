@@ -1,8 +1,8 @@
-"use client";
+import { resolveVariant } from "@/lib/kumo/resolve-variant";
 
 // Kumo, packages/kumo/src/components/loader/loader.tsx from https://github.com/cloudflare/kumo
 // (release cloudflare/kumo@2.19.0), copied by the kumo-shadcn registry (https://github.com/tom-ricci/kumo-shadcn).
-// Changes from Kumo's file: import paths, and the "use client" line Kumo's build adds.
+// Changes from Kumo's file: import paths.
 // Unofficial; not affiliated with or endorsed by Cloudflare.
 //
 // MIT License Copyright (c) 2026 Cloudflare, Inc.
@@ -27,7 +27,6 @@
 // FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-import { resolveVariant } from "@/lib/kumo/resolve-variant";
 
 /** Loader size variant definitions mapping sizes to their pixel values. */
 export const KUMO_LOADER_VARIANTS = {

@@ -55,6 +55,24 @@ npx shadcn@latest add https://raw.githubusercontent.com/tom-ricci/kumo-shadcn/ma
 npx shadcn@latest add tom-ricci/kumo-shadcn/button
 ```
 
+Or give the registry a namespace in `components.json` (or under `"registries"` in `package.json`) and
+add items by name:
+
+```json
+{
+  "registries": {
+    "@kumo": "https://kumo-shadcn.<subdomain>.workers.dev/r/{name}.json"
+  }
+}
+```
+
+```bash
+npx shadcn@latest add @kumo/kumo-theme @kumo/button
+```
+
+The registry index is at `/r/registry.json`. Each item has Kumo's own title, description and category
+(from Kumo's component metadata).
+
 3. Import it:
 
    ```tsx
@@ -92,10 +110,25 @@ items, you see only the errors in their files. The exact list is in
 
 ### Next.js
 
-The copied files start with `"use client"`, as Kumo's own build does, so you can render Kumo components
-from Server Components. Compound parts accessed with a dot (`Dialog.Root`) and render-prop functions only
-work inside a `"use client"` file. From a Server Component, use the named exports (`DialogRoot`,
-`DialogTrigger`, ...).
+The copied files have `"use client"` exactly where Kumo's source has it, which is one file
+(`loader/skeleton-line.tsx`). Kumo's npm package marks every file as a client module at build time; its
+source doesn't. So use Kumo components from your own `"use client"` files. Rendering them directly from a
+Server Component fails `next build` with "You're importing a module that depends on `createContext` into
+a React Server Component module". CI checks that exact failure, and that the same components build when
+used from a `"use client"` file.
+
+### components.json options
+
+The shadcn CLI rewrites files as it installs them, depending on `components.json`. CI installs every item
+with each of these set:
+
+| Option | Result |
+| --- | --- |
+| `rtl: true` | Works. The CLI turns physical classes into logical ones (`ml-2` → `ms-2`) where it can see them (in `className` and `cn(...)` there); classes in Kumo's variant objects stay physical. |
+| `tsx: false` | Works. Files are written as `.js`/`.jsx`, and the app builds. |
+| `rsc: false` | Works. The CLI drops the one `"use client"` line. |
+| `tailwind.cssVariables: false` | Works with `kumo-theme` and `kumo-cloudflare`. `kumo-binding` needs `true`: it reads your shadcn CSS variables, and with `false` there are none. |
+| `tailwind.prefix` | Not supported. The CLI adds the prefix to class strings in `className` attributes, but Kumo keeps most of its classes in variant objects (`classes: "..."`), which it doesn't reach. Those classes then produce no styles. |
 
 ## Themes
 
@@ -226,12 +259,15 @@ in [`scripts/icons.ts`](scripts/icons.ts).
 
 A workflow ([`update.yml`](.github/workflows/update.yml)) runs every day. It takes the source of the
 latest Kumo release, regenerates the registry, and installs every item with the real shadcn CLI into fresh
-Vite and Next.js apps (lucide, tabler and hugeicons; all three themes; default and custom aliases). In
+Vite and Next.js apps (lucide, tabler and hugeicons; all three themes; default and custom aliases; the
+`components.json` options above). In
 each app, the template as it comes must report exactly the errors listed under
 [TypeScript settings](#typescript-settings), so a change in either direction is noticed. With those
 settings relaxed, `tsc --noEmit` and a production build must pass. In the Vite apps, a headless Chrome
 also hovers a button, a dropdown item and a sidebar item and checks their backgrounds against the theme.
-Only then does it commit the new registry to `main` and deploy it to the Worker. If anything fails,
+It also checks the registry against the shadcn registry directory's requirements
+([`directory/SUBMISSION.md`](directory/SUBMISSION.md)). Only then does it commit the new registry to
+`main` and deploy it to the Worker. If anything fails,
 nothing is published and the run fails.
 
 So when Kumo adds or changes a component, the next `shadcn add` gives you the new version. Like any
@@ -247,12 +283,16 @@ PostCSS. It never runs Kumo's code, and it uses no AI. For each component it:
 - rewrites imports: other components to `@/components/ui/<name>/<file>`, helpers to `@/lib/kumo/<file>`,
   Phosphor to `@/lib/kumo/icons`; the CLI then maps these through your aliases;
 - lists the npm packages the files import, with the version ranges Kumo declares;
-- lists the other items it needs as `registryDependencies`;
+- lists the other items it needs as `registryDependencies` (full item URLs, which work without any
+  configuration; `--deps namespace` writes `@kumo/<item>` instead, for once the namespace is listed in
+  the shadcn registry directory);
+- takes each item's title, description and category from Kumo's `ai/component-registry.json` (in Kumo's
+  npm package of the same version);
 - turns Kumo's CSS files into `kumo-base` and the theme items.
 
 Kumo's class names and logic are not changed, and nothing is suppressed (no `@ts-ignore`, no lint
-comments, no casts). Each file's header lists the edits: import paths, a `"use client"` line, and the
-highlight and sidebar hooks above. `lib/kumo/process-env.d.ts` gives `process.env.NODE_ENV`, which Kumo
+comments, no casts). Each file's header lists the edits: import paths, and the highlight and sidebar
+hooks above. `"use client"` is exactly where Kumo's source has it. `lib/kumo/process-env.d.ts` gives `process.env.NODE_ENV`, which Kumo
 reads for development warnings, a type in apps without `@types/node`.
 
 The generator stops with an error instead of guessing: on an icon with no mapping
@@ -298,8 +338,9 @@ The code in this repository that was written here (the generator, the icon shim,
 scripts) is released under the [MIT License](LICENSE), copyright (c) 2026 Thomas Ricci.
 
 The component, block and helper files in `registry/kumo` and `public/r` are copied from Kumo, which is
-also MIT licensed, copyright (c) 2026 Cloudflare, Inc. Each copied file starts with Kumo's full license
-notice, and the text is also in [`registry/kumo/LICENSE-KUMO`](registry/kumo/LICENSE-KUMO). Keep those
+also MIT licensed, copyright (c) 2026 Cloudflare, Inc. Each copied file carries Kumo's full license
+notice, right after its first statement: the shadcn CLI removes comments that come before a file's first
+statement when it installs it, and keeps the ones after. The text is also in [`registry/kumo/LICENSE-KUMO`](registry/kumo/LICENSE-KUMO). Keep those
 headers when you change the files in your project.
 
 The MIT License does not grant trademark rights. "Cloudflare", "Kumo" and the Cloudflare logo (which the

@@ -1,8 +1,8 @@
-"use client";
+import { Autocomplete as AutocompleteBase } from "@base-ui/react/autocomplete";
 
 // Kumo, packages/kumo/src/components/autocomplete/autocomplete.tsx from https://github.com/cloudflare/kumo
 // (release cloudflare/kumo@2.19.0), copied by the kumo-shadcn registry (https://github.com/tom-ricci/kumo-shadcn).
-// Changes from Kumo's file: import paths, and the "use client" line Kumo's build adds.
+// Changes from Kumo's file: import paths.
 // Also changed: hover/selected backgrounds that use Kumo's tint read --kumo-highlight first.
 // Unofficial; not affiliated with or endorsed by Cloudflare.
 //
@@ -28,7 +28,6 @@
 // FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-import { Autocomplete as AutocompleteBase } from "@base-ui/react/autocomplete";
 import { CheckIcon } from "@/lib/kumo/icons";
 import { createContext, useContext, type ReactNode } from "react";
 import { inputVariants, KUMO_INPUT_VARIANTS } from "@/components/ui/input/input";

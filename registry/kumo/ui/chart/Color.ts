@@ -1,8 +1,19 @@
-"use client";
+/**
+ * Categorical colors for light mode — used when assigning colors to data series
+ * by index (e.g. the first series gets Blue, the second gets Violet, etc.).
+ */
+enum ChartCategoricalLightColors {
+  Blue = "#4290F0",
+  Yellow = "#F5B647",
+  Pink = "#E8649D",
+  Purple = "#8D58EE",
+  Teal = "#50C3B6",
+  Orange = "#D37536",
+}
 
 // Kumo, packages/kumo/src/components/chart/Color.ts from https://github.com/cloudflare/kumo
 // (release cloudflare/kumo@2.19.0), copied by the kumo-shadcn registry (https://github.com/tom-ricci/kumo-shadcn).
-// Changes from Kumo's file: import paths, and the "use client" line Kumo's build adds.
+// Changes from Kumo's file: import paths.
 // Unofficial; not affiliated with or endorsed by Cloudflare.
 //
 // MIT License Copyright (c) 2026 Cloudflare, Inc.
@@ -27,18 +38,6 @@
 // FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-/**
- * Categorical colors for light mode — used when assigning colors to data series
- * by index (e.g. the first series gets Blue, the second gets Violet, etc.).
- */
-enum ChartCategoricalLightColors {
-  Blue = "#4290F0",
-  Yellow = "#F5B647",
-  Pink = "#E8649D",
-  Purple = "#8D58EE",
-  Teal = "#50C3B6",
-  Orange = "#D37536",
-}
 
 /**
  * Categorical colors for dark mode

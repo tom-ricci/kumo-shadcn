@@ -1,8 +1,22 @@
-"use client";
+import React, {
+  type ComponentPropsWithoutRef,
+  type CSSProperties,
+  type ReactNode,
+  createContext,
+  forwardRef,
+  useCallback,
+  useContext,
+  useEffect,
+  useMemo,
+  useId,
+  useRef,
+  useState,
+  useSyncExternalStore,
+} from "react";
 
 // Kumo, packages/kumo/src/components/sidebar/sidebar.tsx from https://github.com/cloudflare/kumo
 // (release cloudflare/kumo@2.19.0), copied by the kumo-shadcn registry (https://github.com/tom-ricci/kumo-shadcn).
-// Changes from Kumo's file: import paths, and the "use client" line Kumo's build adds.
+// Changes from Kumo's file: import paths.
 // Also changed: the sidebar's default colors read --kumo-sidebar-bg and --kumo-sidebar-active-bg (then --kumo-highlight) first.
 // Unofficial; not affiliated with or endorsed by Cloudflare.
 //
@@ -28,21 +42,6 @@
 // FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-import React, {
-  type ComponentPropsWithoutRef,
-  type CSSProperties,
-  type ReactNode,
-  createContext,
-  forwardRef,
-  useCallback,
-  useContext,
-  useEffect,
-  useMemo,
-  useId,
-  useRef,
-  useState,
-  useSyncExternalStore,
-} from "react";
 import { ScrollArea as ScrollAreaBase } from "@base-ui/react/scroll-area";
 
 import { CaretRightIcon, XIcon } from "@/lib/kumo/icons";
