@@ -2,8 +2,7 @@
 
 // Kumo, packages/kumo/src/blocks/page-header/page-header.tsx from https://github.com/cloudflare/kumo
 // (release cloudflare/kumo@2.19.0), copied by the kumo-shadcn registry (https://github.com/tom-ricci/kumo-shadcn).
-// Changes from Kumo's file, all mechanical: import paths; `type` on type-only imports; `// @ts-ignore`
-// above lines that only stricter app tsconfigs reject; the "use client" line Kumo's build adds.
+// Changes from Kumo's file: import paths, and the "use client" line Kumo's build adds.
 // Unofficial; not affiliated with or endorsed by Cloudflare.
 //
 // MIT License Copyright (c) 2026 Cloudflare, Inc.
@@ -28,7 +27,7 @@
 // FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-import { type ReactNode } from "react";
+import { ReactNode } from "react";
 import { Tabs, type TabsItem } from "@/components/ui/tabs/tabs";
 import { cn } from "@/lib/kumo/cn";
 

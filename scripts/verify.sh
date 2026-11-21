@@ -62,7 +62,7 @@ const { iconLibraries } = await import(process.cwd() + "/node_modules/shadcn/dis
 console.log(iconLibraries[process.argv[1]].packages.join("\n"));' "$icons")
 step "install ${icon_packages[*]}" npm install "${icon_packages[@]}" || exit 1
 src=.; [ -d src ] && src=src
-dir() { echo "$src/${1#@/}"; }
+dir() { local d="$src/${1#@/}"; echo "${d#./}"; }
 
 # 3. Every item (helpers, icon shim, all components and blocks) or just
 # [items], plus one theme.
@@ -101,18 +101,52 @@ else # only some items installed: a page that just imports them
 fi
 if [ "$framework" = vite ]; then
   printf 'import { KumoDemo } from "./kumo-demo";\n\nexport default function App() {\n  return <KumoDemo />;\n}\n' >src/App.tsx
-  step "tsc --noEmit" npx tsc -p tsconfig.app.json --noEmit
-  step "vite build" npx vite build
-  css=$(ls dist/assets/*.css 2>/dev/null)
+  tsc_cmd=(npx tsc -p tsconfig.app.json --noEmit) build_cmd=(npx vite build) tsconfig=tsconfig.app.json
 else
   page=$( [ -d src/app ] && echo src/app/page.tsx || echo app/page.tsx )
   # A Server Component page that renders Kumo components directly and the
   # client demo, to cover the RSC boundary.
   printf 'import { Badge } from "%s/badge/index";\nimport { Button } from "%s/button/index";\nimport { KumoDemo } from "@/kumo-demo";\n\nexport default function Page() {\n  return (\n    <main>\n      <div className="flex gap-2 bg-kumo-base p-4">\n        <Badge variant="primary">Server</Badge>\n        <Button variant="secondary">Server button</Button>\n      </div>\n      <KumoDemo />\n    </main>\n  );\n}\n' "$ui_alias" "$ui_alias" >"$page"
-  step "tsc --noEmit" npx tsc --noEmit
-  step "next build" npx next build
-  css=$(find .next/static -name '*.css' 2>/dev/null)
+  tsc_cmd=(npx tsc --noEmit) build_cmd=(npx next build) tsconfig=tsconfig.json
 fi
+
+# 5a. The template exactly as `shadcn init` made it. Kumo's code is copied
+# as-is, so stricter template settings report errors, as they would for any
+# shadcn component. The exact set (file and error code, alias folders written
+# as <ui>/<lib>/<components>) must match scripts/verify/expected-errors-<framework>.txt,
+# so any change shows up. VERIFY_RECORD=1 rewrites that file instead.
+expected="$repo/scripts/verify/expected-errors-$framework.txt"
+normalize() {
+  sed -E 's/\x1b\[[0-9;]*m//g' | sed -nE \
+    -e 's#^([^ (]+)\([0-9]+,[0-9]+\): error (TS[0-9]+):.*#\1 \2#p' \
+    -e 's#^\[([A-Z_]+)\] (.*)$#build \1 \2#p' |
+    sed -E -e "s#(^|\")$(dir "$ui_alias")/#\1<ui>/#g" -e "s#(^|\")$(dir "$lib_alias")/#\1<lib>/#g" -e "s#(^|\")$(dir @/components)/#\1<components>/#g"
+}
+if [ -z "$only" ]; then
+  { "${tsc_cmd[@]}" 2>&1 | normalize
+    if "${build_cmd[@]}" >"$work/$name.stock-build.log" 2>&1; then echo "build: ok"; else echo "build: failed"; fi
+    normalize <"$work/$name.stock-build.log"
+  } | LC_ALL=C sort >"$work/$name.stock-errors.txt"
+  if [ -n "${VERIFY_RECORD:-}" ]; then
+    { echo "# Errors a stock \`shadcn init -t $framework\` app reports after adding every item (scripts/verify.sh)."
+      echo "# One line per error: file and code, or the build result and bundler errors."
+      cat "$work/$name.stock-errors.txt"; } >"$expected"
+    pass "stock template: recorded $(grep -c . "$work/$name.stock-errors.txt") lines to $(basename "$expected")"
+  elif diff <(grep -v '^#' "$expected" | LC_ALL=C sort) "$work/$name.stock-errors.txt" >"$work/$name.stock-diff.txt"; then
+    pass "stock template: tsc and build report exactly the expected errors ($(grep -c ' TS' "$work/$name.stock-errors.txt") tsc errors, $(grep '^build:' "$work/$name.stock-errors.txt"))"
+  else
+    fail "stock template: errors differ from $(basename "$expected") (< expected, > now):"; cat "$work/$name.stock-diff.txt"
+  fi
+fi
+
+# 5b. The same app with the settings the README tells users to relax.
+# Then tsc must be clean and the production build must pass.
+relax=()
+[ "$framework" = vite ] && relax=(erasableSyntaxOnly noUnusedParameters verbatimModuleSyntax)
+for flag in "${relax[@]}"; do sed -i -E "s/\"$flag\": true/\"$flag\": false/" "$tsconfig"; done
+step "tsc --noEmit${relax:+ (relaxed: ${relax[*]})}" "${tsc_cmd[@]}"
+step "${build_cmd[*]:1}" "${build_cmd[@]}"
+if [ "$framework" = vite ]; then css=$(ls dist/assets/*.css 2>/dev/null); else css=$(find .next/static -name '*.css' 2>/dev/null); fi
 if [ -n "$css" ] && grep -q "bg-kumo-base" $css && grep -q -- "--kumo-base:" $css && grep -q "@keyframes skeleton" $css; then
   pass "built CSS has Kumo utilities, $theme tokens and keyframes"
 else fail "built CSS is missing Kumo utilities, tokens or keyframes"; fi
