@@ -2,11 +2,17 @@
 // No Worker script: public/_headers sets CORS and caching, public/_redirects
 // sends the bare domain to the repository. Deployed by .github/workflows/update.yml.
 {
-  "$schema": "./node_modules/wrangler/config-schema.json",
-  "name": "kumo-shadcn",
-  "compatibility_date": "2026-11-05",
-  "assets": {
-    "directory": "./public",
-    "not_found_handling": "none"
-  }
+    "$schema": "./node_modules/wrangler/config-schema.json",
+    "name": "kumo-shadcn",
+    "compatibility_date": "2026-11-05",
+    "assets": {
+        "directory": "./public",
+        "not_found_handling": "none",
+    },
+    "routes": [
+        {
+            "pattern": "kumo-shadcn.thomasricci.dev",
+            "custom_domain": true,
+        },
+    ],
 }

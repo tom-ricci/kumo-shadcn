@@ -2,3 +2,6 @@ node_modules/
 *.tsbuildinfo
 .check/
 .kumo/
+# The docs page, built by scripts/build-site.sh (deployed, not committed):
+public/index.html
+public/assets/

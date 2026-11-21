@@ -175,6 +175,7 @@ normalize() {
   sed -E 's/\x1b\[[0-9;]*m//g' | sed -nE \
     -e 's#^([^ (]+)\([0-9]+,[0-9]+\): error (TS[0-9]+):.*#\1 \2#p' \
     -e 's#^\[([A-Z_]+)\] (.*)$#build \1 \2#p' \
+    -e 's#^Build failed with ([0-9]+) errors?:.*#build: failed with \1 errors#p' \
     -e 's#^Error: You.re importing a module that depends on `([^`]+)` into a React Server Component module.*#build server-component imports \1#p' |
     sed -E -e "s#(^|\")$(dir "$ui_alias")/#\1<ui>/#g" -e "s#(^|\")$(dir "$lib_alias")/#\1<lib>/#g" -e "s#(^|\")$(dir @/components)/#\1<components>/#g"
 }
@@ -188,10 +189,18 @@ if [ -z "$only" ] && [ "$transform" = none ]; then
       echo "# One line per error: file and code, or the build result and bundler errors."
       cat "$work/$name.stock-errors.txt"; } >"$expected"
     pass "stock template: recorded $(grep -c . "$work/$name.stock-errors.txt") lines to $(basename "$expected")"
-  elif diff <(grep -v '^#' "$expected" | LC_ALL=C sort) "$work/$name.stock-errors.txt" >"$work/$name.stock-diff.txt"; then
-    pass "stock template: tsc and build report exactly the expected errors ($(grep -c ' TS' "$work/$name.stock-errors.txt") tsc errors, $(grep '^build:' "$work/$name.stock-errors.txt"))"
   else
-    fail "stock template: errors differ from $(basename "$expected") (< expected, > now):"; cat "$work/$name.stock-diff.txt"
+    # tsc errors, the build result and the bundler's error count must match
+    # exactly. Rolldown prints only some of its errors (5 of 6), in no fixed
+    # order, so each one it prints must just be one of the expected ones.
+    sampled='^build [A-Z_]+ '
+    want=$(grep -v '^#' "$expected" | LC_ALL=C sort)
+    if diff <(grep -Ev "$sampled" <<<"$want") <(grep -Ev "$sampled" "$work/$name.stock-errors.txt") >"$work/$name.stock-diff.txt" \
+      && ! grep -Fxvf <(grep -E "$sampled" <<<"$want") <(grep -E "$sampled" "$work/$name.stock-errors.txt") >>"$work/$name.stock-diff.txt"; then
+      pass "stock template: tsc and build report exactly the expected errors ($(grep -c ' TS' "$work/$name.stock-errors.txt") tsc errors, $(grep '^build:' "$work/$name.stock-errors.txt" | tail -1))"
+    else
+      fail "stock template: errors differ from $(basename "$expected") (< expected, > now):"; cat "$work/$name.stock-diff.txt"
+    fi
   fi
 fi
 

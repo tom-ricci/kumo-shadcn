@@ -5,6 +5,9 @@ Cloudflare's React component library.
 
 This registry is unofficial. It is not affiliated with or endorsed by Cloudflare.
 
+Docs page: https://kumo-shadcn.thomasricci.dev (built with this registry). Kumo's own docs, to browse the
+components: https://kumo-ui.com
+
 ## What you get
 
 It works like shadcn/ui: `shadcn add` copies the source of a Kumo component into your project, and the
@@ -323,11 +326,18 @@ npm run verify -- vite lucide kumo-theme   # one test app: framework, icon libra
 
 ## Hosting
 
+The Worker serves two things from `public/`: the registry under `/r/` (committed, written by the
+generator and `shadcn build`) and a one-page docs site at `/` (`index.html` and `assets/`, built by
+[`scripts/build-site.sh`](scripts/build-site.sh) from [`site/`](site) and not committed). The site is a
+small Vite app that installs its Kumo components from the freshly built registry with the shadcn CLI,
+so it is also a test. The build fails if `public/r` changes, and
+[`scripts/check-worker.sh`](scripts/check-worker.sh) checks both with `wrangler dev`.
+
 The registry is static JSON in `public/`. A Cloudflare Worker serves it with
 [Workers Static Assets](https://developers.cloudflare.com/workers/static-assets/), configured in
 [`wrangler.jsonc`](wrangler.jsonc). There is no Worker script: [`public/_headers`](public/_headers) adds
-CORS (`Access-Control-Allow-Origin: *`) and a five-minute cache to `/r/*`, item files are served as
-`application/json`, and [`public/_redirects`](public/_redirects) sends `/` to this repository.
+CORS (`Access-Control-Allow-Origin: *`) and a five-minute cache to `/r/*` (and a long cache to the docs
+page's hashed `/assets/*`), and item files are served as `application/json`.
 
 The update workflow deploys it from `main` after every successful run. To turn that on, add two
 repository secrets (Settings → Secrets and variables → Actions):
