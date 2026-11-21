@@ -373,8 +373,7 @@ function sourceHeader(where: string, notes: string[]): string {
   return [
     `// Kumo, packages/kumo/src/${where} from https://github.com/cloudflare/kumo`,
     `// (release ${release.replace("@", "")}), copied by the kumo-shadcn registry (${HOMEPAGE}).`,
-    "// Changes from Kumo's file, all mechanical: import paths; `type` on type-only imports; `// @ts-ignore`",
-    "// above lines that only stricter app tsconfigs reject; the \"use client\" line Kumo's build adds.",
+    "// Changes from Kumo's file: import paths, and the \"use client\" line Kumo's build adds.",
     ...notes.map((n) => `// Also changed: ${n}.`),
     "// Unofficial; not affiliated with or endorsed by Cloudflare.",
     "//",
@@ -616,50 +615,12 @@ function themeCss(blocks: TokenBlock[]): CssObject {
 }
 
 // ---------------------------------------------------------------------------
-// Type-only imports. Kumo imports some types without `type` (e.g.
-// `import { Button, ButtonProps }`). Kumo's own build copes; an app with
-// verbatimModuleSyntax (Vite's default tsconfig) or a bundler that keeps the
-// import does not. The type checker marks those names `type`, nothing else.
-function markTypeOnlyImports(files: string[]): number {
-  const config = ts.parseJsonConfigFileContent(ts.readConfigFile(join(root, "tsconfig.json"), ts.sys.readFile).config, ts.sys, root);
-  const program = ts.createProgram(files, { ...config.options, noEmit: true });
-  const checker = program.getTypeChecker();
-  const isTypeOnly = (id: ts.Identifier) => {
-    const symbol = checker.getSymbolAtLocation(id);
-    if (!symbol || !(symbol.flags & ts.SymbolFlags.Alias)) return false;
-    const target = checker.getAliasedSymbol(symbol);
-    if (!target.declarations?.length) fail(`cannot resolve ${id.text} in ${relative(root, id.getSourceFile().fileName)}; is its package in devDependencies?`);
-    return !(target.flags & ts.SymbolFlags.Value);
-  };
-  let changed = 0;
-  for (const file of files) {
-    const sf = program.getSourceFile(file)!;
-    const inserts: number[] = [];
-    for (const st of sf.statements) {
-      const clause = ts.isImportDeclaration(st) && !st.importClause?.isTypeOnly ? st.importClause?.namedBindings
-        : ts.isExportDeclaration(st) && st.moduleSpecifier && !st.isTypeOnly ? st.exportClause : undefined;
-      if (!clause || !(ts.isNamedImports(clause) || ts.isNamedExports(clause))) continue;
-      for (const el of clause.elements as ts.NodeArray<ts.ImportSpecifier | ts.ExportSpecifier>)
-        if (!el.isTypeOnly && ts.isIdentifier(el.name) && isTypeOnly(el.name)) inserts.push(el.getStart(sf));
-    }
-    if (!inserts.length) continue;
-    let text = sf.text;
-    for (const at of inserts.sort((a, b) => b - a)) text = `${text.slice(0, at)}type ${text.slice(at)}`;
-    writeFileSync(file, text);
-    changed += inserts.length;
-  }
-  return changed;
-}
-
-// Kumo compiles with its own tsconfig. App templates can be stricter: the
-// Vite template shadcn uses sets erasableSyntaxOnly (no enums, no runtime
-// namespaces) and noUnusedLocals/Parameters. For exactly those diagnostics
-// the generator adds a `// @ts-ignore` line above the line; the code itself
-// is unchanged. Any other type error fails generation.
-const STRICT_APP_CODES = new Map([
-  [1294, "erasableSyntaxOnly"],
-  ...[6133, 6138, 6192, 6196, 6198, 6199, 6205].map((c) => [c, "noUnusedLocals/noUnusedParameters"] as [number, string]),
-]);
+// The generated tree must type-check cleanly under tsconfig.json: strict,
+// isolatedModules (Next.js requires it), bundler resolution. Stricter app
+// settings that Kumo's own code doesn't meet (erasableSyntaxOnly,
+// noUnusedLocals/Parameters, verbatimModuleSyntax) are left to fail in the
+// app, as they would with any shadcn component; scripts/verify.sh asserts
+// exactly which errors a stock template reports. Nothing is suppressed.
 function typeCheck(files: string[]) {
   const config = ts.parseJsonConfigFileContent(ts.readConfigFile(join(root, "tsconfig.json"), ts.sys.readFile).config, ts.sys, root);
   const program = ts.createProgram(files, { ...config.options, noEmit: true });
@@ -667,30 +628,6 @@ function typeCheck(files: string[]) {
 }
 const formatDiagnostic = (d: ts.Diagnostic) =>
   `${d.file ? `${relative(root, d.file.fileName)}(${d.file.getLineAndCharacterOfPosition(d.start ?? 0).line + 1}): ` : ""}TS${d.code} ${ts.flattenDiagnosticMessageText(d.messageText, " ")}`;
-function suppressStrictAppDiagnostics(files: string[]): number {
-  const byFile = new Map<string, Map<number, Set<string>>>();
-  for (const d of typeCheck(files)) {
-    const why = STRICT_APP_CODES.get(d.code);
-    if (!why || !d.file || !d.file.fileName.startsWith(outDir)) fail(`type error in the generated registry: ${formatDiagnostic(d)}`);
-    const line = d.file.getLineAndCharacterOfPosition(d.start ?? 0).line;
-    const lines = byFile.get(d.file.fileName) ?? new Map<number, Set<string>>();
-    lines.set(line, (lines.get(line) ?? new Set()).add(why));
-    byFile.set(d.file.fileName, lines);
-  }
-  let count = 0;
-  for (const [file, lines] of byFile) {
-    const text = readFileSync(file, "utf8").split("\n");
-    for (const [line, whys] of [...lines].sort(([a], [b]) => b - a)) {
-      const indent = text[line].match(/^\s*/)![0];
-      text.splice(line, 0, `${indent}// @ts-ignore -- kumo-shadcn: Kumo's code, rejected only by ${[...whys].join(", ")}`);
-      count++;
-    }
-    writeFileSync(file, text.join("\n"));
-  }
-  const left = typeCheck(files);
-  if (left.length) fail(`type errors after adding @ts-ignore lines:\n${left.map(formatDiagnostic).join("\n")}`);
-  return count;
-}
 
 // ---------------------------------------------------------------------------
 // Build
@@ -754,8 +691,8 @@ writeFileSync(join(root, shimPath), iconShim());
 
 const generatedFiles = [...copies.values()].map((c) => join(root, outPath(c.area)));
 const extraFiles = [join(root, shimPath), ...(needsProcessEnv ? [join(root, processEnvPath)] : [])];
-const typeFixes = markTypeOnlyImports([...generatedFiles, ...extraFiles]);
-const ignores = suppressStrictAppDiagnostics([...generatedFiles, ...extraFiles]);
+const typeErrors = typeCheck([...generatedFiles, ...extraFiles]);
+if (typeErrors.length) fail(`type errors in the generated registry:\n${typeErrors.map(formatDiagnostic).join("\n")}`);
 
 // Tokens and themes
 const lightKumo = kumoThemeBlocks("theme-kumo.css");
@@ -932,6 +869,5 @@ writeFileSync(join(root, "registry", "kumo", "VERSION"), `${release}\n`);
 writeFileSync(join(root, "registry", "kumo", "LICENSE-KUMO"), `${licenseText}\n`);
 const counts = { ui: 0, block: 0 };
 for (const cs of groups.values()) if (cs[0].area.kind !== "lib") counts[cs[0].area.kind]++;
-console.log(`Marked ${typeFixes} type-only import names; added ${ignores} @ts-ignore lines for strict app tsconfigs.`);
 console.log(`Generated ${counts.ui} components, ${counts.block} blocks, ${libCopies.length} helper files and ${iconImports.size} icon names from ${release}.`);
 if (bound.fallbacks.length) console.log(`notice: new Kumo tokens with no kumo-binding mapping yet (they use Kumo's value): ${bound.fallbacks.join(", ")}`);

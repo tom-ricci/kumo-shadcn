@@ -1,0 +1,3 @@
+# Errors a stock `shadcn init -t next` app reports after adding every item (scripts/verify.sh).
+# One line per error: file and code, or the build result and bundler errors.
+build: ok

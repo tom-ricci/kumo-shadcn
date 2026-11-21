@@ -2,8 +2,7 @@
 
 // Kumo, packages/kumo/src/components/clipboard-text/clipboard-text.tsx from https://github.com/cloudflare/kumo
 // (release cloudflare/kumo@2.19.0), copied by the kumo-shadcn registry (https://github.com/tom-ricci/kumo-shadcn).
-// Changes from Kumo's file, all mechanical: import paths; `type` on type-only imports; `// @ts-ignore`
-// above lines that only stricter app tsconfigs reject; the "use client" line Kumo's build adds.
+// Changes from Kumo's file: import paths, and the "use client" line Kumo's build adds.
 // Unofficial; not affiliated with or endorsed by Cloudflare.
 //
 // MIT License Copyright (c) 2026 Cloudflare, Inc.
@@ -408,7 +407,6 @@ export const ClipboardText = forwardRef<HTMLDivElement, ClipboardTextProps>(
           <TooltipWrapper>
             <Tooltip.Root
               disabled={copied}
-              // @ts-ignore -- kumo-shadcn: Kumo's code, rejected only by noUnusedLocals/noUnusedParameters
               onOpenChange={(open, eventDetails) => {
                 // Prevent tooltip from closing when button is clicked
                 if (eventDetails.reason === "trigger-press") {
