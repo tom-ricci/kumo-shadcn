@@ -1,0 +1,17 @@
+@import "tailwindcss";
+@import "@fontsource-variable/geist";
+
+@custom-variant dark (&:is(.dark *));
+
+@theme inline {
+  --font-sans: "Geist Variable", ui-sans-serif, system-ui, sans-serif;
+}
+
+@layer base {
+  body {
+    @apply bg-kumo-canvas font-sans text-kumo-default antialiased;
+  }
+  :not(pre) > code {
+    @apply rounded bg-kumo-tint px-1 py-0.5 font-mono text-[0.9em] text-kumo-strong;
+  }
+}

@@ -1,0 +1,5 @@
+node_modules/
+dist/
+# Installed from the registry by scripts/build-site.sh at build time:
+src/components/ui/
+src/lib/

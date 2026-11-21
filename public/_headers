@@ -1,0 +1,9 @@
+# Workers Static Assets headers (https://developers.cloudflare.com/workers/static-assets/headers/).
+# Registry items are JSON fetched by the shadcn CLI and by browser-based tools.
+/r/*
+  Access-Control-Allow-Origin: *
+  Cache-Control: public, max-age=300
+
+# The docs page's build files have content hashes in their names.
+/assets/*
+  Cache-Control: public, max-age=31536000, immutable

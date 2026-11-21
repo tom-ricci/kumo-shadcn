@@ -31,6 +31,7 @@ on:
       - "wrangler.jsonc"
       - "public/_headers"
       - "public/_redirects"
+      - "site/**"
       - ".github/workflows/update.yml"
 
 permissions: {}
@@ -71,6 +72,18 @@ jobs:
       # that doesn't compile for one of the five icon libraries.
       - name: Generate, build and check
         run: npm run registry
+
+      # The docs page at /, built with kumo-shadcn itself from the registry
+      # just generated (its components come from public/r through the CLI).
+      # It writes public/index.html and public/assets/ only, and fails if
+      # public/r changes.
+      - name: Build the docs page
+        run: scripts/build-site.sh
+
+      # wrangler dev on the assembled public/: the page at /, the registry at
+      # /r/* with JSON, CORS and cache headers as before.
+      - name: Check the Worker
+        run: scripts/check-worker.sh
 
       - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
         with:
