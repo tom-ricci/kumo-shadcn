@@ -18,6 +18,7 @@ import React, {
 // (release cloudflare/kumo@2.19.0), copied by the kumo-shadcn registry (https://github.com/tom-ricci/kumo-shadcn).
 // Changes from Kumo's file: import paths.
 // Also changed: the sidebar's default colors read --kumo-sidebar-bg and --kumo-sidebar-active-bg (then --kumo-highlight) first.
+// Also changed: cn comes from your shadcn utils (@/lib/utils).
 // Unofficial; not affiliated with or endorsed by Cloudflare.
 //
 // MIT License Copyright (c) 2026 Cloudflare, Inc.
@@ -45,7 +46,7 @@ import React, {
 import { ScrollArea as ScrollAreaBase } from "@base-ui/react/scroll-area";
 
 import { CaretRightIcon, XIcon } from "@/lib/kumo/icons";
-import { cn } from "@/lib/kumo/cn";
+import { cn } from "@/lib/utils";
 import { useLinkComponent } from "@/lib/kumo/link-provider";
 import { unwrapLazyElement } from "@/lib/kumo/unwrap-lazy-element";
 import { SkeletonLine } from "@/components/ui/loader/skeleton-line";

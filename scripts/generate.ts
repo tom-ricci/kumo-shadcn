@@ -56,8 +56,10 @@ export const NAMESPACE = "@kumo";
 // namespace configured, or listed in the shadcn registry directory).
 const depsForm = args.deps ?? "url";
 if (!["url", "namespace"].includes(depsForm)) fail(`--deps must be url or namespace`);
-const depRef = (name: string) => (depsForm === "namespace" ? `${NAMESPACE}/${name}` : itemUrl(name));
-const depName = (ref: string) => (ref.startsWith(`${NAMESPACE}/`) ? ref.slice(NAMESPACE.length + 1) : ref.slice(baseUrl.length + 1, -5));
+// "utils" is shadcn's own item (lib/utils.ts with cn), so it stays a bare name.
+const depRef = (name: string) => (name === "utils" ? name : depsForm === "namespace" ? `${NAMESPACE}/${name}` : itemUrl(name));
+const depName = (ref: string) =>
+  ref.startsWith(`${NAMESPACE}/`) ? ref.slice(NAMESPACE.length + 1) : ref.startsWith(baseUrl) ? ref.slice(baseUrl.length + 1, -5) : ref;
 
 // ---------------------------------------------------------------------------
 // Source files
@@ -83,11 +85,23 @@ function listSource(dir: string): string[] {
 const subdirs = (dir: string) =>
   readdirSync(dir, { withFileTypes: true }).filter((d) => d.isDirectory()).map((d) => d.name).sort();
 
+// cn: Kumo's utils/cn.ts only re-exports cn from the `cn` package. The
+// registry uses the project's own shadcn cn instead (@/lib/utils, shadcn's
+// "utils" item, which leaves an installed cn package alone). What is left of
+// that file is safeRandomId, so it is renamed.
+const KUMO_CN_FILE = "utils/cn.ts";
+const SHADCN_UTILS = "@/lib/utils";
+const RENAMED_HELPERS: Record<string, string> = { "cn.ts": "random-id.ts" };
+const isKumoCn = (file: string, name: string) => posix(relative(src, file)) === KUMO_CN_FILE && name === "cn";
+
 function areaOf(file: string): Area | undefined {
   const parts = posix(relative(src, file)).split("/");
   if (parts[0] === "components" && parts.length > 2) return { kind: "ui", item: parts[1], rel: parts.slice(2).join("/") };
   if (parts[0] === "blocks" && parts.length > 2) return { kind: "block", item: parts[1], rel: parts.slice(2).join("/") };
-  if (parts[0] === "utils" && parts.length > 1) return { kind: "lib", item: "kumo-utils", rel: parts.slice(1).join("/") };
+  if (parts[0] === "utils" && parts.length > 1) {
+    const rel = parts.slice(1).join("/");
+    return { kind: "lib", item: "kumo-utils", rel: RENAMED_HELPERS[rel] ?? rel };
+  }
   return undefined;
 }
 
@@ -208,6 +222,7 @@ interface Copied {
   usesProcessEnv: boolean;
 }
 const iconImports = new Set<string>();
+const cnRewrites = new Set<string>(); // files whose cn import now comes from @/lib/utils
 
 type Found = { node: ts.StringLiteralLike; decl?: ts.ImportDeclaration; reexport?: ts.ExportDeclaration; sideEffect: boolean };
 function moduleSpecifiers(sf: ts.SourceFile): Found[] {
@@ -308,23 +323,42 @@ function copyFile(file: string): Copied {
       const target = resolveRelative(file, spec);
       const targetArea = areaOf(target)!;
       copied.localFiles.add(target);
-      if (targetArea.kind === area.kind && targetArea.item === area.item) continue; // same item: keep relative
-      copied.registryDependencies.add(targetArea.item);
-      if (!isBarrel(target)) {
+      const sameItem = targetArea.kind === area.kind && targetArea.item === area.item;
+      const helpers = targetArea.kind === "lib";
+      if (sameItem && !helpers) continue; // same component: keep relative
+      if (!isBarrel(target) && !helpers) {
+        copied.registryDependencies.add(targetArea.item);
         replaceSpec(node, aliasPath(targetArea));
         continue;
       }
-      // A barrel of another item: group the names by defining file.
+      // A barrel, or Kumo's helpers: group the names by defining file. A
+      // name defined in Kumo's utils/cn.ts named cn comes from the project's
+      // shadcn utils instead; re-exports of it from the helpers are dropped.
       const owner = decl ?? reexport;
       const clause = decl ? decl.importClause?.namedBindings : reexport?.exportClause;
       if (!owner || !clause || (decl?.importClause?.name) || !(ts.isNamedImports(clause) || ts.isNamedExports(clause)))
-        fail(`unknown import pattern: only named imports from another item's index are supported (${where}: "${spec}")`);
+        fail(`unknown import pattern: only named imports from another item's index or Kumo's helpers are supported (${where}: "${spec}")`);
       const groups = new Map<string, string[]>();
       for (const el of clause.elements as ts.NodeArray<ts.ImportSpecifier | ts.ExportSpecifier>) {
         const name = (el.propertyName ?? el.name).text;
         const origin = originOf(target, name) ?? fail(`cannot find where ${name} is defined (imported in ${where} from "${spec}")`);
-        copied.localFiles.add(origin);
-        const key = aliasPath(areaOf(origin)!);
+        let key: string;
+        if (isKumoCn(origin, name)) {
+          if (reexport && area.kind === "lib") continue; // the helpers no longer re-export cn
+          if (reexport) fail(`unknown import pattern: ${where} re-exports cn`);
+          key = SHADCN_UTILS;
+          copied.registryDependencies.add("utils");
+          cnRewrites.add(where);
+        } else {
+          copied.localFiles.add(origin);
+          const originArea = areaOf(origin)!;
+          if (originArea.kind === area.kind && originArea.item === area.item)
+            key = `./${posix(relative(dirname(outPath(area)), outPath(originArea))).replace(/\.tsx?$/, "")}`.replace(/^\.\/\.\.\//, "../");
+          else {
+            key = aliasPath(originArea);
+            copied.registryDependencies.add(originArea.item);
+          }
+        }
         groups.set(key, [...(groups.get(key) ?? []), el.getText(sf)]);
       }
       const kw = decl ? "import" : "export";
@@ -346,6 +380,11 @@ function copyFile(file: string): Copied {
       fail(`unknown import pattern: "${spec}" in ${where}`);
     } else if (packageName(spec) === "@cloudflare/kumo") {
       fail(`unknown import pattern: ${where} imports "${spec}" (the registry must not depend on the npm package)`);
+    } else if (spec === "cn") {
+      // Kumo's utils/cn.ts re-exports the cn package; the registry uses the
+      // project's shadcn cn, so that statement goes.
+      if (!(reexport && area.kind === "lib")) fail(`unknown import pattern: ${where} imports the cn package directly`);
+      edits.push({ start: reexport.getFullStart(), end: reexport.getEnd(), text: "" });
     } else {
       const name = packageName(spec);
       if (IGNORED_PACKAGES.has(name)) {
@@ -366,17 +405,22 @@ function copyFile(file: string): Copied {
     if (area.kind !== "lib") copied.registryDependencies.add("kumo-utils");
   }
 
+  if (cnRewrites.has(where)) patched.notes.push("cn comes from your shadcn utils (@/lib/utils)");
+  if (where === KUMO_CN_FILE) patched.notes.push("cn is no longer re-exported (it comes from your shadcn utils), and the file is renamed random-id.ts");
+  if (where === "utils/index.ts") patched.notes.push("cn is no longer re-exported (it comes from your shadcn utils)");
   let body = text;
   for (const e of edits.sort((a, b) => b.start - a.start)) body = body.slice(0, e.start) + e.text + body.slice(e.end);
   // "use client" stays exactly where Kumo's source has it. The license header
   // goes right after the first statement (the directive, or usually the
   // first import): the shadcn CLI strips comments before a file's first
   // statement when it installs it, but keeps comments after it.
-  const first = sf.statements[0];
-  if (!first) fail(`${where} has no statements`);
+  // (the first statement that the edits above didn't remove)
+  const removed = (st: ts.Statement) => edits.some((e) => e.text === "" && e.start <= st.getFullStart() && e.end >= st.getEnd());
+  const first = sf.statements.find((st) => !removed(st));
+  if (!first) fail(`${where} has no statements left`);
   const shift = edits.filter((e) => e.end <= first.getEnd()).reduce((n, e) => n + e.text.length - (e.end - e.start), 0);
   const at = first.getEnd() + shift;
-  copied.code = `${body.slice(0, at)}\n\n${sourceHeader(where, patched.notes)}\n${body.slice(at).replace(/^[ \t]*\n/, "")}`;
+  copied.code = `${body.slice(0, at).replace(/^\s+/, "")}\n\n${sourceHeader(where, patched.notes)}\n${body.slice(at).replace(/^[ \t]*\n/, "")}`;
   return copied;
 }
 
@@ -903,6 +947,7 @@ for (const item of items) for (const key of ["dependencies", "devDependencies", 
       fileOwner.set(path, it.name);
       if (path.endsWith("/index")) fileOwner.set(path.slice(0, -6), it.name);
     }
+  fileOwner.set(SHADCN_UTILS, "utils"); // shadcn's own utils item
   const byName = new Map((items as { name: string; registryDependencies?: string[] }[]).map((i) => [i.name, i]));
   const closure = (name: string, seen = new Set<string>()): Set<string> => {
     if (seen.has(name)) return seen;

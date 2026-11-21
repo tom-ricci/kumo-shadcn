@@ -4,6 +4,7 @@ import { Select as SelectBase } from "@base-ui/react/select";
 // (release cloudflare/kumo@2.19.0), copied by the kumo-shadcn registry (https://github.com/tom-ricci/kumo-shadcn).
 // Changes from Kumo's file: import paths.
 // Also changed: hover/selected backgrounds that use Kumo's tint read --kumo-highlight first.
+// Also changed: cn comes from your shadcn utils (@/lib/utils).
 // Unofficial; not affiliated with or endorsed by Cloudflare.
 //
 // MIT License Copyright (c) 2026 Cloudflare, Inc.
@@ -31,16 +32,13 @@ import { Select as SelectBase } from "@base-ui/react/select";
 import { CaretUpDownIcon, CheckIcon } from "@/lib/kumo/icons";
 import { forwardRef, useId } from "react";
 import type { ReactNode } from "react";
-import { cn } from "@/lib/kumo/cn";
+import { cn } from "@/lib/utils";
 import { buttonVariants } from "@/components/ui/button/button";
 import { KUMO_INPUT_VARIANTS, type KumoInputSize } from "@/components/ui/input/input";
 import { SkeletonLine } from "@/components/ui/loader/skeleton-line";
 import { Label } from "@/components/ui/label/label";
 import { Field, type FieldErrorMatch } from "@/components/ui/field/field";
-import {
-  usePortalContainer,
-  type PortalContainer,
-} from "@/lib/kumo/portal-provider";
+import { usePortalContainer, type PortalContainer } from "@/lib/kumo/portal-provider";
 
 /** Select variant definitions. */
 export const KUMO_SELECT_VARIANTS = {

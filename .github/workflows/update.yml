@@ -107,6 +107,8 @@ jobs:
           - vite lucide kumo-theme default - no-css-vars
           - vite lucide kumo-theme default - prefix
           - next lucide kumo-binding default - no-rsc
+          # A project without lib/utils.ts or cn: shadcn's utils item adds them.
+          - vite lucide kumo-theme default button no-utils
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:

@@ -12,7 +12,9 @@ code is yours to read and change. There is no `@cloudflare/kumo` package to inst
 
 - **49 components** (`button`, `dialog`, `select`, `chart`, ...) and **3 blocks** (`page-header`,
   `resource-list`, `delete-resource`), copied from Kumo's source.
-- **Helpers** (`kumo-utils`): `cn`, variant helpers, and the link, locale and portal providers.
+- **Helpers** (`kumo-utils`): Kumo's own helpers: variant helpers, the link, locale and portal providers,
+  and `safeRandomId`. For `cn`, the components use your project's `@/lib/utils`, like any shadcn
+  component (see [cn](#cn)).
 - **Icons** (`kumo-icons`): the icons Kumo uses, drawn with the icon library from your `components.json`.
 - **Theme items**: `kumo-theme`, `kumo-cloudflare` and `kumo-binding`. Install exactly one.
 
@@ -87,6 +89,15 @@ The registry index is at `/r/registry.json`. Each item has Kumo's own title, des
    files always import each other by file, so they never pick up the wrong one.
 
 Kumo's providers are in `lib/kumo`, for example `import { LinkProvider } from "@/lib/kumo/link-provider"`.
+
+### cn
+
+Kumo's components import `cn` from `@/lib/utils`, the shadcn utils file your `components.json` points
+to (`aliases.utils`). Items list shadcn's own `utils` item as a registry dependency, so a project without
+`lib/utils.ts` gets it, with the `cn` package. A project that has them keeps them: the registry doesn't
+pin a `cn` version, and CI checks that the `cn` version `shadcn init` installed is unchanged after adding
+every item. Kumo itself pins `cn` 0.4.0; the components work with shadcn's current `cn` (CI checks how it
+merges Kumo's classes).
 
 ### TypeScript settings
 
@@ -281,7 +292,9 @@ PostCSS. It never runs Kumo's code, and it uses no AI. For each component it:
 
 - copies the source files (not tests or stories);
 - rewrites imports: other components to `@/components/ui/<name>/<file>`, helpers to `@/lib/kumo/<file>`,
-  Phosphor to `@/lib/kumo/icons`; the CLI then maps these through your aliases;
+  `cn` to `@/lib/utils`, Phosphor to `@/lib/kumo/icons`; the CLI then maps these through your aliases.
+  Kumo's `utils/cn.ts` only re-exported `cn` next to `safeRandomId`, so it becomes
+  `lib/kumo/random-id.ts` without the re-export;
 - lists the npm packages the files import, with the version ranges Kumo declares;
 - lists the other items it needs as `registryDependencies` (full item URLs, which work without any
   configuration; `--deps namespace` writes `@kumo/<item>` instead, for once the namespace is listed in

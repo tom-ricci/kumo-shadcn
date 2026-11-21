@@ -3,6 +3,7 @@ import { Popover as PopoverBase } from "@base-ui/react/popover";
 // Kumo, packages/kumo/src/components/popover/popover.tsx from https://github.com/cloudflare/kumo
 // (release cloudflare/kumo@2.19.0), copied by the kumo-shadcn registry (https://github.com/tom-ricci/kumo-shadcn).
 // Changes from Kumo's file: import paths.
+// Also changed: cn comes from your shadcn utils (@/lib/utils).
 // Unofficial; not affiliated with or endorsed by Cloudflare.
 //
 // MIT License Copyright (c) 2026 Cloudflare, Inc.
@@ -28,11 +29,8 @@ import { Popover as PopoverBase } from "@base-ui/react/popover";
 // THE SOFTWARE.
 
 import type { ComponentPropsWithoutRef, ReactNode } from "react";
-import { cn } from "@/lib/kumo/cn";
-import {
-  usePortalContainer,
-  type PortalContainer,
-} from "@/lib/kumo/portal-provider";
+import { cn } from "@/lib/utils";
+import { usePortalContainer, type PortalContainer } from "@/lib/kumo/portal-provider";
 
 /** Popover side variant definitions mapping positions to their Tailwind classes. */
 export const KUMO_POPOVER_VARIANTS = {

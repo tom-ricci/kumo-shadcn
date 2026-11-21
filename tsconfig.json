@@ -25,6 +25,9 @@
       ],
       "@/app/(create)/components/icon-placeholder": [
         "./registry/icon-placeholder.tsx"
+      ],
+      "@/lib/utils": [
+        "./registry/shadcn-utils.ts"
       ]
     },
     "noFallthroughCasesInSwitch": true,
