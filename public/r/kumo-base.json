@@ -1,0 +1,510 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "kumo-base",
+  "title": "Kumo base styles",
+  "description": "Kumo's keyframes, helper classes and Tailwind token registration (from @cloudflare/kumo@2.19.0). Every Kumo component installs it. Add a theme item too.",
+  "cssVars": {
+    "theme": {
+      "--ease-bounce": "cubic-bezier(0.2, 0, 0, 1.5)",
+      "--default-transition-duration": "100ms",
+      "--animate-refresh": "refresh 0.5s ease-in-out infinite",
+      "--animate-right": "right 15s linear infinite",
+      "--color-kumo-arrow-edge": "var(--kumo-arrow-edge)",
+      "--color-kumo-arrow-stroke": "var(--kumo-arrow-stroke)",
+      "--color-kumo-badge-blue": "var(--kumo-badge-blue)",
+      "--color-kumo-badge-green": "var(--kumo-badge-green)",
+      "--color-kumo-badge-inverted": "var(--kumo-badge-inverted)",
+      "--color-kumo-badge-neutral": "var(--kumo-badge-neutral)",
+      "--color-kumo-badge-orange": "var(--kumo-badge-orange)",
+      "--color-kumo-badge-purple": "var(--kumo-badge-purple)",
+      "--color-kumo-badge-red": "var(--kumo-badge-red)",
+      "--color-kumo-badge-teal": "var(--kumo-badge-teal)",
+      "--color-kumo-banner-info": "var(--kumo-banner-info)",
+      "--color-kumo-banner-warning": "var(--kumo-banner-warning)",
+      "--color-kumo-base": "var(--kumo-base)",
+      "--color-kumo-brand": "var(--kumo-brand)",
+      "--color-kumo-brand-hover": "var(--kumo-brand-hover)",
+      "--color-kumo-canvas": "var(--kumo-canvas)",
+      "--color-kumo-contrast": "var(--kumo-contrast)",
+      "--color-kumo-control": "var(--kumo-control)",
+      "--color-kumo-danger": "var(--kumo-danger)",
+      "--color-kumo-danger-tint": "var(--kumo-danger-tint)",
+      "--color-kumo-elevated": "var(--kumo-elevated)",
+      "--color-kumo-fill": "var(--kumo-fill)",
+      "--color-kumo-fill-hover": "var(--kumo-fill-hover)",
+      "--color-kumo-focus": "var(--kumo-focus)",
+      "--color-kumo-hairline": "var(--kumo-hairline)",
+      "--color-kumo-info": "var(--kumo-info)",
+      "--color-kumo-info-tint": "var(--kumo-info-tint)",
+      "--color-kumo-interact": "var(--kumo-interact)",
+      "--color-kumo-line": "var(--kumo-line)",
+      "--color-kumo-overlay": "var(--kumo-overlay)",
+      "--color-kumo-recessed": "var(--kumo-recessed)",
+      "--color-kumo-shadow-drop": "var(--kumo-shadow-drop)",
+      "--color-kumo-shadow-edge": "var(--kumo-shadow-edge)",
+      "--color-kumo-success": "var(--kumo-success)",
+      "--color-kumo-success-tint": "var(--kumo-success-tint)",
+      "--color-kumo-tint": "var(--kumo-tint)",
+      "--color-kumo-warning": "var(--kumo-warning)",
+      "--color-kumo-warning-tint": "var(--kumo-warning-tint)",
+      "--text-color-kumo-badge-inverted": "var(--kumo-text-badge-inverted)",
+      "--text-color-kumo-badge-neutral-subtle": "var(--kumo-text-badge-neutral-subtle)",
+      "--text-color-kumo-badge-orange-subtle": "var(--kumo-text-badge-orange-subtle)",
+      "--text-color-kumo-badge-teal-subtle": "var(--kumo-text-badge-teal-subtle)",
+      "--text-color-kumo-brand": "var(--kumo-text-brand)",
+      "--text-color-kumo-danger": "var(--kumo-text-danger)",
+      "--text-color-kumo-default": "var(--kumo-text-default)",
+      "--text-color-kumo-inactive": "var(--kumo-text-inactive)",
+      "--text-color-kumo-info": "var(--kumo-text-info)",
+      "--text-color-kumo-inverse": "var(--kumo-text-inverse)",
+      "--text-color-kumo-link": "var(--kumo-text-link)",
+      "--text-color-kumo-placeholder": "var(--kumo-text-placeholder)",
+      "--text-color-kumo-strong": "var(--kumo-text-strong)",
+      "--text-color-kumo-subtle": "var(--kumo-text-subtle)",
+      "--text-color-kumo-success": "var(--kumo-text-success)",
+      "--text-color-kumo-warning": "var(--kumo-text-warning)"
+    }
+  },
+  "css": {
+    "@layer base": {
+      ":root": {
+        "color-scheme": "light",
+        "--color-red-650": "oklch(55% 0.238 27.4)",
+        "--color-red-750": "oklch(46% 0.195 27.2)",
+        "--color-blue-400": "oklch(70.7% 0.165 254.624)",
+        "--color-blue-800": "oklch(42.4% 0.199 265.638)",
+        "--color-orange-650": "oklch(81.5% 0.197 76)",
+        "--color-teal-650": "oklch(54.9% 0.096 184.565)",
+        "--color-kumo-neutral-50": "oklch(98.75% 0 0)",
+        "--color-kumo-neutral-75": "oklch(98% 0 0)",
+        "--color-kumo-neutral-125": "oklch(96.5% 0 0)",
+        "--color-kumo-neutral-450": "oklch(89% 0 0)",
+        "--color-kumo-neutral-750": "oklch(32% 0 0)",
+        "--color-kumo-neutral-850": "oklch(24% 0 0)",
+        "--color-kumo-neutral-925": "oklch(17% 0 0)",
+        "--color-kumo-neutral-950": "oklch(15% 0 0)",
+        "--color-kumo-neutral-975": "oklch(12% 0 0)",
+        "--color-kumo-neutral-1000": "oklch(10% 0 0)"
+      },
+      "[data-mode=\"dark\"], .dark": {
+        "color-scheme": "dark"
+      },
+      "@keyframes right": {
+        "to": {
+          "transform": "translateX(100%)"
+        }
+      },
+      "@keyframes float": {
+        "to": {
+          "transform": "translate(5px, 15px)"
+        }
+      },
+      "@keyframes refresh": {
+        "from": {
+          "transform": "rotate(0deg)"
+        },
+        "to": {
+          "transform": "rotate(360deg)"
+        }
+      },
+      "@keyframes bounce-in": {
+        "0%": {
+          "transform": "scale(0.6)",
+          "opacity": "0"
+        },
+        "50%": {
+          "transform": "scale(1.2)",
+          "opacity": "1"
+        },
+        "100%": {
+          "transform": "scale(1)"
+        }
+      },
+      "@keyframes shimmer": {
+        "0%": {
+          "transform": "translateX(-100%)"
+        },
+        "100%": {
+          "transform": "translateX(100%)"
+        }
+      },
+      "@keyframes toast-bump": {
+        "0%": {
+          "transform": "scale(1)"
+        },
+        "20%": {
+          "transform": "scale(1.02)"
+        },
+        "100%": {
+          "transform": "scale(1)"
+        }
+      },
+      "@keyframes toast-bump-alternate": {
+        "0%": {
+          "transform": "scale(1)"
+        },
+        "20%": {
+          "transform": "scale(1.02)"
+        },
+        "100%": {
+          "transform": "scale(1)"
+        }
+      },
+      "@keyframes clipboard-toast-bump": {
+        "0%": {
+          "transform": "scale(1)"
+        },
+        "35%": {
+          "transform": "scale(1.04)"
+        },
+        "100%": {
+          "transform": "scale(1)"
+        }
+      },
+      ".skeleton-line": {
+        "position": "relative",
+        "overflow": "hidden",
+        "border-radius": "2px",
+        "height": "0.5rem",
+        "width": "var(--skeleton-width)",
+        "background-color": "#f3f4f6"
+      },
+      ".skeleton-line::after": {
+        "position": "absolute",
+        "top": "0",
+        "right": "0",
+        "bottom": "0",
+        "left": "0",
+        "animation": "shimmer var(--shimmer-duration, 1.5s) var(--shimmer-delay, 0s)\n      infinite ease-in-out",
+        "content": "\"\"",
+        "background": "linear-gradient(\n      90deg,\n      rgba(0, 0, 0, 0) 0%,\n      rgba(0, 0, 0, 0.08) 50%,\n      rgba(0, 0, 0, 0) 100%\n    )"
+      },
+      "[data-mode=\"dark\"] .skeleton-line, .dark .skeleton-line": {
+        "background-color": "rgba(255, 255, 255, 0.06)"
+      },
+      "[data-mode=\"dark\"] .skeleton-line::after, .dark .skeleton-line::after": {
+        "background": "linear-gradient(\n      90deg,\n      rgba(255, 255, 255, 0) 0%,\n      rgba(255, 255, 255, 0.05) 50%,\n      rgba(255, 255, 255, 0) 100%\n    )"
+      },
+      "@keyframes scroll-fade-x-left": {
+        "from": {
+          "--fade-left-n": "0"
+        },
+        "to": {
+          "--fade-left-n": "1"
+        }
+      },
+      "@keyframes scroll-fade-x-right": {
+        "from": {
+          "--fade-right-n": "1"
+        },
+        "to": {
+          "--fade-right-n": "0"
+        }
+      },
+      "@keyframes rdp-slide_in_left": {
+        "from": {
+          "transform": "translateX(-100%)"
+        },
+        "to": {
+          "transform": "translateX(0)"
+        }
+      },
+      "@keyframes rdp-slide_in_right": {
+        "from": {
+          "transform": "translateX(100%)"
+        },
+        "to": {
+          "transform": "translateX(0)"
+        }
+      },
+      "@keyframes rdp-slide_out_left": {
+        "from": {
+          "transform": "translateX(0)"
+        },
+        "to": {
+          "transform": "translateX(-100%)"
+        }
+      },
+      "@keyframes rdp-slide_out_right": {
+        "from": {
+          "transform": "translateX(0)"
+        },
+        "to": {
+          "transform": "translateX(100%)"
+        }
+      },
+      "@keyframes rdp-fade_in": {
+        "from": {
+          "opacity": "0"
+        },
+        "to": {
+          "opacity": "1"
+        }
+      },
+      "@keyframes rdp-fade_out": {
+        "from": {
+          "opacity": "1"
+        },
+        "to": {
+          "opacity": "0"
+        }
+      },
+      "@keyframes skeleton": {
+        "0%": {
+          "background-position": "200% 0"
+        },
+        "100%": {
+          "background-position": "-200% 0"
+        }
+      },
+      ":root, .dark, [data-mode], [data-theme]": {
+        "--color-kumo-arrow-edge": "var(--kumo-arrow-edge)",
+        "--color-kumo-arrow-stroke": "var(--kumo-arrow-stroke)",
+        "--color-kumo-badge-blue": "var(--kumo-badge-blue)",
+        "--color-kumo-badge-green": "var(--kumo-badge-green)",
+        "--color-kumo-badge-inverted": "var(--kumo-badge-inverted)",
+        "--color-kumo-badge-neutral": "var(--kumo-badge-neutral)",
+        "--color-kumo-badge-orange": "var(--kumo-badge-orange)",
+        "--color-kumo-badge-purple": "var(--kumo-badge-purple)",
+        "--color-kumo-badge-red": "var(--kumo-badge-red)",
+        "--color-kumo-badge-teal": "var(--kumo-badge-teal)",
+        "--color-kumo-banner-info": "var(--kumo-banner-info)",
+        "--color-kumo-banner-warning": "var(--kumo-banner-warning)",
+        "--color-kumo-base": "var(--kumo-base)",
+        "--color-kumo-brand": "var(--kumo-brand)",
+        "--color-kumo-brand-hover": "var(--kumo-brand-hover)",
+        "--color-kumo-canvas": "var(--kumo-canvas)",
+        "--color-kumo-contrast": "var(--kumo-contrast)",
+        "--color-kumo-control": "var(--kumo-control)",
+        "--color-kumo-danger": "var(--kumo-danger)",
+        "--color-kumo-danger-tint": "var(--kumo-danger-tint)",
+        "--color-kumo-elevated": "var(--kumo-elevated)",
+        "--color-kumo-fill": "var(--kumo-fill)",
+        "--color-kumo-fill-hover": "var(--kumo-fill-hover)",
+        "--color-kumo-focus": "var(--kumo-focus)",
+        "--color-kumo-hairline": "var(--kumo-hairline)",
+        "--color-kumo-info": "var(--kumo-info)",
+        "--color-kumo-info-tint": "var(--kumo-info-tint)",
+        "--color-kumo-interact": "var(--kumo-interact)",
+        "--color-kumo-line": "var(--kumo-line)",
+        "--color-kumo-overlay": "var(--kumo-overlay)",
+        "--color-kumo-recessed": "var(--kumo-recessed)",
+        "--color-kumo-shadow-drop": "var(--kumo-shadow-drop)",
+        "--color-kumo-shadow-edge": "var(--kumo-shadow-edge)",
+        "--color-kumo-success": "var(--kumo-success)",
+        "--color-kumo-success-tint": "var(--kumo-success-tint)",
+        "--color-kumo-tint": "var(--kumo-tint)",
+        "--color-kumo-warning": "var(--kumo-warning)",
+        "--color-kumo-warning-tint": "var(--kumo-warning-tint)",
+        "--text-color-kumo-badge-inverted": "var(--kumo-text-badge-inverted)",
+        "--text-color-kumo-badge-neutral-subtle": "var(--kumo-text-badge-neutral-subtle)",
+        "--text-color-kumo-badge-orange-subtle": "var(--kumo-text-badge-orange-subtle)",
+        "--text-color-kumo-badge-teal-subtle": "var(--kumo-text-badge-teal-subtle)",
+        "--text-color-kumo-brand": "var(--kumo-text-brand)",
+        "--text-color-kumo-danger": "var(--kumo-text-danger)",
+        "--text-color-kumo-default": "var(--kumo-text-default)",
+        "--text-color-kumo-inactive": "var(--kumo-text-inactive)",
+        "--text-color-kumo-info": "var(--kumo-text-info)",
+        "--text-color-kumo-inverse": "var(--kumo-text-inverse)",
+        "--text-color-kumo-link": "var(--kumo-text-link)",
+        "--text-color-kumo-placeholder": "var(--kumo-text-placeholder)",
+        "--text-color-kumo-strong": "var(--kumo-text-strong)",
+        "--text-color-kumo-subtle": "var(--kumo-text-subtle)",
+        "--text-color-kumo-success": "var(--kumo-text-success)",
+        "--text-color-kumo-warning": "var(--kumo-text-warning)"
+      }
+    },
+    "@layer utilities": {
+      ".no-scrollbar::-webkit-scrollbar": {
+        "display": "none"
+      },
+      ".no-scrollbar": {
+        "-ms-overflow-style": "none",
+        "scrollbar-width": "none"
+      },
+      ".no-input-spinner": {
+        "appearance": "textfield"
+      },
+      ".no-input-spinner ::-webkit-outer-spin-button, .no-input-spinner ::-webkit-inner-spin-button": {
+        "appearance": "none"
+      },
+      ".link-current": {
+        "text-decoration-color": "color-mix(in oklch, currentColor 35%, transparent)"
+      },
+      "[data-mode=\"dark\"] .link-current, .dark .link-current": {
+        "text-decoration-color": "color-mix(in oklch, currentColor 65%, transparent)"
+      },
+      ".link-current:hover": {
+        "text-decoration-color": "currentColor"
+      },
+      ".link-external-icon": {
+        "stroke-width": "1.75"
+      },
+      "[data-mode=\"dark\"] .link-external-icon, .dark .link-external-icon": {
+        "stroke-width": "2"
+      }
+    },
+    ".float": {
+      "animation": "float 5s linear infinite alternate"
+    },
+    ".animate-bounce-in": {
+      "animation": "bounce-in 0.4s ease-out"
+    },
+    ".kumo-chart-shimmer": {
+      "animation": "shimmer 1.8s ease-in-out infinite",
+      "transform-box": "fill-box"
+    },
+    "@media (prefers-reduced-motion: reduce)": {
+      ".kumo-chart-shimmer": {
+        "animation": "none",
+        "transform": "none"
+      },
+      ".animate-toast-bump, .animate-toast-bump-alternate": {
+        "animation": "none"
+      },
+      ".animate-clipboard-toast-bump": {
+        "animation": "none"
+      },
+      ".rdp-root": {
+        "--rdp-animation_duration": "0.01ms"
+      }
+    },
+    ".animate-toast-bump": {
+      "animation": "toast-bump 0.4s cubic-bezier(0.34, 1.56, 0.64, 1)",
+      "transform-origin": "center"
+    },
+    ".animate-toast-bump-alternate": {
+      "animation": "toast-bump-alternate 0.4s cubic-bezier(0.34, 1.56, 0.64, 1)",
+      "transform-origin": "center"
+    },
+    ".animate-clipboard-toast-bump": {
+      "animation": "clipboard-toast-bump 0.35s cubic-bezier(0.34, 1.56, 0.64, 1)",
+      "transform-origin": "center"
+    },
+    "@property --fade-left-n": {
+      "syntax": "\"<number>\"",
+      "inherits": "false",
+      "initial-value": "0"
+    },
+    "@property --fade-right-n": {
+      "syntax": "\"<number>\"",
+      "inherits": "false",
+      "initial-value": "0"
+    },
+    "@supports (animation-timeline: scroll())": {
+      "[data-overflowing]": {
+        "mask-image": "linear-gradient(\n      to right,\n      transparent,\n      white calc(var(--fade-left-n) * var(--scroll-fade-width, 3rem)),\n      white calc(100% - var(--fade-right-n) * var(--scroll-fade-width, 3rem)),\n      transparent\n    )",
+        "animation-name": "scroll-fade-x-left, scroll-fade-x-right",
+        "animation-timing-function": "linear, linear",
+        "animation-timeline": "scroll(self x)",
+        "animation-range": "0 var(--scroll-fade-range, 3rem),\n      calc(100% - var(--scroll-fade-range, 3rem)) 100%",
+        "animation-fill-mode": "both"
+      },
+      ".kumo-tabs-list": {
+        "scrollbar-width": "none",
+        "-ms-overflow-style": "none"
+      },
+      ".kumo-tabs-list::-webkit-scrollbar": {
+        "display": "none"
+      }
+    },
+    ".kumo-tabs-list": {
+      "overscroll-behavior-x": "contain"
+    },
+    "[data-mode=\"dark\"] .kumo-tooltip-popup, [data-mode=\"dark\"] .kumo-popover-popup, .dark .kumo-tooltip-popup, .dark .kumo-popover-popup": {
+      "outline-offset": "-1px"
+    },
+    ".kumo-input-placeholder::placeholder": {
+      "color": "var(--text-color-kumo-placeholder)"
+    },
+    ".rdp-root": {
+      "--rdp-animation_duration": "0.2s",
+      "--rdp-animation_timing": "ease-out"
+    },
+    ".rdp-weeks_before_enter": {
+      "animation": "rdp-slide_in_left var(--rdp-animation_duration)\n    var(--rdp-animation_timing) forwards"
+    },
+    ".rdp-weeks_before_exit": {
+      "animation": "rdp-slide_out_left var(--rdp-animation_duration)\n    var(--rdp-animation_timing) forwards"
+    },
+    ".rdp-weeks_after_enter": {
+      "animation": "rdp-slide_in_right var(--rdp-animation_duration)\n    var(--rdp-animation_timing) forwards"
+    },
+    ".rdp-weeks_after_exit": {
+      "animation": "rdp-slide_out_right var(--rdp-animation_duration)\n    var(--rdp-animation_timing) forwards"
+    },
+    ".rdp-root[dir=\"rtl\"] .rdp-weeks_after_enter": {
+      "animation": "rdp-slide_in_left var(--rdp-animation_duration)\n    var(--rdp-animation_timing) forwards"
+    },
+    ".rdp-root[dir=\"rtl\"] .rdp-weeks_before_exit": {
+      "animation": "rdp-slide_out_right var(--rdp-animation_duration)\n    var(--rdp-animation_timing) forwards"
+    },
+    ".rdp-root[dir=\"rtl\"] .rdp-weeks_before_enter": {
+      "animation": "rdp-slide_in_right var(--rdp-animation_duration)\n    var(--rdp-animation_timing) forwards"
+    },
+    ".rdp-root[dir=\"rtl\"] .rdp-weeks_after_exit": {
+      "animation": "rdp-slide_out_left var(--rdp-animation_duration)\n    var(--rdp-animation_timing) forwards"
+    },
+    ".rdp-caption_after_enter": {
+      "animation": "rdp-fade_in var(--rdp-animation_duration)\n    var(--rdp-animation_timing) forwards"
+    },
+    ".rdp-caption_after_exit": {
+      "animation": "rdp-fade_out var(--rdp-animation_duration)\n    var(--rdp-animation_timing) forwards"
+    },
+    ".rdp-caption_before_enter": {
+      "animation": "rdp-fade_in var(--rdp-animation_duration)\n    var(--rdp-animation_timing) forwards"
+    },
+    ".rdp-caption_before_exit": {
+      "animation": "rdp-fade_out var(--rdp-animation_duration)\n    var(--rdp-animation_timing) forwards"
+    },
+    ":where( a[href], button, input[type=\"button\"], input[type=\"checkbox\"], input[type=\"radio\"], input[type=\"submit\"], input[type=\"reset\"], label[for], select, summary, [role=\"button\"], [role=\"link\"], [role=\"menuitem\"], [role=\"menuitemcheckbox\"], [role=\"menuitemradio\"], [role=\"option\"], [role=\"tab\"], [role=\"checkbox\"], [role=\"radio\"], [role=\"switch\"] ):where([data-kumo-component], [data-kumo-part]):where(:not(:disabled)):where( :not([disabled]) ):where(:not([aria-disabled=\"true\"])):where(:not([data-disabled]))": {
+      "cursor": "pointer"
+    },
+    ".skeleton": {
+      "background": "linear-gradient(\n    90deg,\n    transparent 0%,\n    rgba(0, 0, 0, 0.05) 50%,\n    transparent 100%\n  )",
+      "background-size": "200% 100%",
+      "animation": "skeleton 1.5s ease-in-out infinite"
+    },
+    "[data-mode=\"dark\"] .skeleton, .dark .skeleton": {
+      "background": "linear-gradient(\n    90deg,\n    transparent 0%,\n    rgba(255, 255, 255, 0.05) 50%,\n    transparent 100%\n  )"
+    },
+    ".animate-refresh": {
+      "animation": "refresh 1s linear infinite"
+    },
+    ".kumo-shiki pre": {
+      "background-color": "transparent !important"
+    },
+    "[data-mode=\"dark\"] .kumo-shiki span:not(.line-highlighted), .dark .kumo-shiki span:not(.line-highlighted)": {
+      "color": "var(--shiki-dark) !important",
+      "background-color": "transparent !important"
+    },
+    "[data-mode=\"dark\"] .kumo-shiki .line-highlighted, .dark .kumo-shiki .line-highlighted": {
+      "color": "var(--shiki-dark) !important"
+    },
+    ".kumo-shiki code": {
+      "display": "block",
+      "width": "fit-content",
+      "min-width": "100%",
+      "padding-right": "1rem"
+    },
+    ".kumo-shiki": {
+      "--kumo-code-highlight-bg": "rgba(0, 0, 0, 0.05)"
+    },
+    "[data-mode=\"dark\"] .kumo-shiki, .dark .kumo-shiki": {
+      "--kumo-code-highlight-bg": "rgba(255, 255, 255, 0.08)"
+    },
+    ".kumo-shiki .line.line-highlighted": {
+      "display": "inline-block",
+      "width": "calc(100% + 2rem)",
+      "margin": "0 -1rem",
+      "padding": "0 1rem",
+      "background-color": "var(--kumo-code-highlight-bg)"
+    },
+    ".kumo-line-numbers": {
+      "padding-left": "0.75rem",
+      "line-height": "1.625"
+    }
+  },
+  "docs": "Kumo components need exactly one theme item: kumo-theme (Kumo's own look), kumo-cloudflare (Kumo with the Cloudflare dashboard's sidebar) or kumo-binding (follows your shadcn theme). See https://github.com/tom-ricci/kumo-shadcn#themes",
+  "type": "registry:item"
+}
