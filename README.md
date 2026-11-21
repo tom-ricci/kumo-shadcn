@@ -126,7 +126,7 @@ with each of these set:
 | --- | --- |
 | `rtl: true` | Works. The CLI turns physical classes into logical ones (`ml-2` → `ms-2`) where it can see them (in `className` and `cn(...)` there); classes in Kumo's variant objects stay physical. |
 | `tsx: false` | Works. Files are written as `.js`/`.jsx`, and the app builds. |
-| `rsc: false` | Works. The CLI drops the one `"use client"` line. |
+| `rsc: false` | Works. (shadcn 4.23 leaves the one `"use client"` line in place; it does nothing outside Next.js.) |
 | `tailwind.cssVariables: false` | Works with `kumo-theme` and `kumo-cloudflare`. `kumo-binding` needs `true`: it reads your shadcn CSS variables, and with `false` there are none. |
 | `tailwind.prefix` | Not supported. The CLI adds the prefix to class strings in `className` attributes, but Kumo keeps most of its classes in variant objects (`classes: "..."`), which it doesn't reach. Those classes then produce no styles. |
 
