@@ -8,7 +8,9 @@
 # their dependencies, as a user would, instead of every item ("-": all).
 # [transform] sets a components.json option that makes the shadcn CLI
 # transform the files it writes: rtl (rtl: true), jsx (tsx: false),
-# no-css-vars (tailwind.cssVariables: false), no-rsc (rsc: false), or prefix
+# no-css-vars (tailwind.cssVariables: false), no-rsc (rsc: false),
+# no-utils (lib/utils.ts and the cn package removed before adding, so
+# shadcn's own "utils" item has to bring them back), or prefix
 # (tailwind.prefix "tw", which Kumo does not support: the run checks that it
 # still doesn't). Apps go to $VERIFY_DIR (default: a temp directory outside
 # the repository).
@@ -30,7 +32,7 @@ name="$framework-$icons-$theme${aliases/default/}"
 name=${name//custom-aliases/-custom}
 [ -n "$only" ] && name="$name-only-${only//,/-}"
 [ "$transform" != none ] && name="$name-$transform"
-case "$transform" in none|rtl|jsx|no-css-vars|no-rsc|prefix) ;; *) echo "unknown transform $transform"; exit 2 ;; esac
+case "$transform" in none|rtl|jsx|no-css-vars|no-rsc|no-utils|prefix) ;; *) echo "unknown transform $transform"; exit 2 ;; esac
 if [ "$transform" = no-css-vars ] && [ "$theme" = kumo-binding ]; then
   echo "FAIL $name: kumo-binding needs cssVariables: true (it reads your shadcn CSS variables)"; exit 1
 fi
@@ -87,6 +89,17 @@ step "install ${icon_packages[*]}" npm install "${icon_packages[@]}" || exit 1
 src=.; [ -d src ] && src=src
 dir() { local d="$src/${1#@/}"; echo "${d#./}"; }
 
+# cn: Kumo's components import cn from the project's own @/lib/utils
+# (shadcn's "utils" item). The cn package shadcn init installed must be
+# exactly the same after adding Kumo's items.
+utils_file() { local f; f=$(dir "$(node -p 'require("./components.json").aliases.utils')"); ls "$f".ts "$f".js 2>/dev/null | head -1; }
+cn_state() { node -p 'let v="none";try{v=require("./node_modules/cn/package.json").version}catch{};v+" ("+((require("./package.json").dependencies||{}).cn||"not in package.json")+")"'; }
+if [ "$transform" = no-utils ]; then
+  rm -f "$(utils_file)"
+  step "remove lib/utils and cn" npm uninstall cn || exit 1
+fi
+cn_before=$(cn_state)
+
 # 3. Every item (helpers, icon shim, all components and blocks) or just
 # [items], plus one theme.
 mapfile -t urls < <(node -e '
@@ -95,12 +108,29 @@ const only = process.argv[4] ? process.argv[4].split(",") : null;
 for (const i of r.items) if (i.name === process.argv[2] || (!themes.includes(i.name) && (!only || only.includes(i.name)))) console.log(`http://127.0.0.1:${process.argv[3]}/r/${i.name}.json`);' "$repo/registry.json" "$theme" "$port" "$only")
 step "shadcn add (${#urls[@]} items)" npx -y $SHADCN add "${urls[@]}" -y -o || exit 1
 
+cn_after=$(cn_state)
+if [ "$transform" = no-utils ]; then
+  [ -n "$(utils_file)" ] && [ "${cn_after%% *}" != none ] && pass "shadcn's utils item brought back $(utils_file) and cn $cn_after" \
+    || fail "lib/utils or cn missing after add (cn: $cn_after)"
+elif [ "$cn_after" = "$cn_before" ]; then pass "cn untouched by shadcn add: $cn_before"
+else fail "cn changed by shadcn add: $cn_before -> $cn_after"; fi
+# Kumo's class strings merged by the project's own cn (from @/lib/utils).
+if merged=$(node --input-type=module -e '
+const { cn } = await import(process.argv[1]);
+const cases = [[["text-sm", "text-kumo-subtle"], "text-sm text-kumo-subtle"], [["text-kumo-default", "text-kumo-subtle"], "text-kumo-subtle"],
+  [["bg-kumo-base", "bg-kumo-tint"], "bg-kumo-tint"], [["ring-kumo-line", "ring-kumo-hairline"], "ring-kumo-hairline"],
+  [["bg-kumo-base", "hover:bg-(--kumo-highlight,var(--color-kumo-tint))"], "bg-kumo-base hover:bg-(--kumo-highlight,var(--color-kumo-tint))"], [["px-2", "px-4"], "px-4"]];
+const bad = cases.filter(([args, want]) => cn(...args) !== want).map(([args, want]) => `cn(${args.join(", ")}) = "${cn(...args)}", want "${want}"`);
+console.log(bad.length ? bad.join("; ") : `${cases.length} cases`); process.exit(bad.length ? 1 : 0);' "$app/$(utils_file)" 2>&1); then
+  pass "Kumo class merges with the project's cn: $merged"
+else fail "Kumo class merges with the project's cn: $merged"; fi
+
 # 4. Where files landed, and what the CLI rewrote.
 ts=ts; [ "$transform" = jsx ] && ts=js # tsx: false writes .js/.jsx
 probe=${only%%,*}; probe=${probe:-button}
 probe_dir="$(dir "$ui_alias")/$probe" # a block lands under the components alias
 [ "$(node -p 'require(process.argv[1]).type' "$repo/public/r/$probe.json")" = registry:block ] && probe_dir="$(dir @/components)/$probe"
-[ -f "$probe_dir/index.$ts" ] && [ -f "$(dir "$lib_alias")/kumo/cn.$ts" ] && { [ -n "$only" ] || [ -f "$(dir @/components)/delete-resource/index.$ts" ]; } \
+[ -f "$probe_dir/index.$ts" ] && [ -f "$(dir "$lib_alias")/kumo/random-id.$ts" ] && { [ -n "$only" ] || [ -f "$(dir @/components)/delete-resource/index.$ts" ]; } \
   && pass "files are where components.json aliases say ($ui_alias, $lib_alias)" || fail "files not at the components.json aliases"
 sources=$(find "$src" -path ./node_modules -prune -o -path "$src/node_modules" -prune -o \( -name '*.ts' -o -name '*.tsx' -o -name '*.js' -o -name '*.jsx' \) -print)
 left=$(grep -lE '<IconPlaceholder|from "[^"]*icon-placeholder"' $sources)

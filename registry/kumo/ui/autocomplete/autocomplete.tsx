@@ -4,6 +4,7 @@ import { Autocomplete as AutocompleteBase } from "@base-ui/react/autocomplete";
 // (release cloudflare/kumo@2.19.0), copied by the kumo-shadcn registry (https://github.com/tom-ricci/kumo-shadcn).
 // Changes from Kumo's file: import paths.
 // Also changed: hover/selected backgrounds that use Kumo's tint read --kumo-highlight first.
+// Also changed: cn comes from your shadcn utils (@/lib/utils).
 // Unofficial; not affiliated with or endorsed by Cloudflare.
 //
 // MIT License Copyright (c) 2026 Cloudflare, Inc.
@@ -31,7 +32,7 @@ import { Autocomplete as AutocompleteBase } from "@base-ui/react/autocomplete";
 import { CheckIcon } from "@/lib/kumo/icons";
 import { createContext, useContext, type ReactNode } from "react";
 import { inputVariants, KUMO_INPUT_VARIANTS } from "@/components/ui/input/input";
-import { cn } from "@/lib/kumo/cn";
+import { cn } from "@/lib/utils";
 import { resolveVariant } from "@/lib/kumo/resolve-variant";
 import { Field, type FieldErrorMatch } from "@/components/ui/field/field";
 

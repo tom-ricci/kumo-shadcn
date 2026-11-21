@@ -9,6 +9,7 @@ import {
 // Kumo, packages/kumo/src/components/dialog/dialog.tsx from https://github.com/cloudflare/kumo
 // (release cloudflare/kumo@2.19.0), copied by the kumo-shadcn registry (https://github.com/tom-ricci/kumo-shadcn).
 // Changes from Kumo's file: import paths.
+// Also changed: cn comes from your shadcn utils (@/lib/utils).
 // Unofficial; not affiliated with or endorsed by Cloudflare.
 //
 // MIT License Copyright (c) 2026 Cloudflare, Inc.
@@ -36,12 +37,9 @@ import {
 import { Dialog as DialogBase } from "@base-ui/react/dialog";
 import { AlertDialog as AlertDialogBase } from "@base-ui/react/alert-dialog";
 import { LayerCard } from "@/components/ui/layer-card/layer-card";
-import { cn } from "@/lib/kumo/cn";
+import { cn } from "@/lib/utils";
 import { resolveVariant } from "@/lib/kumo/resolve-variant";
-import {
-  usePortalContainer,
-  type PortalContainer,
-} from "@/lib/kumo/portal-provider";
+import { usePortalContainer, type PortalContainer } from "@/lib/kumo/portal-provider";
 
 /** Dialog size variant definitions mapping sizes to their minimum widths. */
 export const KUMO_DIALOG_VARIANTS = {

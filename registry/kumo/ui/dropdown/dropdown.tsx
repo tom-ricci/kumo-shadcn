@@ -4,6 +4,7 @@ import { Menu as DropdownMenuPrimitive } from "@base-ui/react/menu";
 // (release cloudflare/kumo@2.19.0), copied by the kumo-shadcn registry (https://github.com/tom-ricci/kumo-shadcn).
 // Changes from Kumo's file: import paths.
 // Also changed: hover/selected backgrounds that use Kumo's tint read --kumo-highlight first.
+// Also changed: cn comes from your shadcn utils (@/lib/utils).
 // Unofficial; not affiliated with or endorsed by Cloudflare.
 //
 // MIT License Copyright (c) 2026 Cloudflare, Inc.
@@ -29,14 +30,11 @@ import { Menu as DropdownMenuPrimitive } from "@base-ui/react/menu";
 // THE SOFTWARE.
 
 import * as React from "react";
-import { cn } from "@/lib/kumo/cn";
+import { cn } from "@/lib/utils";
 import { resolveVariant } from "@/lib/kumo/resolve-variant";
 import { useLinkComponent } from "@/lib/kumo/link-provider";
 import { unwrapLazyElement } from "@/lib/kumo/unwrap-lazy-element";
-import {
-  usePortalContainer,
-  type PortalContainer,
-} from "@/lib/kumo/portal-provider";
+import { usePortalContainer, type PortalContainer } from "@/lib/kumo/portal-provider";
 import {
   CaretRightIcon as CaretRight,
   CheckIcon,

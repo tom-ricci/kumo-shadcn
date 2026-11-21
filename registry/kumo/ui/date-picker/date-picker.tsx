@@ -9,6 +9,7 @@ import {
 // (release cloudflare/kumo@2.19.0), copied by the kumo-shadcn registry (https://github.com/tom-ricci/kumo-shadcn).
 // Changes from Kumo's file: import paths.
 // Also changed: hover/selected backgrounds that use Kumo's tint read --kumo-highlight first.
+// Also changed: cn comes from your shadcn utils (@/lib/utils).
 // Unofficial; not affiliated with or endorsed by Cloudflare.
 //
 // MIT License Copyright (c) 2026 Cloudflare, Inc.
@@ -47,7 +48,7 @@ import {
   type PropsRange,
   type PropsRangeRequired,
 } from "react-day-picker";
-import { cn } from "@/lib/kumo/cn";
+import { cn } from "@/lib/utils";
 import { buttonVariants } from "@/components/ui/button/button";
 
 const CHEVRON_ICONS = {

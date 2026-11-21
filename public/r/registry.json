@@ -959,15 +959,7 @@
       "type": "registry:lib",
       "title": "Kumo utilities",
       "description": "Kumo's shared helpers (cn, variants, link/locale/portal providers, ...) from @cloudflare/kumo@2.19.0.",
-      "dependencies": [
-        "cn@0.4.0"
-      ],
       "files": [
-        {
-          "path": "registry/kumo/lib/kumo/cn.ts",
-          "type": "registry:lib",
-          "target": "@lib/kumo/cn.ts"
-        },
         {
           "path": "registry/kumo/lib/kumo/index.ts",
           "type": "registry:lib",
@@ -987,6 +979,11 @@
           "path": "registry/kumo/lib/kumo/portal-provider.tsx",
           "type": "registry:lib",
           "target": "@lib/kumo/portal-provider.tsx"
+        },
+        {
+          "path": "registry/kumo/lib/kumo/random-id.ts",
+          "type": "registry:lib",
+          "target": "@lib/kumo/random-id.ts"
         },
         {
           "path": "registry/kumo/lib/kumo/resolve-variant.ts",
@@ -1049,7 +1046,8 @@
         "https://raw.githubusercontent.com/tom-ricci/kumo-shadcn/main/public/r/input.json",
         "https://raw.githubusercontent.com/tom-ricci/kumo-shadcn/main/public/r/kumo-base.json",
         "https://raw.githubusercontent.com/tom-ricci/kumo-shadcn/main/public/r/kumo-icons.json",
-        "https://raw.githubusercontent.com/tom-ricci/kumo-shadcn/main/public/r/kumo-utils.json"
+        "https://raw.githubusercontent.com/tom-ricci/kumo-shadcn/main/public/r/kumo-utils.json",
+        "utils"
       ],
       "files": [
         {
@@ -1084,7 +1082,8 @@
       "registryDependencies": [
         "https://raw.githubusercontent.com/tom-ricci/kumo-shadcn/main/public/r/kumo-base.json",
         "https://raw.githubusercontent.com/tom-ricci/kumo-shadcn/main/public/r/kumo-icons.json",
-        "https://raw.githubusercontent.com/tom-ricci/kumo-shadcn/main/public/r/kumo-utils.json"
+        "https://raw.githubusercontent.com/tom-ricci/kumo-shadcn/main/public/r/kumo-utils.json",
+        "utils"
       ],
       "files": [
         {
@@ -1120,7 +1119,8 @@
         "https://raw.githubusercontent.com/tom-ricci/kumo-shadcn/main/public/r/button.json",
         "https://raw.githubusercontent.com/tom-ricci/kumo-shadcn/main/public/r/kumo-base.json",
         "https://raw.githubusercontent.com/tom-ricci/kumo-shadcn/main/public/r/kumo-utils.json",
-        "https://raw.githubusercontent.com/tom-ricci/kumo-shadcn/main/public/r/link.json"
+        "https://raw.githubusercontent.com/tom-ricci/kumo-shadcn/main/public/r/link.json",
+        "utils"
       ],
       "files": [
         {
@@ -1162,7 +1162,8 @@
         "https://raw.githubusercontent.com/tom-ricci/kumo-shadcn/main/public/r/kumo-base.json",
         "https://raw.githubusercontent.com/tom-ricci/kumo-shadcn/main/public/r/kumo-icons.json",
         "https://raw.githubusercontent.com/tom-ricci/kumo-shadcn/main/public/r/kumo-utils.json",
-        "https://raw.githubusercontent.com/tom-ricci/kumo-shadcn/main/public/r/loader.json"
+        "https://raw.githubusercontent.com/tom-ricci/kumo-shadcn/main/public/r/loader.json",
+        "utils"
       ],
       "files": [
         {
@@ -1199,7 +1200,8 @@
         "https://raw.githubusercontent.com/tom-ricci/kumo-shadcn/main/public/r/kumo-icons.json",
         "https://raw.githubusercontent.com/tom-ricci/kumo-shadcn/main/public/r/kumo-utils.json",
         "https://raw.githubusercontent.com/tom-ricci/kumo-shadcn/main/public/r/loader.json",
-        "https://raw.githubusercontent.com/tom-ricci/kumo-shadcn/main/public/r/tooltip.json"
+        "https://raw.githubusercontent.com/tom-ricci/kumo-shadcn/main/public/r/tooltip.json",
+        "utils"
       ],
       "files": [
         {
@@ -1233,7 +1235,7 @@
       },
       "registryDependencies": [
         "https://raw.githubusercontent.com/tom-ricci/kumo-shadcn/main/public/r/kumo-base.json",
-        "https://raw.githubusercontent.com/tom-ricci/kumo-shadcn/main/public/r/kumo-utils.json"
+        "utils"
       ],
       "files": [
         {
@@ -1280,9 +1282,9 @@
       ],
       "registryDependencies": [
         "https://raw.githubusercontent.com/tom-ricci/kumo-shadcn/main/public/r/kumo-base.json",
-        "https://raw.githubusercontent.com/tom-ricci/kumo-shadcn/main/public/r/kumo-utils.json",
         "https://raw.githubusercontent.com/tom-ricci/kumo-shadcn/main/public/r/loader.json",
-        "https://raw.githubusercontent.com/tom-ricci/kumo-shadcn/main/public/r/text.json"
+        "https://raw.githubusercontent.com/tom-ricci/kumo-shadcn/main/public/r/text.json",
+        "utils"
       ],
       "files": [
         {
@@ -1376,7 +1378,8 @@
         "https://raw.githubusercontent.com/tom-ricci/kumo-shadcn/main/public/r/kumo-base.json",
         "https://raw.githubusercontent.com/tom-ricci/kumo-shadcn/main/public/r/kumo-icons.json",
         "https://raw.githubusercontent.com/tom-ricci/kumo-shadcn/main/public/r/kumo-utils.json",
-        "https://raw.githubusercontent.com/tom-ricci/kumo-shadcn/main/public/r/label.json"
+        "https://raw.githubusercontent.com/tom-ricci/kumo-shadcn/main/public/r/label.json",
+        "utils"
       ],
       "files": [
         {
@@ -1416,7 +1419,8 @@
         "https://raw.githubusercontent.com/tom-ricci/kumo-shadcn/main/public/r/input.json",
         "https://raw.githubusercontent.com/tom-ricci/kumo-shadcn/main/public/r/kumo-base.json",
         "https://raw.githubusercontent.com/tom-ricci/kumo-shadcn/main/public/r/kumo-icons.json",
-        "https://raw.githubusercontent.com/tom-ricci/kumo-shadcn/main/public/r/kumo-utils.json"
+        "https://raw.githubusercontent.com/tom-ricci/kumo-shadcn/main/public/r/kumo-utils.json",
+        "utils"
       ],
       "files": [
         {
@@ -1450,7 +1454,7 @@
       },
       "registryDependencies": [
         "https://raw.githubusercontent.com/tom-ricci/kumo-shadcn/main/public/r/kumo-base.json",
-        "https://raw.githubusercontent.com/tom-ricci/kumo-shadcn/main/public/r/kumo-utils.json"
+        "utils"
       ],
       "files": [
         {
@@ -1484,7 +1488,8 @@
       },
       "registryDependencies": [
         "https://raw.githubusercontent.com/tom-ricci/kumo-shadcn/main/public/r/kumo-base.json",
-        "https://raw.githubusercontent.com/tom-ricci/kumo-shadcn/main/public/r/kumo-utils.json"
+        "https://raw.githubusercontent.com/tom-ricci/kumo-shadcn/main/public/r/kumo-utils.json",
+        "utils"
       ],
       "files": [
         {
@@ -1522,7 +1527,7 @@
       "registryDependencies": [
         "https://raw.githubusercontent.com/tom-ricci/kumo-shadcn/main/public/r/kumo-base.json",
         "https://raw.githubusercontent.com/tom-ricci/kumo-shadcn/main/public/r/kumo-icons.json",
-        "https://raw.githubusercontent.com/tom-ricci/kumo-shadcn/main/public/r/kumo-utils.json"
+        "utils"
       ],
       "files": [
         {
@@ -1562,7 +1567,8 @@
         "https://raw.githubusercontent.com/tom-ricci/kumo-shadcn/main/public/r/input.json",
         "https://raw.githubusercontent.com/tom-ricci/kumo-shadcn/main/public/r/kumo-base.json",
         "https://raw.githubusercontent.com/tom-ricci/kumo-shadcn/main/public/r/kumo-icons.json",
-        "https://raw.githubusercontent.com/tom-ricci/kumo-shadcn/main/public/r/kumo-utils.json"
+        "https://raw.githubusercontent.com/tom-ricci/kumo-shadcn/main/public/r/kumo-utils.json",
+        "utils"
       ],
       "files": [
         {
@@ -1602,7 +1608,8 @@
         "https://raw.githubusercontent.com/tom-ricci/kumo-shadcn/main/public/r/kumo-icons.json",
         "https://raw.githubusercontent.com/tom-ricci/kumo-shadcn/main/public/r/kumo-utils.json",
         "https://raw.githubusercontent.com/tom-ricci/kumo-shadcn/main/public/r/layer-card.json",
-        "https://raw.githubusercontent.com/tom-ricci/kumo-shadcn/main/public/r/loader.json"
+        "https://raw.githubusercontent.com/tom-ricci/kumo-shadcn/main/public/r/loader.json",
+        "utils"
       ],
       "files": [
         {
@@ -1646,7 +1653,7 @@
         "https://raw.githubusercontent.com/tom-ricci/kumo-shadcn/main/public/r/button.json",
         "https://raw.githubusercontent.com/tom-ricci/kumo-shadcn/main/public/r/kumo-base.json",
         "https://raw.githubusercontent.com/tom-ricci/kumo-shadcn/main/public/r/kumo-icons.json",
-        "https://raw.githubusercontent.com/tom-ricci/kumo-shadcn/main/public/r/kumo-utils.json"
+        "utils"
       ],
       "files": [
         {
@@ -1675,7 +1682,7 @@
       "registryDependencies": [
         "https://raw.githubusercontent.com/tom-ricci/kumo-shadcn/main/public/r/kumo-base.json",
         "https://raw.githubusercontent.com/tom-ricci/kumo-shadcn/main/public/r/kumo-icons.json",
-        "https://raw.githubusercontent.com/tom-ricci/kumo-shadcn/main/public/r/kumo-utils.json"
+        "utils"
       ],
       "files": [
         {
@@ -1714,7 +1721,8 @@
         "https://raw.githubusercontent.com/tom-ricci/kumo-shadcn/main/public/r/input.json",
         "https://raw.githubusercontent.com/tom-ricci/kumo-shadcn/main/public/r/kumo-base.json",
         "https://raw.githubusercontent.com/tom-ricci/kumo-shadcn/main/public/r/kumo-icons.json",
-        "https://raw.githubusercontent.com/tom-ricci/kumo-shadcn/main/public/r/kumo-utils.json"
+        "https://raw.githubusercontent.com/tom-ricci/kumo-shadcn/main/public/r/kumo-utils.json",
+        "utils"
       ],
       "files": [
         {
@@ -1752,7 +1760,8 @@
       "registryDependencies": [
         "https://raw.githubusercontent.com/tom-ricci/kumo-shadcn/main/public/r/kumo-base.json",
         "https://raw.githubusercontent.com/tom-ricci/kumo-shadcn/main/public/r/kumo-utils.json",
-        "https://raw.githubusercontent.com/tom-ricci/kumo-shadcn/main/public/r/layer-card.json"
+        "https://raw.githubusercontent.com/tom-ricci/kumo-shadcn/main/public/r/layer-card.json",
+        "utils"
       ],
       "files": [
         {
@@ -1790,7 +1799,8 @@
       "registryDependencies": [
         "https://raw.githubusercontent.com/tom-ricci/kumo-shadcn/main/public/r/kumo-base.json",
         "https://raw.githubusercontent.com/tom-ricci/kumo-shadcn/main/public/r/kumo-icons.json",
-        "https://raw.githubusercontent.com/tom-ricci/kumo-shadcn/main/public/r/kumo-utils.json"
+        "https://raw.githubusercontent.com/tom-ricci/kumo-shadcn/main/public/r/kumo-utils.json",
+        "utils"
       ],
       "files": [
         {
@@ -1827,7 +1837,8 @@
         "https://raw.githubusercontent.com/tom-ricci/kumo-shadcn/main/public/r/kumo-base.json",
         "https://raw.githubusercontent.com/tom-ricci/kumo-shadcn/main/public/r/kumo-icons.json",
         "https://raw.githubusercontent.com/tom-ricci/kumo-shadcn/main/public/r/kumo-utils.json",
-        "https://raw.githubusercontent.com/tom-ricci/kumo-shadcn/main/public/r/text.json"
+        "https://raw.githubusercontent.com/tom-ricci/kumo-shadcn/main/public/r/text.json",
+        "utils"
       ],
       "files": [
         {
@@ -1864,8 +1875,8 @@
       ],
       "registryDependencies": [
         "https://raw.githubusercontent.com/tom-ricci/kumo-shadcn/main/public/r/kumo-base.json",
-        "https://raw.githubusercontent.com/tom-ricci/kumo-shadcn/main/public/r/kumo-utils.json",
-        "https://raw.githubusercontent.com/tom-ricci/kumo-shadcn/main/public/r/label.json"
+        "https://raw.githubusercontent.com/tom-ricci/kumo-shadcn/main/public/r/label.json",
+        "utils"
       ],
       "files": [
         {
@@ -1896,7 +1907,7 @@
       ],
       "registryDependencies": [
         "https://raw.githubusercontent.com/tom-ricci/kumo-shadcn/main/public/r/kumo-base.json",
-        "https://raw.githubusercontent.com/tom-ricci/kumo-shadcn/main/public/r/kumo-utils.json"
+        "utils"
       ],
       "files": [
         {
@@ -1955,7 +1966,8 @@
       },
       "registryDependencies": [
         "https://raw.githubusercontent.com/tom-ricci/kumo-shadcn/main/public/r/kumo-base.json",
-        "https://raw.githubusercontent.com/tom-ricci/kumo-shadcn/main/public/r/kumo-utils.json"
+        "https://raw.githubusercontent.com/tom-ricci/kumo-shadcn/main/public/r/kumo-utils.json",
+        "utils"
       ],
       "files": [
         {
@@ -1990,8 +2002,8 @@
       "registryDependencies": [
         "https://raw.githubusercontent.com/tom-ricci/kumo-shadcn/main/public/r/kumo-base.json",
         "https://raw.githubusercontent.com/tom-ricci/kumo-shadcn/main/public/r/kumo-icons.json",
-        "https://raw.githubusercontent.com/tom-ricci/kumo-shadcn/main/public/r/kumo-utils.json",
-        "https://raw.githubusercontent.com/tom-ricci/kumo-shadcn/main/public/r/text.json"
+        "https://raw.githubusercontent.com/tom-ricci/kumo-shadcn/main/public/r/text.json",
+        "utils"
       ],
       "files": [
         {
@@ -2031,7 +2043,8 @@
         "https://raw.githubusercontent.com/tom-ricci/kumo-shadcn/main/public/r/field.json",
         "https://raw.githubusercontent.com/tom-ricci/kumo-shadcn/main/public/r/input-group.json",
         "https://raw.githubusercontent.com/tom-ricci/kumo-shadcn/main/public/r/kumo-base.json",
-        "https://raw.githubusercontent.com/tom-ricci/kumo-shadcn/main/public/r/kumo-utils.json"
+        "https://raw.githubusercontent.com/tom-ricci/kumo-shadcn/main/public/r/kumo-utils.json",
+        "utils"
       ],
       "files": [
         {
@@ -2074,7 +2087,8 @@
         "https://raw.githubusercontent.com/tom-ricci/kumo-shadcn/main/public/r/input.json",
         "https://raw.githubusercontent.com/tom-ricci/kumo-shadcn/main/public/r/kumo-base.json",
         "https://raw.githubusercontent.com/tom-ricci/kumo-shadcn/main/public/r/kumo-utils.json",
-        "https://raw.githubusercontent.com/tom-ricci/kumo-shadcn/main/public/r/tooltip.json"
+        "https://raw.githubusercontent.com/tom-ricci/kumo-shadcn/main/public/r/tooltip.json",
+        "utils"
       ],
       "files": [
         {
@@ -2136,7 +2150,8 @@
         "https://raw.githubusercontent.com/tom-ricci/kumo-shadcn/main/public/r/kumo-base.json",
         "https://raw.githubusercontent.com/tom-ricci/kumo-shadcn/main/public/r/kumo-icons.json",
         "https://raw.githubusercontent.com/tom-ricci/kumo-shadcn/main/public/r/kumo-utils.json",
-        "https://raw.githubusercontent.com/tom-ricci/kumo-shadcn/main/public/r/tooltip.json"
+        "https://raw.githubusercontent.com/tom-ricci/kumo-shadcn/main/public/r/tooltip.json",
+        "utils"
       ],
       "files": [
         {
@@ -2173,7 +2188,7 @@
       ],
       "registryDependencies": [
         "https://raw.githubusercontent.com/tom-ricci/kumo-shadcn/main/public/r/kumo-base.json",
-        "https://raw.githubusercontent.com/tom-ricci/kumo-shadcn/main/public/r/kumo-utils.json"
+        "utils"
       ],
       "files": [
         {
@@ -2216,7 +2231,8 @@
         "https://raw.githubusercontent.com/tom-ricci/kumo-shadcn/main/public/r/kumo-icons.json",
         "https://raw.githubusercontent.com/tom-ricci/kumo-shadcn/main/public/r/kumo-utils.json",
         "https://raw.githubusercontent.com/tom-ricci/kumo-shadcn/main/public/r/layer-card.json",
-        "https://raw.githubusercontent.com/tom-ricci/kumo-shadcn/main/public/r/text.json"
+        "https://raw.githubusercontent.com/tom-ricci/kumo-shadcn/main/public/r/text.json",
+        "utils"
       ],
       "files": [
         {
@@ -2253,7 +2269,8 @@
       ],
       "registryDependencies": [
         "https://raw.githubusercontent.com/tom-ricci/kumo-shadcn/main/public/r/kumo-base.json",
-        "https://raw.githubusercontent.com/tom-ricci/kumo-shadcn/main/public/r/kumo-utils.json"
+        "https://raw.githubusercontent.com/tom-ricci/kumo-shadcn/main/public/r/kumo-utils.json",
+        "utils"
       ],
       "files": [
         {
@@ -2287,7 +2304,8 @@
       },
       "registryDependencies": [
         "https://raw.githubusercontent.com/tom-ricci/kumo-shadcn/main/public/r/kumo-base.json",
-        "https://raw.githubusercontent.com/tom-ricci/kumo-shadcn/main/public/r/kumo-utils.json"
+        "https://raw.githubusercontent.com/tom-ricci/kumo-shadcn/main/public/r/kumo-utils.json",
+        "utils"
       ],
       "files": [
         {
@@ -2327,8 +2345,8 @@
       "registryDependencies": [
         "https://raw.githubusercontent.com/tom-ricci/kumo-shadcn/main/public/r/kumo-base.json",
         "https://raw.githubusercontent.com/tom-ricci/kumo-shadcn/main/public/r/kumo-icons.json",
-        "https://raw.githubusercontent.com/tom-ricci/kumo-shadcn/main/public/r/kumo-utils.json",
-        "https://raw.githubusercontent.com/tom-ricci/kumo-shadcn/main/public/r/tooltip.json"
+        "https://raw.githubusercontent.com/tom-ricci/kumo-shadcn/main/public/r/tooltip.json",
+        "utils"
       ],
       "files": [
         {
@@ -2370,7 +2388,7 @@
       ],
       "registryDependencies": [
         "https://raw.githubusercontent.com/tom-ricci/kumo-shadcn/main/public/r/kumo-base.json",
-        "https://raw.githubusercontent.com/tom-ricci/kumo-shadcn/main/public/r/kumo-utils.json"
+        "utils"
       ],
       "files": [
         {
@@ -2404,8 +2422,8 @@
       },
       "registryDependencies": [
         "https://raw.githubusercontent.com/tom-ricci/kumo-shadcn/main/public/r/kumo-base.json",
-        "https://raw.githubusercontent.com/tom-ricci/kumo-shadcn/main/public/r/kumo-utils.json",
-        "https://raw.githubusercontent.com/tom-ricci/kumo-shadcn/main/public/r/tabs.json"
+        "https://raw.githubusercontent.com/tom-ricci/kumo-shadcn/main/public/r/tabs.json",
+        "utils"
       ],
       "files": [
         {
@@ -2442,7 +2460,8 @@
         "https://raw.githubusercontent.com/tom-ricci/kumo-shadcn/main/public/r/kumo-base.json",
         "https://raw.githubusercontent.com/tom-ricci/kumo-shadcn/main/public/r/kumo-icons.json",
         "https://raw.githubusercontent.com/tom-ricci/kumo-shadcn/main/public/r/kumo-utils.json",
-        "https://raw.githubusercontent.com/tom-ricci/kumo-shadcn/main/public/r/select.json"
+        "https://raw.githubusercontent.com/tom-ricci/kumo-shadcn/main/public/r/select.json",
+        "utils"
       ],
       "files": [
         {
@@ -2479,7 +2498,8 @@
       ],
       "registryDependencies": [
         "https://raw.githubusercontent.com/tom-ricci/kumo-shadcn/main/public/r/kumo-base.json",
-        "https://raw.githubusercontent.com/tom-ricci/kumo-shadcn/main/public/r/kumo-utils.json"
+        "https://raw.githubusercontent.com/tom-ricci/kumo-shadcn/main/public/r/kumo-utils.json",
+        "utils"
       ],
       "files": [
         {
@@ -2516,7 +2536,8 @@
       ],
       "registryDependencies": [
         "https://raw.githubusercontent.com/tom-ricci/kumo-shadcn/main/public/r/kumo-base.json",
-        "https://raw.githubusercontent.com/tom-ricci/kumo-shadcn/main/public/r/kumo-utils.json"
+        "https://raw.githubusercontent.com/tom-ricci/kumo-shadcn/main/public/r/kumo-utils.json",
+        "utils"
       ],
       "files": [
         {
@@ -2550,7 +2571,7 @@
       },
       "registryDependencies": [
         "https://raw.githubusercontent.com/tom-ricci/kumo-shadcn/main/public/r/kumo-base.json",
-        "https://raw.githubusercontent.com/tom-ricci/kumo-shadcn/main/public/r/kumo-utils.json"
+        "utils"
       ],
       "files": [
         {
@@ -2593,7 +2614,8 @@
         "https://raw.githubusercontent.com/tom-ricci/kumo-shadcn/main/public/r/kumo-icons.json",
         "https://raw.githubusercontent.com/tom-ricci/kumo-shadcn/main/public/r/kumo-utils.json",
         "https://raw.githubusercontent.com/tom-ricci/kumo-shadcn/main/public/r/label.json",
-        "https://raw.githubusercontent.com/tom-ricci/kumo-shadcn/main/public/r/loader.json"
+        "https://raw.githubusercontent.com/tom-ricci/kumo-shadcn/main/public/r/loader.json",
+        "utils"
       ],
       "files": [
         {
@@ -2633,7 +2655,8 @@
         "https://raw.githubusercontent.com/tom-ricci/kumo-shadcn/main/public/r/input.json",
         "https://raw.githubusercontent.com/tom-ricci/kumo-shadcn/main/public/r/kumo-base.json",
         "https://raw.githubusercontent.com/tom-ricci/kumo-shadcn/main/public/r/kumo-icons.json",
-        "https://raw.githubusercontent.com/tom-ricci/kumo-shadcn/main/public/r/kumo-utils.json"
+        "https://raw.githubusercontent.com/tom-ricci/kumo-shadcn/main/public/r/kumo-utils.json",
+        "utils"
       ],
       "files": [
         {
@@ -2674,7 +2697,8 @@
         "https://raw.githubusercontent.com/tom-ricci/kumo-shadcn/main/public/r/kumo-icons.json",
         "https://raw.githubusercontent.com/tom-ricci/kumo-shadcn/main/public/r/kumo-utils.json",
         "https://raw.githubusercontent.com/tom-ricci/kumo-shadcn/main/public/r/loader.json",
-        "https://raw.githubusercontent.com/tom-ricci/kumo-shadcn/main/public/r/tooltip.json"
+        "https://raw.githubusercontent.com/tom-ricci/kumo-shadcn/main/public/r/tooltip.json",
+        "utils"
       ],
       "files": [
         {
@@ -2711,7 +2735,7 @@
       ],
       "registryDependencies": [
         "https://raw.githubusercontent.com/tom-ricci/kumo-shadcn/main/public/r/kumo-base.json",
-        "https://raw.githubusercontent.com/tom-ricci/kumo-shadcn/main/public/r/kumo-utils.json"
+        "utils"
       ],
       "files": [
         {
@@ -2746,7 +2770,8 @@
       "registryDependencies": [
         "https://raw.githubusercontent.com/tom-ricci/kumo-shadcn/main/public/r/kumo-base.json",
         "https://raw.githubusercontent.com/tom-ricci/kumo-shadcn/main/public/r/kumo-utils.json",
-        "https://raw.githubusercontent.com/tom-ricci/kumo-shadcn/main/public/r/layer-card.json"
+        "https://raw.githubusercontent.com/tom-ricci/kumo-shadcn/main/public/r/layer-card.json",
+        "utils"
       ],
       "files": [
         {
@@ -2784,7 +2809,8 @@
       "registryDependencies": [
         "https://raw.githubusercontent.com/tom-ricci/kumo-shadcn/main/public/r/field.json",
         "https://raw.githubusercontent.com/tom-ricci/kumo-shadcn/main/public/r/kumo-base.json",
-        "https://raw.githubusercontent.com/tom-ricci/kumo-shadcn/main/public/r/kumo-utils.json"
+        "https://raw.githubusercontent.com/tom-ricci/kumo-shadcn/main/public/r/kumo-utils.json",
+        "utils"
       ],
       "files": [
         {
@@ -2819,7 +2845,8 @@
       "registryDependencies": [
         "https://raw.githubusercontent.com/tom-ricci/kumo-shadcn/main/public/r/checkbox.json",
         "https://raw.githubusercontent.com/tom-ricci/kumo-shadcn/main/public/r/kumo-base.json",
-        "https://raw.githubusercontent.com/tom-ricci/kumo-shadcn/main/public/r/kumo-utils.json"
+        "https://raw.githubusercontent.com/tom-ricci/kumo-shadcn/main/public/r/kumo-utils.json",
+        "utils"
       ],
       "files": [
         {
@@ -2853,7 +2880,7 @@
       },
       "registryDependencies": [
         "https://raw.githubusercontent.com/tom-ricci/kumo-shadcn/main/public/r/kumo-base.json",
-        "https://raw.githubusercontent.com/tom-ricci/kumo-shadcn/main/public/r/kumo-utils.json"
+        "utils"
       ],
       "files": [
         {
@@ -2895,7 +2922,7 @@
       ],
       "registryDependencies": [
         "https://raw.githubusercontent.com/tom-ricci/kumo-shadcn/main/public/r/kumo-base.json",
-        "https://raw.githubusercontent.com/tom-ricci/kumo-shadcn/main/public/r/kumo-utils.json"
+        "utils"
       ],
       "files": [
         {
@@ -2936,7 +2963,7 @@
         "https://raw.githubusercontent.com/tom-ricci/kumo-shadcn/main/public/r/input.json",
         "https://raw.githubusercontent.com/tom-ricci/kumo-shadcn/main/public/r/kumo-base.json",
         "https://raw.githubusercontent.com/tom-ricci/kumo-shadcn/main/public/r/kumo-icons.json",
-        "https://raw.githubusercontent.com/tom-ricci/kumo-shadcn/main/public/r/kumo-utils.json"
+        "utils"
       ],
       "files": [
         {
@@ -2970,7 +2997,8 @@
       },
       "registryDependencies": [
         "https://raw.githubusercontent.com/tom-ricci/kumo-shadcn/main/public/r/kumo-base.json",
-        "https://raw.githubusercontent.com/tom-ricci/kumo-shadcn/main/public/r/kumo-utils.json"
+        "https://raw.githubusercontent.com/tom-ricci/kumo-shadcn/main/public/r/kumo-utils.json",
+        "utils"
       ],
       "files": [
         {
@@ -3009,7 +3037,8 @@
         "https://raw.githubusercontent.com/tom-ricci/kumo-shadcn/main/public/r/button.json",
         "https://raw.githubusercontent.com/tom-ricci/kumo-shadcn/main/public/r/kumo-base.json",
         "https://raw.githubusercontent.com/tom-ricci/kumo-shadcn/main/public/r/kumo-icons.json",
-        "https://raw.githubusercontent.com/tom-ricci/kumo-shadcn/main/public/r/kumo-utils.json"
+        "https://raw.githubusercontent.com/tom-ricci/kumo-shadcn/main/public/r/kumo-utils.json",
+        "utils"
       ],
       "files": [
         {
@@ -3049,7 +3078,7 @@
         "https://raw.githubusercontent.com/tom-ricci/kumo-shadcn/main/public/r/input.json",
         "https://raw.githubusercontent.com/tom-ricci/kumo-shadcn/main/public/r/input-group.json",
         "https://raw.githubusercontent.com/tom-ricci/kumo-shadcn/main/public/r/kumo-base.json",
-        "https://raw.githubusercontent.com/tom-ricci/kumo-shadcn/main/public/r/kumo-utils.json"
+        "utils"
       ],
       "files": [
         {
@@ -3086,7 +3115,8 @@
       ],
       "registryDependencies": [
         "https://raw.githubusercontent.com/tom-ricci/kumo-shadcn/main/public/r/kumo-base.json",
-        "https://raw.githubusercontent.com/tom-ricci/kumo-shadcn/main/public/r/kumo-utils.json"
+        "https://raw.githubusercontent.com/tom-ricci/kumo-shadcn/main/public/r/kumo-utils.json",
+        "utils"
       ],
       "files": [
         {

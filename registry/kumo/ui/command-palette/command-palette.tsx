@@ -10,6 +10,7 @@ import {
 // Kumo, packages/kumo/src/components/command-palette/command-palette.tsx from https://github.com/cloudflare/kumo
 // (release cloudflare/kumo@2.19.0), copied by the kumo-shadcn registry (https://github.com/tom-ricci/kumo-shadcn).
 // Changes from Kumo's file: import paths.
+// Also changed: cn comes from your shadcn utils (@/lib/utils).
 // Unofficial; not affiliated with or endorsed by Cloudflare.
 //
 // MIT License Copyright (c) 2026 Cloudflare, Inc.
@@ -45,11 +46,8 @@ import {
 
 import { LayerCard } from "@/components/ui/layer-card/layer-card";
 import { Loader } from "@/components/ui/loader/loader";
-import { cn } from "@/lib/kumo/cn";
-import {
-  usePortalContainer,
-  type PortalContainer,
-} from "@/lib/kumo/portal-provider";
+import { cn } from "@/lib/utils";
+import { usePortalContainer, type PortalContainer } from "@/lib/kumo/portal-provider";
 import type {
   HighlightRange,
   CommandPaletteRootProps,

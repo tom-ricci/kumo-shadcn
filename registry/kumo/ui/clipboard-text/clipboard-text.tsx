@@ -8,6 +8,7 @@ import {
 // Kumo, packages/kumo/src/components/clipboard-text/clipboard-text.tsx from https://github.com/cloudflare/kumo
 // (release cloudflare/kumo@2.19.0), copied by the kumo-shadcn registry (https://github.com/tom-ricci/kumo-shadcn).
 // Changes from Kumo's file: import paths.
+// Also changed: cn comes from your shadcn utils (@/lib/utils).
 // Unofficial; not affiliated with or endorsed by Cloudflare.
 //
 // MIT License Copyright (c) 2026 Cloudflare, Inc.
@@ -37,7 +38,7 @@ import { Toast } from "@base-ui/react/toast";
 import { Tooltip } from "@base-ui/react/tooltip";
 import { Button } from "@/components/ui/button/button";
 import { inputVariants } from "@/components/ui/input/input";
-import { cn } from "@/lib/kumo/cn";
+import { cn } from "@/lib/utils";
 import { resolveVariant } from "@/lib/kumo/resolve-variant";
 
 // External manager — same-id re-adds update + reset timeout in Base UI's store
