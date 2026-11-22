@@ -32,7 +32,6 @@ on:
       - "registry/shadcn-utils.ts"
       - "wrangler.jsonc"
       - "public/_headers"
-      - "public/_redirects"
       - ".github/workflows/update.yml"
 
 permissions: {}

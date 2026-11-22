@@ -4,7 +4,7 @@
   "title": "Cloudflare Logo",
   "description": "Cloudflare logo component. Kumo component, from @cloudflare/kumo@2.19.0.",
   "registryDependencies": [
-    "https://raw.githubusercontent.com/tom-ricci/kumo-shadcn/main/public/r/kumo-base.json",
+    "https://kumo-shadcn.thomasricci.dev/r/kumo-base.json",
     "utils"
   ],
   "files": [

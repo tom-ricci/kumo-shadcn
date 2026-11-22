@@ -8,9 +8,10 @@ import { readFile } from "node:fs/promises";
 import { createServer } from "node:http";
 import { join, normalize, resolve, dirname } from "node:path";
 import { fileURLToPath } from "node:url";
+import { BASE_URL } from "./config.ts";
 
 const root = resolve(dirname(fileURLToPath(import.meta.url)), "..", "..", "..", "public", "r");
-const PROD = "https://raw.githubusercontent.com/tom-ricci/kumo-shadcn/main/public/r";
+const PROD = BASE_URL; // the base URL registryDependencies use (config.ts)
 let local = "";
 
 const server = createServer(async (req, res) => {

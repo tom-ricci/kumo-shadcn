@@ -7,7 +7,7 @@
     "@base-ui/react@^1.9.0"
   ],
   "registryDependencies": [
-    "https://raw.githubusercontent.com/tom-ricci/kumo-shadcn/main/public/r/kumo-base.json",
+    "https://kumo-shadcn.thomasricci.dev/r/kumo-base.json",
     "utils"
   ],
   "files": [

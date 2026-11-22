@@ -4,11 +4,11 @@
   "title": "Pagination",
   "description": "Pagination component. Kumo component, from @cloudflare/kumo@2.19.0.",
   "registryDependencies": [
-    "https://raw.githubusercontent.com/tom-ricci/kumo-shadcn/main/public/r/input-group.json",
-    "https://raw.githubusercontent.com/tom-ricci/kumo-shadcn/main/public/r/kumo-base.json",
-    "https://raw.githubusercontent.com/tom-ricci/kumo-shadcn/main/public/r/kumo-icons.json",
-    "https://raw.githubusercontent.com/tom-ricci/kumo-shadcn/main/public/r/kumo-utils.json",
-    "https://raw.githubusercontent.com/tom-ricci/kumo-shadcn/main/public/r/select.json",
+    "https://kumo-shadcn.thomasricci.dev/r/input-group.json",
+    "https://kumo-shadcn.thomasricci.dev/r/kumo-base.json",
+    "https://kumo-shadcn.thomasricci.dev/r/kumo-icons.json",
+    "https://kumo-shadcn.thomasricci.dev/r/kumo-utils.json",
+    "https://kumo-shadcn.thomasricci.dev/r/select.json",
     "utils"
   ],
   "files": [

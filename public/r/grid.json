@@ -4,8 +4,8 @@
   "title": "Grid",
   "description": "Responsive CSS grid layout container with preset column configurations. Kumo component, from @cloudflare/kumo@2.19.0.",
   "registryDependencies": [
-    "https://raw.githubusercontent.com/tom-ricci/kumo-shadcn/main/public/r/kumo-base.json",
-    "https://raw.githubusercontent.com/tom-ricci/kumo-shadcn/main/public/r/kumo-utils.json",
+    "https://kumo-shadcn.thomasricci.dev/r/kumo-base.json",
+    "https://kumo-shadcn.thomasricci.dev/r/kumo-utils.json",
     "utils"
   ],
   "files": [

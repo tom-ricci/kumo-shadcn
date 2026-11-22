@@ -20,6 +20,7 @@ import { existsSync, readFileSync } from "node:fs";
 import { dirname, join, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import { registryItemSchema, registrySchema } from "shadcn/schema";
+import { BASE_URL, NAMESPACE } from "./config.ts";
 
 const root = resolve(dirname(fileURLToPath(import.meta.url)), "..", "..", ".."); // the repository root
 const built = join(root, "public", "r");
@@ -46,6 +47,8 @@ report(typeof entry.description === "string" && entry.description.length > 0, "e
 report(typeof entry.logo === "string" && entry.logo.trim().startsWith("<svg"), "entry has an inline SVG logo");
 report(entry.author === undefined || typeof entry.author === "string", "entry author, if any, is a string");
 report(Object.keys(entry).every((k) => allowed.has(k)), `entry has only ${[...allowed].join(", ")}`);
+report(entry.name === NAMESPACE, `entry name is the registry's namespace ${NAMESPACE} (config.ts)`);
+report(entry.url === `${BASE_URL}/{name}.json`, `entry url is ${BASE_URL}/{name}.json, where registryDependencies point (config.ts)`);
 
 const index = JSON.parse(readFileSync(join(built, "registry.json"), "utf8"));
 const parsed = registrySchema.safeParse(index);
@@ -63,5 +66,4 @@ report(!missing.length, `every item has public/r/<name>.json${missing.length ? `
 const invalid = names.filter((n: string) => existsSync(join(built, `${n}.json`)) && !registryItemSchema.safeParse(JSON.parse(readFileSync(join(built, `${n}.json`), "utf8"))).success);
 report(!invalid.length, `every item validates against registryItemSchema${invalid.length ? ` (invalid: ${invalid.join(", ")})` : ""}`);
 report(existsSync(join(root, "LICENSE")), "open source: LICENSE (MIT) is present");
-if (entry.url.includes("SUBDOMAIN")) console.log("note: directory/entry.json still has the SUBDOMAIN placeholder; set the Worker's address before submitting.");
 if (failed) process.exit(1);

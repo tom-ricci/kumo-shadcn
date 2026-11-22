@@ -25,10 +25,10 @@ const INSTALL: Record<string, { label: string; code: string; lang: "bash" | "jso
   namespace: [
     {
       label: "Give the registry a namespace in components.json:",
-      code: `{\n  "registries": {\n    "@kumo": "${SITE}/r/{name}.json"\n  }\n}`,
+      code: `{\n  "registries": {\n    "@kumo-shadcn": "${SITE}/r/{name}.json"\n  }\n}`,
       lang: "jsonc",
     },
-    { label: "Then add items by name:", code: "npx shadcn@latest add @kumo/kumo-theme @kumo/button", lang: "bash" },
+    { label: "Then add items by name:", code: "npx shadcn@latest add @kumo-shadcn/kumo-theme @kumo-shadcn/button", lang: "bash" },
   ],
   github: [
     {
@@ -125,7 +125,7 @@ export function App() {
           variant="segmented"
           tabs={[
             { value: "url", label: "By URL" },
-            { value: "namespace", label: "@kumo namespace" },
+            { value: "namespace", label: "@kumo-shadcn namespace" },
             { value: "github", label: "GitHub" },
           ]}
           selectedValue={method}

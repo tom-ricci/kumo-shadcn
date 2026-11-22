@@ -1,18 +1,18 @@
-// Cloudflare Worker that serves the built registry (public/) as static assets.
-// No Worker script: public/_headers sets CORS and caching, public/_redirects
-// sends the bare domain to the repository. Deployed by .github/workflows/update.yml.
+// Cloudflare Worker that serves public/ as static assets: the registry under
+// /r/ and the docs page at /. No Worker script: public/_headers sets CORS and
+// caching. Deployed by .github/workflows/update.yml.
 {
-    "$schema": "./node_modules/wrangler/config-schema.json",
-    "name": "kumo-shadcn",
-    "compatibility_date": "2026-11-05",
-    "assets": {
-        "directory": "./public",
-        "not_found_handling": "none",
-    },
-    "routes": [
-        {
-            "pattern": "kumo-shadcn.thomasricci.dev",
-            "custom_domain": true,
-        },
-    ],
+  "$schema": "./node_modules/wrangler/config-schema.json",
+  "name": "kumo-shadcn",
+  "compatibility_date": "2026-11-05",
+  "assets": {
+    "directory": "./public",
+    "not_found_handling": "none"
+  },
+  "routes": [
+    {
+      "pattern": "kumo-shadcn.thomasricci.dev",
+      "custom_domain": true
+    }
+  ]
 }

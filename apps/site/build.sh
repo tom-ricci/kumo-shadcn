@@ -7,7 +7,7 @@
 #
 # The page's Kumo components are installed with the real shadcn CLI from the
 # registry that was just built: public/r is served on localhost (packages/registry/src/serve-registry.ts)
-# and the site's "@kumo" namespace points at it. They are not checked in.
+# and the site's "@kumo-shadcn" namespace points at it. They are not checked in.
 set -euo pipefail
 
 SHADCN="shadcn@4.23.0"
@@ -35,10 +35,10 @@ for _ in $(seq 100); do port=$(sed -n 's#^registry at http://127.0.0.1:\([0-9]*\
 [ -n "$port" ] || { echo "registry server did not start" >&2; exit 1; }
 node -e '
 const fs = require("fs"); const c = JSON.parse(fs.readFileSync("components.json", "utf8"));
-c.registries["@kumo"] = `http://127.0.0.1:${process.argv[1]}/r/{name}.json`;
+c.registries["@kumo-shadcn"] = `http://127.0.0.1:${process.argv[1]}/r/{name}.json`;
 fs.writeFileSync("components.json", JSON.stringify(c, null, 2));' "$port"
 
-mapfile -t items < <(grep -v '^#' kumo-items.txt | sed '/^$/d; s/^/@kumo\//')
+mapfile -t items < <(grep -v '^#' kumo-items.txt | sed '/^$/d; s/^/@kumo-shadcn\//')
 npx -y "$SHADCN" add "${items[@]}" -y
 npx tsc --noEmit
 npx vite build

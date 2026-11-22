@@ -4,7 +4,7 @@
   "title": "Resource List Page",
   "description": "ResourceListPage - A layout component for resource list pages. Kumo block, from @cloudflare/kumo@2.19.0.",
   "registryDependencies": [
-    "https://raw.githubusercontent.com/tom-ricci/kumo-shadcn/main/public/r/kumo-base.json",
+    "https://kumo-shadcn.thomasricci.dev/r/kumo-base.json",
     "utils"
   ],
   "files": [

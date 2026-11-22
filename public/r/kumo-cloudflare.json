@@ -4,7 +4,7 @@
   "title": "Kumo theme, Cloudflare dashboard variant",
   "description": "Kumo's own colors with the Cloudflare dashboard's direction: one highlight shade for every hover and selected background, and a canvas-colored sidebar. Install one theme item: kumo-theme, kumo-cloudflare or kumo-binding. From @cloudflare/kumo@2.19.0.",
   "registryDependencies": [
-    "https://raw.githubusercontent.com/tom-ricci/kumo-shadcn/main/public/r/kumo-base.json"
+    "https://kumo-shadcn.thomasricci.dev/r/kumo-base.json"
   ],
   "cssVars": {
     "theme": {

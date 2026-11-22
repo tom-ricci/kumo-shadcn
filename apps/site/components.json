@@ -19,6 +19,6 @@
     "hooks": "@/hooks"
   },
   "registries": {
-    "@kumo": "https://kumo-shadcn.thomasricci.dev/r/{name}.json"
+    "@kumo-shadcn": "https://kumo-shadcn.thomasricci.dev/r/{name}.json"
   }
 }
