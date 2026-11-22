@@ -3,6 +3,8 @@ import { forwardRef } from "react";
 // Kumo, packages/kumo/src/components/cloudflare-logo/cloudflare-logo.tsx from https://github.com/cloudflare/kumo
 // (release cloudflare/kumo@2.19.0), copied by the kumo-shadcn registry (https://github.com/tom-ricci/kumo-shadcn).
 // Changes from Kumo's file: import paths.
+// Also changed: Kumo's type scale classes (text-xs, text-sm, text-base, text-lg) read --kumo-font-size-* and --kumo-line-height-*, not your theme's --text-*.
+// Also changed: transitions without a duration-* class use --kumo-transition-duration (Kumo's 100ms), not your theme's default duration.
 // Also changed: cn comes from your shadcn utils (@/lib/utils).
 // Unofficial; not affiliated with or endorsed by Cloudflare.
 //
@@ -291,8 +293,8 @@ export const PoweredByCloudflare = forwardRef<
         rel="noopener noreferrer"
         className={cn(
           // Base badge styles
-          "inline-flex items-center gap-2 rounded-lg py-2 pr-3 pl-2.5 text-sm font-medium",
-          "ring-1 transition-all ring-inset hover:shadow-sm",
+          "inline-flex items-center gap-2 rounded-lg py-2 pr-3 pl-2.5 text-(length:--kumo-font-size-sm)/[var(--tw-leading,var(--kumo-line-height-sm))] font-medium",
+          "ring-1 transition-all duration-(--kumo-transition-duration) ring-inset hover:shadow-sm",
           // Color variants using semantic tokens
           color === "color" &&
             "bg-kumo-base text-kumo-default ring-kumo-hairline",

@@ -3,6 +3,7 @@ import { CheckIcon, CopySimpleIcon } from "@/lib/kumo/icons";
 // Kumo, packages/kumo/src/components/inline-copy-text/inline-copy-text.tsx from https://github.com/cloudflare/kumo
 // (release cloudflare/kumo@2.19.0), copied by the kumo-shadcn registry (https://github.com/tom-ricci/kumo-shadcn).
 // Changes from Kumo's file: import paths.
+// Also changed: transitions without a duration-* class use --kumo-transition-duration (Kumo's 100ms), not your theme's default duration.
 // Also changed: cn comes from your shadcn utils (@/lib/utils).
 // Unofficial; not affiliated with or endorsed by Cloudflare.
 //
@@ -262,7 +263,7 @@ export const InlineCopyText = forwardRef<
             aria-hidden
             size={14}
             className={cn(
-              "shrink-0 opacity-0 transition-opacity motion-reduce:transition-none",
+              "shrink-0 opacity-0 transition-opacity duration-(--kumo-transition-duration) motion-reduce:transition-none",
               "group-hover/inline-copy:opacity-100 group-focus-visible/inline-copy:opacity-100",
               "group-focus-within:opacity-100 group-hover:opacity-100",
             )}

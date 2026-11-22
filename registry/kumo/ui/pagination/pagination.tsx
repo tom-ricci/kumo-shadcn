@@ -11,6 +11,7 @@ import {
 // Kumo, packages/kumo/src/components/pagination/pagination.tsx from https://github.com/cloudflare/kumo
 // (release cloudflare/kumo@2.19.0), copied by the kumo-shadcn registry (https://github.com/tom-ricci/kumo-shadcn).
 // Changes from Kumo's file: import paths.
+// Also changed: Kumo's type scale classes (text-xs, text-sm, text-base, text-lg) read --kumo-font-size-* and --kumo-line-height-*, not your theme's --text-*.
 // Also changed: cn comes from your shadcn utils (@/lib/utils).
 // Unofficial; not affiliated with or endorsed by Cloudflare.
 //
@@ -192,7 +193,7 @@ function PaginationInfo({ children, className }: PaginationInfoProps) {
   return (
     <div
       data-slot="pagination-info"
-      className={cn("text-sm text-kumo-subtle", className)}
+      className={cn("text-(length:--kumo-font-size-sm)/[var(--tw-leading,var(--kumo-line-height-sm))] text-kumo-subtle", className)}
     >
       {content}
     </div>
@@ -235,7 +236,7 @@ function PaginationPageSize({
       data-slot="pagination-page-size"
       className={cn("flex items-center gap-2", className)}
     >
-      {label && <span className="text-sm text-kumo-subtle">{label}</span>}
+      {label && <span className="text-(length:--kumo-font-size-sm)/[var(--tw-leading,var(--kumo-line-height-sm))] text-kumo-subtle">{label}</span>}
       <Select
         aria-label={labels.pageSize}
         value={value}
@@ -664,7 +665,7 @@ function PaginationRoot(props: PaginationProps) {
           aria-live="polite"
           aria-atomic="true"
           data-slot="pagination-info"
-          className="grow text-sm text-kumo-subtle"
+          className="grow text-(length:--kumo-font-size-sm)/[var(--tw-leading,var(--kumo-line-height-sm))] text-kumo-subtle"
         >
           {getPaginationText()}
         </div>

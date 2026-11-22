@@ -12,6 +12,9 @@ import {
 // (release cloudflare/kumo@2.19.0), copied by the kumo-shadcn registry (https://github.com/tom-ricci/kumo-shadcn).
 // Changes from Kumo's file: import paths.
 // Also changed: hover/selected backgrounds that use Kumo's tint read --kumo-highlight first.
+// Also changed: Kumo's type scale classes (text-xs, text-sm, text-base, text-lg) read --kumo-font-size-* and --kumo-line-height-*, not your theme's --text-*.
+// Also changed: transitions without a duration-* class use --kumo-transition-duration (Kumo's 100ms), not your theme's default duration.
+// Also changed: Kumo's helper classes, animations and data attributes carry a kumo- prefix.
 // Also changed: cn comes from your shadcn utils (@/lib/utils).
 // Unofficial; not affiliated with or endorsed by Cloudflare.
 //
@@ -245,7 +248,7 @@ export function Tabs({
       <TabsPrimitive.List
         ref={listRef}
         activateOnFocus={activateOnFocus}
-        data-overflowing={isOverflowing ? "" : undefined}
+        data-kumo-overflowing={isOverflowing ? "" : undefined}
         data-overflow-start={canScrollStart ? "" : undefined}
         data-overflow-end={canScrollEnd ? "" : undefined}
         {...bindDrag()}
@@ -282,7 +285,7 @@ export function Tabs({
               isOverflowing
                 ? "cursor-grab active:cursor-grabbing"
                 : "cursor-pointer",
-              isSm ? "text-xs" : "text-base",
+              isSm ? "text-(length:--kumo-font-size-xs)/[var(--tw-leading,var(--kumo-line-height-xs))]" : "text-(length:--kumo-font-size-base)/[var(--tw-leading,var(--kumo-line-height-base))]",
               isSegmented &&
                 "my-0.5 text-kumo-subtle hover:text-kumo-default focus-visible:ring-inset aria-selected:text-kumo-default",
               isSegmented && (isSm ? "rounded-sm px-2" : "rounded-md px-2.5"),
@@ -383,7 +386,7 @@ function TabsOverflowControl({
     >
       <span
         className={cn(
-          "flex items-center justify-center text-kumo-subtle transition-colors hover:text-kumo-default",
+          "flex items-center justify-center text-kumo-subtle transition-colors duration-(--kumo-transition-duration) hover:text-kumo-default",
           size === "sm" ? "size-5" : "size-6",
           isSegmented
             ? size === "sm"

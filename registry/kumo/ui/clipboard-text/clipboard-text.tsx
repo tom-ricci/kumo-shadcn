@@ -8,6 +8,8 @@ import {
 // Kumo, packages/kumo/src/components/clipboard-text/clipboard-text.tsx from https://github.com/cloudflare/kumo
 // (release cloudflare/kumo@2.19.0), copied by the kumo-shadcn registry (https://github.com/tom-ricci/kumo-shadcn).
 // Changes from Kumo's file: import paths.
+// Also changed: Kumo's type scale classes (text-xs, text-sm, text-base, text-lg) read --kumo-font-size-* and --kumo-line-height-*, not your theme's --text-*.
+// Also changed: Kumo's helper classes, animations and data attributes carry a kumo- prefix.
 // Also changed: cn comes from your shadcn utils (@/lib/utils).
 // Unofficial; not affiliated with or endorsed by Cloudflare.
 //
@@ -50,17 +52,17 @@ const COPIED_FEEDBACK_MS = 1500;
 export const KUMO_CLIPBOARD_TEXT_VARIANTS = {
   size: {
     sm: {
-      classes: "text-xs",
+      classes: "text-(length:--kumo-font-size-xs)/[var(--tw-leading,var(--kumo-line-height-xs))]",
       buttonSize: "sm" as const,
       description: "Small clipboard text for compact UIs",
     },
     base: {
-      classes: "text-sm",
+      classes: "text-(length:--kumo-font-size-sm)/[var(--tw-leading,var(--kumo-line-height-sm))]",
       buttonSize: "base" as const,
       description: "Default clipboard text size",
     },
     lg: {
-      classes: "text-sm",
+      classes: "text-(length:--kumo-font-size-sm)/[var(--tw-leading,var(--kumo-line-height-sm))]",
       buttonSize: "lg" as const,
       description: "Large clipboard text for prominent display",
     },
@@ -178,9 +180,9 @@ function AnchoredToasts() {
               key={updateKey}
               toast={toast}
               className={cn(
-                "flex origin-[var(--transform-origin)] flex-col rounded-md bg-kumo-base px-3 py-1.5 font-sans text-xs text-kumo-default",
+                "flex origin-[var(--transform-origin)] flex-col rounded-md bg-kumo-base px-3 py-1.5 font-sans text-(length:--kumo-font-size-xs)/[var(--tw-leading,var(--kumo-line-height-xs))] text-kumo-default",
                 "shadow-lg outline outline-kumo-line",
-                updateKey > 0 && "animate-clipboard-toast-bump",
+                updateKey > 0 && "animate-kumo-clipboard-toast-bump",
               )}
             >
               <Toast.Description />
@@ -419,7 +421,7 @@ export const ClipboardText = forwardRef<HTMLDivElement, ClipboardTextProps>(
                 <Tooltip.Positioner side={tooltipSide} sideOffset={8}>
                   <Tooltip.Popup
                     className={cn(
-                      "flex origin-[var(--transform-origin)] flex-col rounded-md bg-kumo-base px-3 py-1.5 text-xs text-kumo-default",
+                      "flex origin-[var(--transform-origin)] flex-col rounded-md bg-kumo-base px-3 py-1.5 text-(length:--kumo-font-size-xs)/[var(--tw-leading,var(--kumo-line-height-xs))] text-kumo-default",
                       "shadow-md outline outline-kumo-line",
                     )}
                   >

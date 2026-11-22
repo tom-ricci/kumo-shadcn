@@ -4,6 +4,8 @@ import { Menu as DropdownMenuPrimitive } from "@base-ui/react/menu";
 // (release cloudflare/kumo@2.19.0), copied by the kumo-shadcn registry (https://github.com/tom-ricci/kumo-shadcn).
 // Changes from Kumo's file: import paths.
 // Also changed: hover/selected backgrounds that use Kumo's tint read --kumo-highlight first.
+// Also changed: Kumo's type scale classes (text-xs, text-sm, text-base, text-lg) read --kumo-font-size-* and --kumo-line-height-*, not your theme's --text-*.
+// Also changed: transitions without a duration-* class use --kumo-transition-duration (Kumo's 100ms), not your theme's default duration.
 // Also changed: cn comes from your shadcn utils (@/lib/utils).
 // Unofficial; not affiliated with or endorsed by Cloudflare.
 //
@@ -124,7 +126,7 @@ const autoInsetClasses =
  * with the same colour, radius and state.
  */
 const menuRowClasses = cn(
-  "relative flex cursor-default items-center gap-2 rounded-md px-2 py-1.5 text-base outline-hidden select-none", // base styles
+  "relative flex cursor-default items-center gap-2 rounded-md px-2 py-1.5 text-(length:--kumo-font-size-base)/[var(--tw-leading,var(--kumo-line-height-base))] outline-hidden select-none", // base styles
   "focus:text-kumo-default focus-visible:ring-2 focus-visible:ring-kumo-brand", // focus state
   "data-highlighted:bg-(--kumo-highlight,var(--color-kumo-tint))", // highlight state
   "data-disabled:pointer-events-none data-disabled:opacity-50", // disabled state
@@ -526,7 +528,7 @@ const DropdownMenuCheckboxItem = React.forwardRef<
     ref={ref}
     data-kumo-component="DropdownMenu"
     data-kumo-part="checkbox-item"
-    className={cn(menuRowClasses, "pl-8 transition-colors", className)}
+    className={cn(menuRowClasses, "pl-8 transition-colors duration-(--kumo-transition-duration)", className)}
     checked={checked}
     {...props}
   >
@@ -548,7 +550,7 @@ const DropdownMenuLabel = React.forwardRef<
   <DropdownMenuPrimitive.GroupLabel
     ref={ref}
     className={cn(
-      "px-2 py-1.5 text-base font-semibold",
+      "px-2 py-1.5 text-(length:--kumo-font-size-base)/[var(--tw-leading,var(--kumo-line-height-base))] font-semibold",
       autoInsetClasses,
       inset && "pl-8",
       className,
@@ -576,7 +578,7 @@ const DropdownMenuShortcut = ({
 }: React.HTMLAttributes<HTMLSpanElement>) => {
   return (
     <span
-      className={cn("ml-auto text-xs tracking-widest opacity-60", className)}
+      className={cn("ml-auto text-(length:--kumo-font-size-xs)/[var(--tw-leading,var(--kumo-line-height-xs))] tracking-widest opacity-60", className)}
       {...props}
     />
   );

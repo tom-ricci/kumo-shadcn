@@ -9,6 +9,9 @@ import {
 // (release cloudflare/kumo@2.19.0), copied by the kumo-shadcn registry (https://github.com/tom-ricci/kumo-shadcn).
 // Changes from Kumo's file: import paths.
 // Also changed: hover/selected backgrounds that use Kumo's tint read --kumo-highlight first.
+// Also changed: react-day-picker's root and month animations get kumo-rdp-* class names, which Kumo's CSS styles.
+// Also changed: Kumo's type scale classes (text-xs, text-sm, text-base, text-lg) read --kumo-font-size-* and --kumo-line-height-*, not your theme's --text-*.
+// Also changed: transitions without a duration-* class use --kumo-transition-duration (Kumo's 100ms), not your theme's default duration.
 // Also changed: cn comes from your shadcn utils (@/lib/utils).
 // Unofficial; not affiliated with or endorsed by Cloudflare.
 //
@@ -104,7 +107,7 @@ const dayButtonClassName = cn(
   // Reset native button styles explicitly, so global button styles in the
   // host app (e.g. a default background) don't leak into the days.
   "m-0 border-0 bg-transparent p-0",
-  "flex size-(--cell-size) items-center justify-center rounded-md text-base text-kumo-default tabular-nums transition-colors outline-none focus-visible:outline-hidden",
+  "flex size-(--cell-size) items-center justify-center rounded-md text-(length:--kumo-font-size-base)/[var(--tw-leading,var(--kumo-line-height-base))] text-kumo-default tabular-nums transition-colors duration-(--kumo-transition-duration) outline-none focus-visible:outline-hidden",
   "cursor-pointer hover:bg-(--kumo-highlight,var(--color-kumo-tint))",
   "focus-visible:relative focus-visible:z-10 focus-visible:ring-2 focus-visible:ring-kumo-brand",
   "[td[data-day][data-disabled]_&]:cursor-not-allowed [td[data-day][data-disabled]_&]:text-kumo-inactive [td[data-day][data-disabled]_&]:hover:bg-transparent",
@@ -270,7 +273,7 @@ export function DatePicker({
         ),
         caption_label: cn(
           defaults.caption_label,
-          "text-base font-medium text-kumo-default",
+          "text-(length:--kumo-font-size-base)/[var(--tw-leading,var(--kumo-line-height-base))] font-medium text-kumo-default",
           hasDropdowns &&
             "flex h-7 items-center gap-1 rounded-md ps-2 pe-1 [&>svg]:text-kumo-subtle",
         ),
@@ -292,13 +295,13 @@ export function DatePicker({
         weekdays: cn(defaults.weekdays, "flex"),
         weekday: cn(
           defaults.weekday,
-          "flex h-5 w-(--cell-width) items-center justify-center text-xs font-normal text-kumo-subtle",
+          "flex h-5 w-(--cell-width) items-center justify-center text-(length:--kumo-font-size-xs)/[var(--tw-leading,var(--kumo-line-height-xs))] font-normal text-kumo-subtle",
         ),
         week: cn(defaults.week, "mt-2 flex"),
         week_number_header: cn(defaults.week_number_header, "w-(--cell-width)"),
         week_number: cn(
           defaults.week_number,
-          "flex h-(--cell-size) w-(--cell-width) items-center justify-center text-xs text-kumo-subtle",
+          "flex h-(--cell-size) w-(--cell-width) items-center justify-center text-(length:--kumo-font-size-xs)/[var(--tw-leading,var(--kumo-line-height-xs))] text-kumo-subtle",
         ),
         // The range band is painted on the cells: full width in the middle,
         // the inner half at each end so it meets the end squares, and
@@ -323,10 +326,19 @@ export function DatePicker({
         ),
         hidden: cn(defaults.hidden, "invisible"),
         footer: cn(defaults.footer, "w-0 min-w-full pt-3"),
+        caption_after_enter: "kumo-rdp-caption_after_enter",
+        caption_after_exit: "kumo-rdp-caption_after_exit",
+        caption_before_enter: "kumo-rdp-caption_before_enter",
+        caption_before_exit: "kumo-rdp-caption_before_exit",
+        weeks_after_enter: "kumo-rdp-weeks_after_enter",
+        weeks_after_exit: "kumo-rdp-weeks_after_exit",
+        weeks_before_enter: "kumo-rdp-weeks_before_enter",
+        weeks_before_exit: "kumo-rdp-weeks_before_exit",
         ...classNames,
         root: cn(
           defaults.root,
-          "w-fit rounded-xl bg-kumo-base text-sm select-none [--cell-size:--spacing(8)] [--cell-width:--spacing(9)]",
+          "kumo-rdp-root",
+          "w-fit rounded-xl bg-kumo-base text-(length:--kumo-font-size-sm)/[var(--tw-leading,var(--kumo-line-height-sm))] select-none [--cell-size:--spacing(8)] [--cell-width:--spacing(9)]",
           classNames?.root,
           className,
         ),

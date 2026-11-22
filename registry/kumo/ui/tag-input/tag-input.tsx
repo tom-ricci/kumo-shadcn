@@ -3,6 +3,7 @@ import { XIcon } from "@/lib/kumo/icons";
 // Kumo, packages/kumo/src/components/tag-input/tag-input.tsx from https://github.com/cloudflare/kumo
 // (release cloudflare/kumo@2.19.0), copied by the kumo-shadcn registry (https://github.com/tom-ricci/kumo-shadcn).
 // Changes from Kumo's file: import paths.
+// Also changed: Kumo's type scale classes (text-xs, text-sm, text-base, text-lg) read --kumo-font-size-* and --kumo-line-height-*, not your theme's --text-*.
 // Also changed: cn comes from your shadcn utils (@/lib/utils).
 // Unofficial; not affiliated with or endorsed by Cloudflare.
 //
@@ -224,7 +225,7 @@ export const TagInput = forwardRef<HTMLInputElement, TagInputProps>(
     const inputVariant = variant ?? (fieldError ? "error" : "default");
     const chipClassName = cn(
       "flex w-fit max-w-full shrink-0 items-center gap-2.5 rounded-sm bg-kumo-overlay ring-1 ring-kumo-hairline",
-      "h-6 py-0 pr-[3px] pl-2 text-sm",
+      "h-6 py-0 pr-[3px] pl-2 text-(length:--kumo-font-size-sm)/[var(--tw-leading,var(--kumo-line-height-sm))]",
     );
     const input = (controlProps?: ComponentPropsWithoutRef<"input">) => (
       <input

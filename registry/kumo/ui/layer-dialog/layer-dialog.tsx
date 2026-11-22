@@ -15,6 +15,8 @@ import {
 // Kumo, packages/kumo/src/components/layer-dialog/layer-dialog.tsx from https://github.com/cloudflare/kumo
 // (release cloudflare/kumo@2.19.0), copied by the kumo-shadcn registry (https://github.com/tom-ricci/kumo-shadcn).
 // Changes from Kumo's file: import paths.
+// Also changed: transitions without a duration-* class use --kumo-transition-duration (Kumo's 100ms), not your theme's default duration.
+// Also changed: Kumo's helper classes, animations and data attributes carry a kumo- prefix.
 // Also changed: cn comes from your shadcn utils (@/lib/utils).
 // Unofficial; not affiliated with or endorsed by Cloudflare.
 //
@@ -488,7 +490,7 @@ function LayerDialogBody({ children }: LayerDialogBodyProps) {
             <style> it adds to <head> once per document, which head-swapping
             client routers and strict CSPs can drop. */}
         <ScrollAreaBase.Viewport
-          className="no-scrollbar min-h-0 flex-1 overscroll-none [mask-image:linear-gradient(to_bottom,transparent_0,black_min(24px,var(--scroll-area-overflow-y-start,0px)),black_calc(100%-min(24px,var(--scroll-area-overflow-y-end,24px))),transparent_100%)]"
+          className="kumo-no-scrollbar min-h-0 flex-1 overscroll-none [mask-image:linear-gradient(to_bottom,transparent_0,black_min(24px,var(--scroll-area-overflow-y-start,0px)),black_calc(100%-min(24px,var(--scroll-area-overflow-y-end,24px))),transparent_100%)]"
           onScroll={handleScroll}
         >
           {/* pt-0.5 keeps a first-child control's ring-drawn border and
@@ -506,9 +508,9 @@ function LayerDialogBody({ children }: LayerDialogBodyProps) {
         <ScrollAreaBase.Scrollbar
           keepMounted
           orientation="vertical"
-          className="my-1.5 mr-0.5 hidden w-2 p-px opacity-0 transition-opacity data-[has-overflow-y]:block data-[hovering]:opacity-100 data-[scrolling]:opacity-100"
+          className="my-1.5 mr-0.5 hidden w-2 p-px opacity-0 transition-opacity duration-(--kumo-transition-duration) data-[has-overflow-y]:block data-[hovering]:opacity-100 data-[scrolling]:opacity-100"
         >
-          <ScrollAreaBase.Thumb className="w-full rounded-full bg-kumo-contrast opacity-10 transition-opacity hover:opacity-20 active:opacity-30" />
+          <ScrollAreaBase.Thumb className="w-full rounded-full bg-kumo-contrast opacity-10 transition-opacity duration-(--kumo-transition-duration) hover:opacity-20 active:opacity-30" />
         </ScrollAreaBase.Scrollbar>
       </ScrollAreaBase.Root>
       {!isDesktop && actions && (

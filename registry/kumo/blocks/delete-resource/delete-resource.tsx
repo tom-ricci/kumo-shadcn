@@ -3,6 +3,7 @@ import { useState, useCallback, useEffect, useRef } from "react";
 // Kumo, packages/kumo/src/blocks/delete-resource/delete-resource.tsx from https://github.com/cloudflare/kumo
 // (release cloudflare/kumo@2.19.0), copied by the kumo-shadcn registry (https://github.com/tom-ricci/kumo-shadcn).
 // Changes from Kumo's file: import paths.
+// Also changed: Kumo's type scale classes (text-xs, text-sm, text-base, text-lg) read --kumo-font-size-* and --kumo-line-height-*, not your theme's --text-*.
 // Also changed: cn comes from your shadcn utils (@/lib/utils).
 // Unofficial; not affiliated with or endorsed by Cloudflare.
 //
@@ -140,7 +141,7 @@ export function DeleteResource({
     <DialogRoot open={open} onOpenChange={onOpenChange}>
       <Dialog size={size} className={cn("p-0", className)}>
         <div className="flex items-center justify-between border-b border-kumo-line px-6 py-4">
-          <DialogTitle className="text-lg font-semibold">
+          <DialogTitle className="text-(length:--kumo-font-size-lg)/[var(--tw-leading,var(--kumo-line-height-lg))] font-semibold">
             Delete {resourceName}
           </DialogTitle>
           <DialogClose
@@ -166,7 +167,7 @@ export function DeleteResource({
                 {errorMessage}
               </Banner>
             )}
-            <p className="max-w-prose text-base text-pretty text-kumo-subtle">
+            <p className="max-w-prose text-(length:--kumo-font-size-base)/[var(--tw-leading,var(--kumo-line-height-base))] text-pretty text-kumo-subtle">
               This action cannot be undone. This will permanently delete the{" "}
               <span className="font-medium text-kumo-default">
                 {resourceName}
@@ -176,11 +177,11 @@ export function DeleteResource({
           </div>
 
           <div className="flex flex-col gap-2">
-            <div className="flex items-center gap-1.5 text-base">
+            <div className="flex items-center gap-1.5 text-(length:--kumo-font-size-base)/[var(--tw-leading,var(--kumo-line-height-base))]">
               <span>
                 Type{" "}
                 <button
-                  className="group inline rounded-md bg-kumo-tint px-2 py-1 font-mono text-sm font-semibold hover:cursor-pointer hover:bg-kumo-fill"
+                  className="group inline rounded-md bg-kumo-tint px-2 py-1 font-mono text-(length:--kumo-font-size-sm)/[var(--tw-leading,var(--kumo-line-height-sm))] font-semibold hover:cursor-pointer hover:bg-kumo-fill"
                   onClick={handleCopy}
                   aria-label={`Copy ${resourceName} to clipboard`}
                 >

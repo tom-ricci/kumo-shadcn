@@ -148,8 +148,8 @@ with each of these set:
 ## Themes
 
 Every component installs `kumo-base`: Kumo's keyframes, a few helper classes, and the Tailwind setup that
-makes classes like `bg-kumo-base` and `text-kumo-subtle` work. The colors themselves come from a theme
-item. Install exactly one:
+makes classes like `bg-kumo-base` and `text-kumo-subtle` work. The colors and the type scale come from a
+theme item. Install exactly one:
 
 - **`kumo-theme`**: Kumo's own look, with Kumo's colors and type scale, as Kumo ships them. It also
   includes Kumo's `fedramp` theme (`data-theme="fedramp"`).
@@ -163,9 +163,54 @@ selectors working for colors: `data-mode="dark"` and `data-theme="kumo"` / `data
 page or on part of it. The few `dark:` classes in Kumo's code (in `Switch`) follow your app's dark
 variant, which is the `.dark` class in a shadcn project.
 
-`kumo-theme` and `kumo-cloudflare` set Kumo's type scale (`text-xs` 12px, `text-sm` 13px, `text-base`
-14px, `text-lg` 16px) for the whole app. That is how Kumo looks, but it also changes your other
-components. `kumo-binding` leaves your type scale alone.
+### What the items write
+
+Nothing outside Kumo's own names. Installing `kumo-base` or a theme item leaves the rest of your app
+exactly as it was: your `text-sm` is still your `text-sm`, `transition` still takes your default
+duration, and a class of yours called `skeleton` or `no-scrollbar` stays yours.
+
+| Item | Writes |
+| --- | --- |
+| `kumo-base` | Tailwind theme entries for Kumo's tokens (`--color-kumo-*`, `--text-color-kumo-*`, so `bg-kumo-base` and `text-kumo-subtle` work) and `--animate-kumo-*`, `--ease-kumo-*`; Kumo's palette shades (`--color-kumo-neutral-50`, `--color-kumo-red-650`, ...) and `--kumo-transition-duration` (100ms) on `:root`; keyframes and helper classes, all named `kumo-*` (`.kumo-skeleton`, `.kumo-no-scrollbar`, `.animate-kumo-refresh`, `@keyframes kumo-shimmer`, ...); rules for Kumo's own elements (`.kumo-shiki`, `[data-kumo-component]`, ...); and `color-scheme` (see below) |
+| `kumo-theme`, `kumo-cloudflare` | Kumo's color tokens (`--kumo-*`) for light, dark and fedramp, and Kumo's type scale as `--kumo-font-size-<size>` / `--kumo-line-height-<size>` (`xs` 12px, `sm` 13px, `base` 14px, `lg` 16px); `kumo-cloudflare` adds `--kumo-highlight` and `--kumo-sidebar-bg` |
+| `kumo-binding` | Kumo's color tokens and type scale (`--kumo-*`), set from your shadcn variables; it only reads yours |
+
+The one exception is `color-scheme`: a property, not a name, so it can't be namespaced. `kumo-base` sets
+`color-scheme: light` on `:root` and `dark` on `.dark` (and `data-mode="dark"`), so native scrollbars and
+form controls in Kumo's components follow the mode. In dark mode that is what next-themes, shadcn's dark
+mode for Next.js, already sets on `<html>`. `@custom-variant dark` is not written by any item; Kumo's few
+`dark:` classes use your project's (shadcn's `.dark`). The generator checks all of this on every build:
+anything an item writes outside Kumo's names fails it unless
+[`packages/registry/src/allowed-globals.txt`](packages/registry/src/allowed-globals.txt) lists it with a
+reason, and those two `color-scheme` rules are the only entries.
+
+Kumo's components read Kumo's sizes through those variables: the registry rewrites Kumo's `text-xs`,
+`text-sm`, `text-base` and `text-lg` classes to
+`text-(length:--kumo-font-size-sm)/[var(--tw-leading,var(--kumo-line-height-sm))]` (and so on), which is
+the same CSS as Tailwind's `text-sm` with Kumo's values, and which `cn` still merges as a font size. To
+match Kumo's sizes in your own code, use the same class or the variables (`font-size:
+var(--kumo-font-size-sm)`). There are no `text-kumo-<size>` utilities: `cn` would take them for a text
+color and drop one of `text-kumo-sm text-kumo-subtle`, and `text-kumo-base` is already the color
+`kumo-base`. Transitions in Kumo's components that had no duration get
+`duration-(--kumo-transition-duration)`, Kumo's 100ms.
+
+`kumo-binding` maps Kumo's sizes onto your sizes of the same name (`--kumo-font-size-sm` is your
+`--text-sm`, and so on, with Tailwind's defaults as fallbacks), so Kumo components use your type scale,
+as they did with `kumo-binding` before. Its status colors read your `--success`, `--warning` and `--info`
+if your theme defines them, and otherwise use Kumo's.
+
+**Breaking change** (from the release that added this): `kumo-theme` and `kumo-cloudflare` no longer set
+`--text-xs` to `--text-lg`, and `kumo-base` no longer sets `--default-transition-duration`,
+`--color-blue-400`, `--color-blue-800` or Kumo's extra palette shades under Tailwind's names. If your own
+code relied on Kumo's type scale (13px `text-sm`), Kumo's 100ms default transition, or Kumo's helper
+classes and keyframes by their old names (`no-scrollbar`, `skeleton`, `skeleton-line`, `link-current`,
+`animate-refresh`, `animate-bounce-in`, `@keyframes shimmer`, `--color-red-650`, ...), switch to the
+`kumo-` names above. `kumo-binding` no longer defines `--success`, `--warning` and `--info`; define them
+yourself if your code used them. To upgrade a project, add your theme item again along with the
+components (`shadcn add <theme item> <components> -o`): updated components need the theme's new
+`--kumo-font-size-*` variables. The CLI doesn't remove the old rules, so then delete them from your CSS
+file: Kumo's `--text-*` and `--default-transition-duration` in `@theme`, the old keyframes and helper
+classes, and (after `kumo-binding`) `--success`, `--warning` and `--info` in `@layer base`.
 
 To switch themes, delete the old theme's rules from `@layer base` in your CSS file, then add the new
 item. The CLI adds rules but doesn't remove them.
@@ -247,18 +292,18 @@ the table). The exceptions are on purpose: brand follows your `--primary`, and f
 | line, hairline | `--border`, `--border` toward background | `--border` (+4% fg), `--border` |
 | focus | `--ring` | `--ring` |
 | danger (+ tint, text) | `--destructive` | `--destructive` |
-| success, warning, info (+ tints, text, banners) | new `--success`, `--warning`, `--info` | same |
+| success, warning, info (+ tints, text, banners) | your `--success`, `--warning`, `--info` if defined, else Kumo's | same |
 | text default, strong, subtle | `--foreground` (6% toward bg), `--foreground`, `--muted-foreground` | same, default 2% toward bg |
 | text placeholder, inactive | `--muted-foreground` toward `--background` | same |
 | badge colors, shadows, brand text | Kumo's values | Kumo's values |
 
-`--success`, `--warning` and `--info` are new variables, because shadcn has none. They default to
-Kumo's colors. Kumo puts white text on brand and danger fills, so where the browser supports relative
+shadcn has no standard `--success`, `--warning` or `--info`, so the binding reads them only if your theme
+defines them, and otherwise uses Kumo's colors; it never defines them. Kumo puts white text on brand and
+danger fills, so where the browser supports relative
 colors the binding caps their lightness (shadcn's default dark `--primary` is almost white).
 
 Every value is set in `@layer base`, so anything you set in your own `:root` or `.dark` wins. That
-includes the Kumo variables themselves (`--kumo-base`, `--kumo-text-subtle`, ...) and the three new
-ones.
+includes the Kumo variables themselves (`--kumo-base`, `--kumo-text-subtle`, `--kumo-font-size-sm`, ...).
 
 ## Icons
 
@@ -340,11 +385,19 @@ PostCSS. It never runs Kumo's code, and it uses no AI. For each component it:
   listed in the shadcn registry directory);
 - takes each item's title, description and category from Kumo's `ai/component-registry.json` (in Kumo's
   npm package of the same version);
-- turns Kumo's CSS files into `kumo-base` and the theme items.
+- turns Kumo's CSS files into `kumo-base` and the theme items, with every name in Kumo's namespace (see
+  [What the items write](#what-the-items-write)): helper classes, keyframes, custom properties and
+  data attributes get a `kumo-` prefix, Tailwind's type scale and default duration become
+  `--kumo-font-size-*`, `--kumo-line-height-*` and `--kumo-transition-duration`, and Kumo's code is
+  rewritten to match.
 
 Kumo's logic is not changed, and nothing is suppressed (no `@ts-ignore`, no lint comments, no casts).
-Class names change only for the highlight, sidebar and button bevel hooks above. Each file's header lists
-the edits: import paths, and those hooks. `"use client"` is exactly where Kumo's source has it. `lib/kumo/process-env.d.ts` gives `process.env.NODE_ENV`, which Kumo
+Class names change only for the highlight, sidebar and button bevel hooks above and for namespacing (the
+type scale and duration classes, and the renamed helper classes, keyframes and `data-overflowing`; the
+date picker gives react-day-picker's root and animations `kumo-rdp-*` class names). Each file's header
+lists the edits. Every rewrite is listed in a file in `packages/registry/src/` (`expected-*.txt`); when a
+Kumo release changes what matches, generation fails until the list is reviewed and updated
+(`KUMO_RECORD=1` rewrites the lists). `"use client"` is exactly where Kumo's source has it. `lib/kumo/process-env.d.ts` gives `process.env.NODE_ENV`, which Kumo
 reads for development warnings, a type in apps without `@types/node`.
 
 The generator stops with an error instead of guessing: on an icon with no mapping

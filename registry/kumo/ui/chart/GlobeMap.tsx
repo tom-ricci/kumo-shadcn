@@ -3,6 +3,8 @@ import type { PointerEvent as ReactPointerEvent } from "react";
 // Kumo, packages/kumo/src/components/chart/GlobeMap.tsx from https://github.com/cloudflare/kumo
 // (release cloudflare/kumo@2.19.0), copied by the kumo-shadcn registry (https://github.com/tom-ricci/kumo-shadcn).
 // Changes from Kumo's file: import paths.
+// Also changed: Kumo's type scale classes (text-xs, text-sm, text-base, text-lg) read --kumo-font-size-* and --kumo-line-height-*, not your theme's --text-*.
+// Also changed: transitions without a duration-* class use --kumo-transition-duration (Kumo's 100ms), not your theme's default duration.
 // Also changed: cn comes from your shadcn utils (@/lib/utils).
 // Unofficial; not affiliated with or endorsed by Cloudflare.
 //
@@ -548,7 +550,7 @@ export const GlobeMap = forwardRef<HTMLDivElement, GlobeMapProps>(
                 )}
                 fill={marker.color ?? resolvedMarkerColor}
                 opacity={edgeOpacity}
-                className="stroke-kumo-base transition-opacity outline-none"
+                className="stroke-kumo-base transition-opacity duration-(--kumo-transition-duration) outline-none"
                 strokeWidth={2}
                 data-globe-marker=""
                 data-globe-marker-interactive={isInteractive}
@@ -609,7 +611,7 @@ export const GlobeMap = forwardRef<HTMLDivElement, GlobeMapProps>(
         {tooltip ? (
           <div
             role="tooltip"
-            className="pointer-events-none absolute z-10 flex -translate-x-1/2 -translate-y-full flex-col gap-0.5 rounded-lg border border-kumo-line bg-kumo-base px-2 py-1.5 text-xs text-kumo-default shadow-lg"
+            className="pointer-events-none absolute z-10 flex -translate-x-1/2 -translate-y-full flex-col gap-0.5 rounded-lg border border-kumo-line bg-kumo-base px-2 py-1.5 text-(length:--kumo-font-size-xs)/[var(--tw-leading,var(--kumo-line-height-xs))] text-kumo-default shadow-lg"
             style={{ left: tooltip.x, top: tooltip.y - 8 }}
           >
             <strong>{tooltip.name}</strong>

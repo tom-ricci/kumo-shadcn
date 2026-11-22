@@ -3,6 +3,7 @@ import { Switch as BaseSwitch } from "@base-ui/react/switch";
 // Kumo, packages/kumo/src/components/switch/switch.tsx from https://github.com/cloudflare/kumo
 // (release cloudflare/kumo@2.19.0), copied by the kumo-shadcn registry (https://github.com/tom-ricci/kumo-shadcn).
 // Changes from Kumo's file: import paths.
+// Also changed: Kumo's type scale classes (text-xs, text-sm, text-base, text-lg) read --kumo-font-size-* and --kumo-line-height-*, not your theme's --text-*.
 // Also changed: cn comes from your shadcn utils (@/lib/utils).
 // Unofficial; not affiliated with or endorsed by Cloudflare.
 //
@@ -515,7 +516,7 @@ const SwitchItem = forwardRef<HTMLButtonElement, SwitchItemProps>(
             );
           }}
         />
-        <span className="text-base font-medium text-kumo-default">{label}</span>
+        <span className="text-(length:--kumo-font-size-base)/[var(--tw-leading,var(--kumo-line-height-base))] font-medium text-kumo-default">{label}</span>
       </label>
     );
   },
@@ -527,7 +528,7 @@ SwitchItem.displayName = "Switch.Item";
 function SwitchLegend({ children, className }: SwitchLegendProps) {
   return (
     <Fieldset.Legend
-      className={cn("text-base font-medium text-kumo-default", className)}
+      className={cn("text-(length:--kumo-font-size-base)/[var(--tw-leading,var(--kumo-line-height-base))] font-medium text-kumo-default", className)}
     >
       {children}
     </Fieldset.Legend>
@@ -553,14 +554,14 @@ function SwitchGroup({
         disabled={disabled}
       >
         {legend && (
-          <Fieldset.Legend className="text-base font-medium text-kumo-default">
+          <Fieldset.Legend className="text-(length:--kumo-font-size-base)/[var(--tw-leading,var(--kumo-line-height-base))] font-medium text-kumo-default">
             {legend}
           </Fieldset.Legend>
         )}
         <div className="flex flex-col gap-2">{children}</div>
-        {error && <p className="text-sm text-kumo-danger">{error}</p>}
+        {error && <p className="text-(length:--kumo-font-size-sm)/[var(--tw-leading,var(--kumo-line-height-sm))] text-kumo-danger">{error}</p>}
         {description && (
-          <p className="text-sm leading-snug text-pretty text-kumo-subtle">
+          <p className="text-(length:--kumo-font-size-sm)/[var(--tw-leading,var(--kumo-line-height-sm))] leading-snug text-pretty text-kumo-subtle">
             {description}
           </p>
         )}

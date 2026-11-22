@@ -6,18 +6,6 @@
   "registryDependencies": [
     "https://kumo-shadcn.thomasricci.dev/r/kumo-base.json"
   ],
-  "cssVars": {
-    "theme": {
-      "--text-xs": "12px",
-      "--text-xs--line-height": "calc(1 / 0.75)",
-      "--text-sm": "13px",
-      "--text-sm--line-height": "calc(1 / 0.85)",
-      "--text-base": "14px",
-      "--text-base--line-height": "1.5",
-      "--text-lg": "16px",
-      "--text-lg--line-height": "1.5"
-    }
-  },
   "css": {
     "@layer base": {
       ":root, [data-theme=\"kumo\"]": {
@@ -69,12 +57,20 @@
         "--kumo-banner-warning": "var(\n      --color-yellow-100,\n      oklch(97.3% 0.071 103.193)\n    )",
         "--kumo-badge-red": "var(--color-red-600, oklch(57.7% 0.245 27.325))",
         "--kumo-badge-green": "var(\n      --color-emerald-600,\n      oklch(59.6% 0.145 163.225)\n    )",
-        "--kumo-badge-orange": "var(--color-orange-650, oklch(81.5% 0.197 76))",
+        "--kumo-badge-orange": "var(--color-kumo-orange-650, oklch(81.5% 0.197 76))",
         "--kumo-badge-purple": "var(\n      --color-purple-600,\n      oklch(55.8% 0.288 302.321)\n    )",
-        "--kumo-badge-teal": "var(--color-teal-650, oklch(54.9% 0.096 184.565))",
+        "--kumo-badge-teal": "var(--color-kumo-teal-650, oklch(54.9% 0.096 184.565))",
         "--kumo-badge-blue": "var(--color-blue-600, oklch(54.6% 0.245 262.881))",
         "--kumo-badge-neutral": "var(--color-neutral-500, oklch(55.6% 0 0))",
-        "--kumo-badge-inverted": "var(--color-neutral-950, oklch(14.5% 0 0))"
+        "--kumo-badge-inverted": "var(--color-neutral-950, oklch(14.5% 0 0))",
+        "--kumo-font-size-xs": "12px",
+        "--kumo-line-height-xs": "calc(1 / 0.75)",
+        "--kumo-font-size-sm": "13px",
+        "--kumo-line-height-sm": "calc(1 / 0.85)",
+        "--kumo-font-size-base": "14px",
+        "--kumo-line-height-base": "1.5",
+        "--kumo-font-size-lg": "16px",
+        "--kumo-line-height-lg": "1.5"
       },
       ":root[data-mode=\"dark\"], [data-mode=\"dark\"]:not([data-theme]), [data-mode=\"dark\"] [data-theme=\"kumo\"], [data-theme=\"kumo\"][data-mode=\"dark\"], [data-theme=\"kumo\"] [data-mode=\"dark\"], :root.dark, .dark:not([data-theme]), .dark [data-theme=\"kumo\"], [data-theme=\"kumo\"].dark, [data-theme=\"kumo\"] .dark": {
         "--kumo-text-default": "var(--color-neutral-100, oklch(97% 0 0))",
@@ -125,7 +121,7 @@
         "--kumo-banner-warning": "oklch(55.4% 0.135 66.442 / 0.5)",
         "--kumo-badge-red": "var(--color-red-700, oklch(50.5% 0.213 27.518))",
         "--kumo-badge-green": "var(\n      --color-emerald-700,\n      oklch(50.8% 0.118 165.612)\n    )",
-        "--kumo-badge-orange": "var(--color-orange-650, oklch(81.5% 0.197 76))",
+        "--kumo-badge-orange": "var(--color-kumo-orange-650, oklch(81.5% 0.197 76))",
         "--kumo-badge-purple": "var(\n      --color-purple-700,\n      oklch(49.6% 0.265 301.924)\n    )",
         "--kumo-badge-teal": "var(--color-teal-700, oklch(51.1% 0.096 186.391))",
         "--kumo-badge-blue": "var(--color-blue-700, oklch(48.8% 0.243 264.376))",

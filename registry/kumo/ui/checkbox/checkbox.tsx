@@ -3,6 +3,7 @@ import { forwardRef, createContext, useContext, type ReactNode } from "react";
 // Kumo, packages/kumo/src/components/checkbox/checkbox.tsx from https://github.com/cloudflare/kumo
 // (release cloudflare/kumo@2.19.0), copied by the kumo-shadcn registry (https://github.com/tom-ricci/kumo-shadcn).
 // Changes from Kumo's file: import paths.
+// Also changed: Kumo's type scale classes (text-xs, text-sm, text-base, text-lg) read --kumo-font-size-* and --kumo-line-height-*, not your theme's --text-*.
 // Also changed: cn comes from your shadcn utils (@/lib/utils).
 // Unofficial; not affiliated with or endorsed by Cloudflare.
 //
@@ -394,7 +395,7 @@ const CheckboxBase = forwardRef<HTMLButtonElement, CheckboxProps>(
       <FieldBase.Root className="inline-flex">
         <FieldBase.Label
           className={cn(
-            "!m-0 inline-flex !min-h-0 items-start gap-2 !text-base",
+            "!m-0 inline-flex !min-h-0 items-start gap-2 !text-(length:--kumo-font-size-base)/[var(--tw-leading,var(--kumo-line-height-base))]",
             controlFirst ? "flex-row" : "flex-row-reverse justify-end",
             disabled ? "cursor-not-allowed" : "cursor-pointer",
           )}
@@ -502,11 +503,11 @@ const CheckboxItem = forwardRef<HTMLButtonElement, CheckboxItemProps>(
           )}
         >
           <div className="flex min-w-0 flex-1 flex-col gap-0.5">
-            <span className="text-base font-medium text-kumo-default">
+            <span className="text-(length:--kumo-font-size-base)/[var(--tw-leading,var(--kumo-line-height-base))] font-medium text-kumo-default">
               {label}
             </span>
             {description && (
-              <span className="text-sm leading-snug text-pretty text-kumo-subtle">
+              <span className="text-(length:--kumo-font-size-sm)/[var(--tw-leading,var(--kumo-line-height-sm))] leading-snug text-pretty text-kumo-subtle">
                 {description}
               </span>
             )}
@@ -569,7 +570,7 @@ const CheckboxItem = forwardRef<HTMLButtonElement, CheckboxItemProps>(
         >
           {indicator}
         </BaseCheckbox.Root>
-        <span className="text-base text-kumo-default">{label}</span>
+        <span className="text-(length:--kumo-font-size-base)/[var(--tw-leading,var(--kumo-line-height-base))] text-kumo-default">{label}</span>
       </label>
     );
   },
@@ -581,7 +582,7 @@ CheckboxItem.displayName = "Checkbox.Item";
 function CheckboxLegend({ children, className }: CheckboxLegendProps) {
   return (
     <Fieldset.Legend
-      className={cn("text-base font-medium text-kumo-default", className)}
+      className={cn("text-(length:--kumo-font-size-base)/[var(--tw-leading,var(--kumo-line-height-base))] font-medium text-kumo-default", className)}
     >
       {children}
     </Fieldset.Legend>
@@ -626,7 +627,7 @@ function CheckboxGroup({
           )}
         >
           {legend && (
-            <Fieldset.Legend className="text-base font-medium text-kumo-default">
+            <Fieldset.Legend className="text-(length:--kumo-font-size-base)/[var(--tw-leading,var(--kumo-line-height-base))] font-medium text-kumo-default">
               {legend}
             </Fieldset.Legend>
           )}
@@ -643,9 +644,9 @@ function CheckboxGroup({
           >
             {children}
           </div>
-          {error && <p className="text-sm text-kumo-danger">{error}</p>}
+          {error && <p className="text-(length:--kumo-font-size-sm)/[var(--tw-leading,var(--kumo-line-height-sm))] text-kumo-danger">{error}</p>}
           {description && (
-            <p className="text-sm leading-snug text-pretty text-kumo-subtle">
+            <p className="text-(length:--kumo-font-size-sm)/[var(--tw-leading,var(--kumo-line-height-sm))] leading-snug text-pretty text-kumo-subtle">
               {description}
             </p>
           )}

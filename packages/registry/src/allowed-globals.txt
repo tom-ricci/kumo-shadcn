@@ -1,0 +1,12 @@
+# Writes into the user's CSS outside Kumo's names that the registry keeps on
+# purpose, one per line as checkGlobals() in packages/registry/src/generate.ts
+# prints them ("item | selector | property"), then "#" and the reason.
+# Everything else a style item writes must be in Kumo's namespace (a name
+# containing "kumo", or a rule that only matches inside Kumo's elements).
+#
+# color-scheme is a property, not a name, so it can't be namespaced. Kumo
+# sets it so native parts (scrollbars, form controls, autofill) follow the
+# mode; on .dark that is what next-themes (shadcn's documented dark mode for
+# Next.js) already sets on <html>, and light is what a page without it gets.
+kumo-base | :root | color-scheme  # Kumo's light mode for native controls; a page's default
+kumo-base | [data-mode="dark"], .dark | color-scheme  # dark native controls in dark mode, as next-themes sets

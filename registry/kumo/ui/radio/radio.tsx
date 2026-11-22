@@ -12,6 +12,7 @@ import {
 // Kumo, packages/kumo/src/components/radio/radio.tsx from https://github.com/cloudflare/kumo
 // (release cloudflare/kumo@2.19.0), copied by the kumo-shadcn registry (https://github.com/tom-ricci/kumo-shadcn).
 // Changes from Kumo's file: import paths.
+// Also changed: Kumo's type scale classes (text-xs, text-sm, text-base, text-lg) read --kumo-font-size-* and --kumo-line-height-*, not your theme's --text-*.
 // Also changed: cn comes from your shadcn utils (@/lib/utils).
 // Unofficial; not affiliated with or endorsed by Cloudflare.
 //
@@ -78,7 +79,7 @@ export const KUMO_RADIO_VARIANTS = {
     },
     segmented: {
       classes:
-        "group relative z-0 my-0 mr-0 -ml-px first:ml-0 inline-flex h-8.5 shrink-0 cursor-pointer items-center border-r last:border-r-0 border-kumo-line/60 bg-transparent px-3 first:pl-2.75 last:pr-2.75 first:rounded-l-lg last:rounded-r-lg text-sm font-medium whitespace-nowrap text-kumo-default select-none has-data-checked:text-kumo-inverse has-data-disabled:cursor-not-allowed has-data-disabled:opacity-50 has-focus-visible:outline-2 has-focus-visible:outline-offset-2 has-focus-visible:outline-kumo-brand before:absolute before:-z-10 before:left-0 first:before:-left-px before:-right-px before:-inset-y-px first:before:rounded-l-[9px] last:before:rounded-r-[9px] hover:not-has-data-disabled:not-has-data-checked:before:bg-kumo-contrast/7 has-data-checked:before:bg-kumo-contrast",
+        "group relative z-0 my-0 mr-0 -ml-px first:ml-0 inline-flex h-8.5 shrink-0 cursor-pointer items-center border-r last:border-r-0 border-kumo-line/60 bg-transparent px-3 first:pl-2.75 last:pr-2.75 first:rounded-l-lg last:rounded-r-lg text-(length:--kumo-font-size-sm)/[var(--tw-leading,var(--kumo-line-height-sm))] font-medium whitespace-nowrap text-kumo-default select-none has-data-checked:text-kumo-inverse has-data-disabled:cursor-not-allowed has-data-disabled:opacity-50 has-focus-visible:outline-2 has-focus-visible:outline-offset-2 has-focus-visible:outline-kumo-brand before:absolute before:-z-10 before:left-0 first:before:-left-px before:-right-px before:-inset-y-px first:before:rounded-l-[9px] last:before:rounded-r-[9px] hover:not-has-data-disabled:not-has-data-checked:before:bg-kumo-contrast/7 has-data-checked:before:bg-kumo-contrast",
       description:
         "Compact grouped-button appearance for short, mutually exclusive options",
     },
@@ -381,7 +382,7 @@ function _RadioItem<T = string>(
         data-kumo-part="item-label"
         className={cn(
           "group relative z-0 my-0 mr-0 -ml-px inline-flex h-8.5 shrink-0 cursor-pointer items-center border-r border-kumo-line/60 bg-transparent first:ml-0 last:border-r-0",
-          "px-3 text-sm font-medium whitespace-nowrap text-kumo-default select-none first:rounded-l-lg first:pl-2.75 last:rounded-r-lg last:pr-2.75 has-data-checked:text-kumo-inverse has-data-disabled:cursor-not-allowed has-data-disabled:opacity-50",
+          "px-3 text-(length:--kumo-font-size-sm)/[var(--tw-leading,var(--kumo-line-height-sm))] font-medium whitespace-nowrap text-kumo-default select-none first:rounded-l-lg first:pl-2.75 last:rounded-r-lg last:pr-2.75 has-data-checked:text-kumo-inverse has-data-disabled:cursor-not-allowed has-data-disabled:opacity-50",
           "has-focus-visible:outline-2 has-focus-visible:outline-offset-2 has-focus-visible:outline-kumo-brand",
           "before:absolute before:-inset-y-px before:-right-px before:left-0 before:-z-10 first:before:-left-px first:before:rounded-l-[9px] last:before:rounded-r-[9px] hover:not-has-data-disabled:not-has-data-checked:before:bg-kumo-contrast/7 has-data-checked:before:bg-kumo-contrast",
           variant === "error" &&
@@ -441,11 +442,11 @@ function _RadioItem<T = string>(
         )}
       >
         <div className="flex min-w-0 flex-1 flex-col gap-0.5">
-          <span className="text-base font-medium text-kumo-default">
+          <span className="text-(length:--kumo-font-size-base)/[var(--tw-leading,var(--kumo-line-height-base))] font-medium text-kumo-default">
             {label}
           </span>
           {description && (
-            <span className="text-sm leading-snug text-pretty text-kumo-subtle">
+            <span className="text-(length:--kumo-font-size-sm)/[var(--tw-leading,var(--kumo-line-height-sm))] leading-snug text-pretty text-kumo-subtle">
               {description}
             </span>
           )}
@@ -517,7 +518,7 @@ function _RadioItem<T = string>(
           <span className="h-2 w-2 rounded-full bg-kumo-base" />
         </BaseRadio.Indicator>
       </BaseRadio.Root>
-      <span className="text-base text-kumo-default">{label}</span>
+      <span className="text-(length:--kumo-font-size-base)/[var(--tw-leading,var(--kumo-line-height-base))] text-kumo-default">{label}</span>
     </label>
   );
 }
@@ -535,7 +536,7 @@ const RadioItem = forwardRef(_RadioItem) as <T = string>(
 function RadioLegend({ children, className }: RadioLegendProps) {
   return (
     <Fieldset.Legend
-      className={cn("text-base font-medium text-kumo-default", className)}
+      className={cn("text-(length:--kumo-font-size-base)/[var(--tw-leading,var(--kumo-line-height-base))] font-medium text-kumo-default", className)}
     >
       {children}
     </Fieldset.Legend>
@@ -602,7 +603,7 @@ function RadioGroup<Value = string>({
         )}
       >
         {legend && (
-          <Fieldset.Legend className="text-base font-medium text-kumo-default">
+          <Fieldset.Legend className="text-(length:--kumo-font-size-base)/[var(--tw-leading,var(--kumo-line-height-base))] font-medium text-kumo-default">
             {legend}
           </Fieldset.Legend>
         )}
@@ -624,9 +625,9 @@ function RadioGroup<Value = string>({
         >
           {itemChildren}
         </div>
-        {error && <p className="text-sm text-kumo-danger">{error}</p>}
+        {error && <p className="text-(length:--kumo-font-size-sm)/[var(--tw-leading,var(--kumo-line-height-sm))] text-kumo-danger">{error}</p>}
         {description && (
-          <p className="text-sm leading-snug text-pretty text-kumo-subtle">
+          <p className="text-(length:--kumo-font-size-sm)/[var(--tw-leading,var(--kumo-line-height-sm))] leading-snug text-pretty text-kumo-subtle">
             {description}
           </p>
         )}

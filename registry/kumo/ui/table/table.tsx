@@ -3,6 +3,7 @@ import { forwardRef } from "react";
 // Kumo, packages/kumo/src/components/table/table.tsx from https://github.com/cloudflare/kumo
 // (release cloudflare/kumo@2.19.0), copied by the kumo-shadcn registry (https://github.com/tom-ricci/kumo-shadcn).
 // Changes from Kumo's file: import paths.
+// Also changed: Kumo's type scale classes (text-xs, text-sm, text-base, text-lg) read --kumo-font-size-* and --kumo-line-height-*, not your theme's --text-*.
 // Also changed: cn comes from your shadcn utils (@/lib/utils).
 // Unofficial; not affiliated with or endorsed by Cloudflare.
 //
@@ -171,9 +172,9 @@ const TableRoot = forwardRef<
       KUMO_TABLE_DEFAULT_VARIANTS.layout,
     ).classes,
     "[&_td]:p-3", // Cell padding
-    "[&_th]:border-b [&_th]:border-kumo-fill [&_th]:p-3 [&_th]:text-base [&_th]:font-semibold", // Header styles
+    "[&_th]:border-b [&_th]:border-kumo-fill [&_th]:p-3 [&_th]:text-(length:--kumo-font-size-base)/[var(--tw-leading,var(--kumo-line-height-base))] [&_th]:font-semibold", // Header styles
     "[&_th]:bg-kumo-base", // Header background color
-    "text-left text-base text-kumo-default",
+    "text-left text-(length:--kumo-font-size-base)/[var(--tw-leading,var(--kumo-line-height-base))] text-kumo-default",
     props.className,
   );
 
@@ -195,7 +196,7 @@ const TableHeader = forwardRef<
   const isCompact = variant === "compact";
   const className = cn(
     "group/header",
-    isCompact && "text-xs text-kumo-strong [&_th]:bg-kumo-elevated [&_th]:py-2",
+    isCompact && "text-(length:--kumo-font-size-xs)/[var(--tw-leading,var(--kumo-line-height-xs))] text-kumo-strong [&_th]:bg-kumo-elevated [&_th]:py-2",
     sticky && "[&_th]:sticky [&_th]:top-0 [&_th]:z-1",
     props.className,
   );

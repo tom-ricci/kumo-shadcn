@@ -7,6 +7,7 @@ import {
 // Kumo, packages/kumo/src/components/date-range-picker/date-range-picker.tsx from https://github.com/cloudflare/kumo
 // (release cloudflare/kumo@2.19.0), copied by the kumo-shadcn registry (https://github.com/tom-ricci/kumo-shadcn).
 // Changes from Kumo's file: import paths.
+// Also changed: Kumo's type scale classes (text-xs, text-sm, text-base, text-lg) read --kumo-font-size-* and --kumo-line-height-*, not your theme's --text-*.
 // Also changed: cn comes from your shadcn utils (@/lib/utils).
 // Unofficial; not affiliated with or endorsed by Cloudflare.
 //
@@ -43,7 +44,7 @@ export const KUMO_DATE_RANGE_PICKER_VARIANTS = {
       cellHeight: "h-[22px]",
       cellWidth: "w-6",
       calendarWidth: "w-[168px]",
-      textSize: "text-xs",
+      textSize: "text-(length:--kumo-font-size-xs)/[var(--tw-leading,var(--kumo-line-height-xs))]",
       iconSize: 14,
       description: "Compact calendar for tight spaces",
     },
@@ -52,7 +53,7 @@ export const KUMO_DATE_RANGE_PICKER_VARIANTS = {
       cellHeight: "h-[26px]",
       cellWidth: "w-7",
       calendarWidth: "w-[196px]",
-      textSize: "text-sm",
+      textSize: "text-(length:--kumo-font-size-sm)/[var(--tw-leading,var(--kumo-line-height-sm))]",
       iconSize: 16,
       description: "Default calendar size",
     },
@@ -61,7 +62,7 @@ export const KUMO_DATE_RANGE_PICKER_VARIANTS = {
       cellHeight: "h-[32px]",
       cellWidth: "w-9",
       calendarWidth: "w-[252px]",
-      textSize: "text-base",
+      textSize: "text-(length:--kumo-font-size-base)/[var(--tw-leading,var(--kumo-line-height-base))]",
       iconSize: 18,
       description: "Large calendar for prominent date selection",
     },

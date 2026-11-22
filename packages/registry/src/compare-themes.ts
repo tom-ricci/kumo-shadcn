@@ -43,7 +43,8 @@ const kumoLight: Vars = kumoLayer[':root, [data-theme="kumo"]'];
 const kumoDark: Vars = Object.entries(kumoLayer).find(([k]) => k.startsWith(':root[data-mode="dark"]'))![1] as Vars;
 const bindLayer = item("kumo-binding").css["@layer base"];
 const supports = Object.entries(bindLayer).find(([k]) => k.startsWith("@supports"))![1] as Record<string, Vars>;
-const tokens = Object.keys(kumoLight).filter((k) => k.startsWith("--kumo-"));
+// Color tokens (the theme items also set Kumo's type scale, --kumo-font-size-* and --kumo-line-height-*).
+const tokens = Object.keys(kumoLight).filter((k) => k.startsWith("--kumo-") && !/^--kumo-(font-size|line-height)-/.test(k));
 
 const decls = (v: Vars) => Object.entries(v).map(([k, val]) => `${k}: ${val};`).join(" ");
 const css = `

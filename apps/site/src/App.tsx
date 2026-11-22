@@ -159,7 +159,9 @@ export function App() {
           ))}
         </ul>
         <Text variant="secondary">
-          Dark mode follows shadcn's <code>.dark</code> class. To switch themes later, remove the old theme's rules from{" "}
+          The items only write Kumo's own names (<code>--kumo-*</code> variables, <code>kumo-</code> classes and
+          keyframes), so your own <code>text-sm</code>, transitions and classes look as they did. Dark mode follows
+          shadcn's <code>.dark</code> class. To switch themes later, remove the old theme's rules from{" "}
           <code>@layer base</code> in your CSS file, then add the new item.
         </Text>
       </Section>
@@ -215,7 +217,7 @@ export function App() {
         </Text>
       </Section>
 
-      <footer className="flex flex-wrap gap-x-4 gap-y-1 pb-6 text-sm">
+      <footer className="flex flex-wrap gap-x-4 gap-y-1 pb-6 text-(length:--kumo-font-size-sm)/[var(--tw-leading,var(--kumo-line-height-sm))]">
         <Link href={KUMO_DOCS}>Kumo docs</Link>
         <Link href={REPO}>GitHub</Link>
         <Link href={`${SITE}/r/registry.json`}>Registry index</Link>
