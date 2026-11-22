@@ -41,19 +41,19 @@ You need a project set up with `npx shadcn@latest init`, Tailwind CSS v4, React 
 1. Add one theme item (see [Themes](#themes)):
 
    ```bash
-   npx shadcn@latest add https://kumo-shadcn.<subdomain>.workers.dev/r/kumo-theme.json
+   npx shadcn@latest add https://kumo-shadcn.thomasricci.dev/r/kumo-theme.json
    ```
 
 2. Add components. Each one brings the components, helpers and icons it needs:
 
    ```bash
-   npx shadcn@latest add https://kumo-shadcn.<subdomain>.workers.dev/r/button.json
+   npx shadcn@latest add https://kumo-shadcn.thomasricci.dev/r/button.json
    ```
 
    Replace `button` with any item name. You can list several URLs in one command.
 
-The registry is served by a Cloudflare Worker (see [Hosting](#hosting)); `<subdomain>` is a placeholder
-until the Worker's address is set. The same items work from GitHub, with no Worker:
+The registry is served by a Cloudflare Worker at https://kumo-shadcn.thomasricci.dev (see
+[Hosting](#hosting)). The same items install from GitHub too:
 
 ```bash
 npx shadcn@latest add https://raw.githubusercontent.com/tom-ricci/kumo-shadcn/main/public/r/button.json
@@ -66,16 +66,17 @@ add items by name:
 ```json
 {
   "registries": {
-    "@kumo": "https://kumo-shadcn.<subdomain>.workers.dev/r/{name}.json"
+    "@kumo-shadcn": "https://kumo-shadcn.thomasricci.dev/r/{name}.json"
   }
 }
 ```
 
 ```bash
-npx shadcn@latest add @kumo/kumo-theme @kumo/button
+npx shadcn@latest add @kumo-shadcn/kumo-theme @kumo-shadcn/button
 ```
 
-The registry index is at `/r/registry.json`. Each item has Kumo's own title, description and category
+Items refer to the items they need by their full Worker URL, so dependencies come from the Worker
+whichever way you installed. The registry index is at `/r/registry.json`. Each item has Kumo's own title, description and category
 (from Kumo's component metadata).
 
 3. Import it:
@@ -299,9 +300,9 @@ PostCSS. It never runs Kumo's code, and it uses no AI. For each component it:
   Kumo's `utils/cn.ts` only re-exported `cn` next to `safeRandomId`, so it becomes
   `lib/kumo/random-id.ts` without the re-export;
 - lists the npm packages the files import, with the version ranges Kumo declares;
-- lists the other items it needs as `registryDependencies` (full item URLs, which work without any
-  configuration; `--deps namespace` writes `@kumo/<item>` instead, for once the namespace is listed in
-  the shadcn registry directory);
+- lists the other items it needs as `registryDependencies` (full Worker URLs, which work without any
+  configuration; `--deps namespace` writes `@kumo-shadcn/<item>` instead, for once the namespace is
+  listed in the shadcn registry directory);
 - takes each item's title, description and category from Kumo's `ai/component-registry.json` (in Kumo's
   npm package of the same version);
 - turns Kumo's CSS files into `kumo-base` and the theme items.
@@ -368,13 +369,12 @@ repository secrets (Settings → Secrets and variables → Actions):
 - `CLOUDFLARE_ACCOUNT_ID`: your account ID (shown on the Workers & Pages overview).
 
 Until they exist, the deploy step is skipped with a notice and the rest of the workflow runs as usual.
-The first deploy creates the Worker `kumo-shadcn` at `https://kumo-shadcn.<subdomain>.workers.dev`, where
-`<subdomain>` is your account's workers.dev subdomain. A custom domain is optional (Worker → Settings →
-Domains & Routes). Once the address is settled, replace the placeholder in the install commands above.
+The Worker `kumo-shadcn` answers on the custom domain https://kumo-shadcn.thomasricci.dev (the `routes`
+entry in `wrangler.jsonc`).
 
-Items refer to each other (`registryDependencies`) through the raw GitHub URLs, so they work from any of
-the three addresses. To point them at the Worker instead, change `DEFAULT_BASE_URL` in
-`packages/registry/src/generate.ts` and `PROD` in `packages/registry/src/serve-registry.ts`.
+Items refer to each other (`registryDependencies`) by their Worker URLs. The address, the namespace
+(`@kumo-shadcn`) and the repository URL are set in one place,
+[`packages/registry/src/config.ts`](packages/registry/src/config.ts).
 
 ## License
 

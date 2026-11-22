@@ -1,7 +1,7 @@
 {
-  "name": "@kumo",
-  "homepage": "https://github.com/tom-ricci/kumo-shadcn",
-  "url": "https://kumo-shadcn.SUBDOMAIN.workers.dev/r/{name}.json",
+  "name": "@kumo-shadcn",
+  "homepage": "https://kumo-shadcn.thomasricci.dev",
+  "url": "https://kumo-shadcn.thomasricci.dev/r/{name}.json",
   "description": "Unofficial registry for Kumo, Cloudflare's React component library: Kumo's component source with your aliases and icon library, and a theme that follows your shadcn variables. Not affiliated with Cloudflare.",
   "logo": "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32' fill='currentColor'><rect x='4' y='6' width='24' height='5' rx='2.5'/><rect x='4' y='13.5' width='18' height='5' rx='2.5'/><rect x='4' y='21' width='12' height='5' rx='2.5'/></svg>"
 }

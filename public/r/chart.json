@@ -12,9 +12,9 @@
     "@types/d3-geo@^3.1.0"
   ],
   "registryDependencies": [
-    "https://raw.githubusercontent.com/tom-ricci/kumo-shadcn/main/public/r/kumo-base.json",
-    "https://raw.githubusercontent.com/tom-ricci/kumo-shadcn/main/public/r/loader.json",
-    "https://raw.githubusercontent.com/tom-ricci/kumo-shadcn/main/public/r/text.json",
+    "https://kumo-shadcn.thomasricci.dev/r/kumo-base.json",
+    "https://kumo-shadcn.thomasricci.dev/r/loader.json",
+    "https://kumo-shadcn.thomasricci.dev/r/text.json",
     "utils"
   ],
   "files": [

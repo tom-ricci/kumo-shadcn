@@ -4,9 +4,9 @@
   "title": "Surface",
   "description": "Surface component. Kumo component, from @cloudflare/kumo@2.19.0.",
   "registryDependencies": [
-    "https://raw.githubusercontent.com/tom-ricci/kumo-shadcn/main/public/r/kumo-base.json",
-    "https://raw.githubusercontent.com/tom-ricci/kumo-shadcn/main/public/r/kumo-utils.json",
-    "https://raw.githubusercontent.com/tom-ricci/kumo-shadcn/main/public/r/layer-card.json",
+    "https://kumo-shadcn.thomasricci.dev/r/kumo-base.json",
+    "https://kumo-shadcn.thomasricci.dev/r/kumo-utils.json",
+    "https://kumo-shadcn.thomasricci.dev/r/layer-card.json",
     "utils"
   ],
   "files": [

@@ -7,14 +7,14 @@
     "@base-ui/react@^1.9.0"
   ],
   "registryDependencies": [
-    "https://raw.githubusercontent.com/tom-ricci/kumo-shadcn/main/public/r/button.json",
-    "https://raw.githubusercontent.com/tom-ricci/kumo-shadcn/main/public/r/button-group.json",
-    "https://raw.githubusercontent.com/tom-ricci/kumo-shadcn/main/public/r/dropdown.json",
-    "https://raw.githubusercontent.com/tom-ricci/kumo-shadcn/main/public/r/kumo-base.json",
-    "https://raw.githubusercontent.com/tom-ricci/kumo-shadcn/main/public/r/kumo-icons.json",
-    "https://raw.githubusercontent.com/tom-ricci/kumo-shadcn/main/public/r/kumo-utils.json",
-    "https://raw.githubusercontent.com/tom-ricci/kumo-shadcn/main/public/r/layer-card.json",
-    "https://raw.githubusercontent.com/tom-ricci/kumo-shadcn/main/public/r/text.json",
+    "https://kumo-shadcn.thomasricci.dev/r/button.json",
+    "https://kumo-shadcn.thomasricci.dev/r/button-group.json",
+    "https://kumo-shadcn.thomasricci.dev/r/dropdown.json",
+    "https://kumo-shadcn.thomasricci.dev/r/kumo-base.json",
+    "https://kumo-shadcn.thomasricci.dev/r/kumo-icons.json",
+    "https://kumo-shadcn.thomasricci.dev/r/kumo-utils.json",
+    "https://kumo-shadcn.thomasricci.dev/r/layer-card.json",
+    "https://kumo-shadcn.thomasricci.dev/r/text.json",
     "utils"
   ],
   "files": [

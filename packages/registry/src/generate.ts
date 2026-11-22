@@ -19,9 +19,8 @@ import nested from "postcss-nested";
 import ts from "typescript";
 import { ICON_LIBRARIES, SHIM_EXTRAS, iconNames } from "./icons.ts";
 import { RELATIVE_COLOR_SUPPORTS, binding, kumoCloudflare, kumoTheme, type KumoTheme } from "./themes.ts";
+import { BASE_URL, HOMEPAGE, NAMESPACE, SITE } from "./config.ts";
 
-const HOMEPAGE = "https://github.com/tom-ricci/kumo-shadcn";
-const DEFAULT_BASE_URL = "https://raw.githubusercontent.com/tom-ricci/kumo-shadcn/main/public/r";
 // IconPlaceholder is shadcn's marker element. The CLI removes this import when
 // it installs the file; the path only has to contain "icon-placeholder" and
 // must not start with @/registry/ (the CLI's alias rewrite would mangle that).
@@ -36,7 +35,7 @@ const pkgDir = resolve(dirname(fileURLToPath(import.meta.url)), ".."); // packag
 const kumoRepo = resolve(args.kumo);
 const kumoPkgDir = join(kumoRepo, "packages", "kumo");
 const src = join(kumoPkgDir, "src");
-const baseUrl = (args["base-url"] ?? DEFAULT_BASE_URL).replace(/\/$/, "");
+const baseUrl = (args["base-url"] ?? BASE_URL).replace(/\/$/, "");
 const kumoPkg = JSON.parse(readFileSync(join(kumoPkgDir, "package.json"), "utf8"));
 const release = `${kumoPkg.name}@${kumoPkg.version}`;
 const outDir = join(root, "registry", "kumo");
@@ -50,10 +49,9 @@ const pascal = (s: string) => s.replace(/(^|-)([a-z0-9])/g, (_, __, c: string) =
 const sorted = <T>(items: Iterable<T>) => [...items].sort();
 const cmp = (a: string, b: string) => (a < b ? -1 : a > b ? 1 : 0);
 const itemUrl = (name: string) => `${baseUrl}/${name}.json`;
-// The registry's namespace (components.json "registries": {"@kumo": "<base>/{name}.json"}).
-export const NAMESPACE = "@kumo";
+// The registry's namespace (config.ts): components.json "registries": {"@kumo-shadcn": "<base>/{name}.json"}.
 // How items refer to each other in registryDependencies: "url" (full item
-// URLs; works with no configuration) or "namespace" (@kumo/<item>; needs the
+// URLs; works with no configuration) or "namespace" (@kumo-shadcn/<item>; needs the
 // namespace configured, or listed in the shadcn registry directory).
 const depsForm = args.deps ?? "url";
 if (!["url", "namespace"].includes(depsForm)) fail(`--deps must be url or namespace`);
@@ -969,7 +967,7 @@ for (const item of items) for (const key of ["dependencies", "devDependencies", 
 
 writeFileSync(
   join(root, "registry.json"),
-  `${JSON.stringify({ $schema: "https://ui.shadcn.com/schema/registry.json", name: "kumo", homepage: HOMEPAGE, items }, null, 2)}\n`,
+  `${JSON.stringify({ $schema: "https://ui.shadcn.com/schema/registry.json", name: NAMESPACE.slice(1), homepage: SITE, items }, null, 2)}\n`,
 );
 writeFileSync(join(root, "registry", "kumo", "VERSION"), `${release}\n`);
 // Kumo's license, next to the files copied from it (each also has it inline).
