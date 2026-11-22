@@ -10,10 +10,15 @@
   "scripts": {
     "registry": "turbo run typecheck check-icons check-directory --filter=@kumo-shadcn/registry",
     "site": "turbo run kumo-shadcn-site#build",
+    "dev": "turbo run kumo-shadcn-site#dev",
     "check": "turbo run typecheck check-icons check-directory check-worker",
     "verify": "turbo run verify --only --env-mode=loose --filter=@kumo-shadcn/verify --"
   },
   "devDependencies": {
     "turbo": "2.11.10"
+  },
+  "allowScripts": {
+    "esbuild@0.28.2": true,
+    "workerd@1.20261104.1": true
   }
 }

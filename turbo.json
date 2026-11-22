@@ -1,137 +1,114 @@
 {
-  "$schema": "https://turborepo.com/schema.json",
-  "ui": "stream",
-  "tasks": {
-    "@kumo-shadcn/registry#fetch-kumo": {
-      "cache": false,
-      "passThroughEnv": [
-        "GH_TOKEN",
-        "KUMO_TAG"
-      ]
-    },
-    "@kumo-shadcn/registry#generate": {
-      "dependsOn": [
-        "@kumo-shadcn/registry#fetch-kumo"
-      ],
-      "inputs": [
-        "src/**",
-        "package.json",
-        "tsconfig.registry.json",
-        "$TURBO_ROOT$/registry/icon-placeholder.tsx",
-        "$TURBO_ROOT$/registry/shadcn-utils.ts",
-        "$TURBO_ROOT$/.kumo/LICENSE",
-        "$TURBO_ROOT$/.kumo/packages/kumo/package.json",
-        "$TURBO_ROOT$/.kumo/packages/kumo/src/**",
-        "$TURBO_ROOT$/.kumo/.npm-ai/component-registry.json"
-      ],
-      "outputs": [
-        "$TURBO_ROOT$/registry.json",
-        "$TURBO_ROOT$/registry/kumo/**"
-      ]
-    },
-    "@kumo-shadcn/registry#build": {
-      "dependsOn": [
-        "@kumo-shadcn/registry#generate"
-      ],
-      "inputs": [
-        "package.json",
-        "$TURBO_ROOT$/registry.json",
-        "$TURBO_ROOT$/registry/kumo/**"
-      ],
-      "outputs": [
-        "$TURBO_ROOT$/public/r/**"
-      ]
-    },
-    "@kumo-shadcn/registry#typecheck": {
-      "dependsOn": [
-        "@kumo-shadcn/registry#generate"
-      ],
-      "inputs": [
-        "src/**",
-        "tsconfig.json",
-        "tsconfig.registry.json",
-        "$TURBO_ROOT$/registry/**"
-      ],
-      "outputs": []
-    },
-    "@kumo-shadcn/registry#check-icons": {
-      "dependsOn": [
-        "@kumo-shadcn/registry#generate"
-      ],
-      "inputs": [
-        "src/**",
-        "$TURBO_ROOT$/registry/kumo/lib/kumo/icons.tsx"
-      ],
-      "outputs": []
-    },
-    "@kumo-shadcn/registry#check-directory": {
-      "dependsOn": [
-        "@kumo-shadcn/registry#build"
-      ],
-      "inputs": [
-        "src/**",
-        "$TURBO_ROOT$/public/r/**",
-        "$TURBO_ROOT$/directory/**",
-        "$TURBO_ROOT$/LICENSE"
-      ],
-      "outputs": []
-    },
-    "kumo-shadcn-site#build": {
-      "dependsOn": [
-        "@kumo-shadcn/registry#build"
-      ],
-      "passThroughEnv": [
-        "SITE_BUILD_DIR",
-        "RUNNER_TEMP",
-        "TMPDIR"
-      ],
-      "inputs": [
-        "src/**",
-        "build.sh",
-        "index.html",
-        "package.json",
-        "package-lock.json",
-        "components.json",
-        "kumo-items.txt",
-        "tsconfig.json",
-        "vite.config.ts",
-        "$TURBO_ROOT$/packages/registry/src/serve-registry.ts",
-        "$TURBO_ROOT$/public/r/**"
-      ],
-      "outputs": [
-        "$TURBO_ROOT$/public/index.html",
-        "$TURBO_ROOT$/public/assets/**"
-      ]
-    },
-    "@kumo-shadcn/verify#typecheck": {
-      "inputs": [
-        "check-highlight.ts",
-        "tsconfig.json"
-      ],
-      "outputs": []
-    },
-    "@kumo-shadcn/verify#check-worker": {
-      "dependsOn": [
-        "@kumo-shadcn/registry#build",
-        "kumo-shadcn-site#build"
-      ],
-      "cache": false,
-      "passThroughEnv": [
-        "WORKER_PORT"
-      ]
-    },
-    "@kumo-shadcn/verify#verify": {
-      "dependsOn": [
-        "@kumo-shadcn/registry#build"
-      ],
-      "cache": false,
-      "passThroughEnv": [
-        "CHROMIUM",
-        "VERIFY_DIR",
-        "VERIFY_RECORD",
-        "RUNNER_TEMP",
-        "TMPDIR"
-      ]
+    "$schema": "https://turborepo.com/schema.json",
+    "ui": "tui",
+    "tasks": {
+        "@kumo-shadcn/registry#fetch-kumo": {
+            "cache": false,
+            "passThroughEnv": ["GH_TOKEN", "KUMO_TAG"]
+        },
+        "@kumo-shadcn/registry#generate": {
+            "dependsOn": ["@kumo-shadcn/registry#fetch-kumo"],
+            "inputs": [
+                "src/**",
+                "package.json",
+                "tsconfig.registry.json",
+                "$TURBO_ROOT$/registry/icon-placeholder.tsx",
+                "$TURBO_ROOT$/registry/shadcn-utils.ts",
+                "$TURBO_ROOT$/.kumo/LICENSE",
+                "$TURBO_ROOT$/.kumo/packages/kumo/package.json",
+                "$TURBO_ROOT$/.kumo/packages/kumo/src/**",
+                "$TURBO_ROOT$/.kumo/.npm-ai/component-registry.json"
+            ],
+            "outputs": [
+                "$TURBO_ROOT$/registry.json",
+                "$TURBO_ROOT$/registry/kumo/**"
+            ]
+        },
+        "@kumo-shadcn/registry#build": {
+            "dependsOn": ["@kumo-shadcn/registry#generate"],
+            "inputs": [
+                "package.json",
+                "$TURBO_ROOT$/registry.json",
+                "$TURBO_ROOT$/registry/kumo/**"
+            ],
+            "outputs": ["$TURBO_ROOT$/public/r/**"]
+        },
+        "@kumo-shadcn/registry#typecheck": {
+            "dependsOn": ["@kumo-shadcn/registry#generate"],
+            "inputs": [
+                "src/**",
+                "tsconfig.json",
+                "tsconfig.registry.json",
+                "$TURBO_ROOT$/registry/**"
+            ],
+            "outputs": []
+        },
+        "@kumo-shadcn/registry#check-icons": {
+            "dependsOn": ["@kumo-shadcn/registry#generate"],
+            "inputs": [
+                "src/**",
+                "$TURBO_ROOT$/registry/kumo/lib/kumo/icons.tsx"
+            ],
+            "outputs": []
+        },
+        "@kumo-shadcn/registry#check-directory": {
+            "dependsOn": ["@kumo-shadcn/registry#build"],
+            "inputs": [
+                "src/**",
+                "$TURBO_ROOT$/public/r/**",
+                "$TURBO_ROOT$/directory/**",
+                "$TURBO_ROOT$/LICENSE"
+            ],
+            "outputs": []
+        },
+        "kumo-shadcn-site#build": {
+            "dependsOn": ["@kumo-shadcn/registry#build"],
+            "passThroughEnv": ["SITE_BUILD_DIR", "RUNNER_TEMP", "TMPDIR"],
+            "inputs": [
+                "src/**",
+                "build.sh",
+                "index.html",
+                "package.json",
+                "package-lock.json",
+                "components.json",
+                "kumo-items.txt",
+                "tsconfig.json",
+                "vite.config.ts",
+                "vite-dev-registry.ts",
+                "$TURBO_ROOT$/packages/registry/src/serve-registry.ts",
+                "$TURBO_ROOT$/public/r/**"
+            ],
+            "outputs": [
+                "$TURBO_ROOT$/public/index.html",
+                "$TURBO_ROOT$/public/assets/**"
+            ]
+        },
+        "kumo-shadcn-site#dev": {
+            "cache": false,
+            "persistent": true
+        },
+        "@kumo-shadcn/verify#typecheck": {
+            "inputs": ["check-highlight.ts", "tsconfig.json"],
+            "outputs": []
+        },
+        "@kumo-shadcn/verify#check-worker": {
+            "dependsOn": [
+                "@kumo-shadcn/registry#build",
+                "kumo-shadcn-site#build"
+            ],
+            "cache": false,
+            "passThroughEnv": ["WORKER_PORT"]
+        },
+        "@kumo-shadcn/verify#verify": {
+            "dependsOn": ["@kumo-shadcn/registry#build"],
+            "cache": false,
+            "passThroughEnv": [
+                "CHROMIUM",
+                "VERIFY_DIR",
+                "VERIFY_RECORD",
+                "RUNNER_TEMP",
+                "TMPDIR"
+            ]
+        }
     }
-  }
 }

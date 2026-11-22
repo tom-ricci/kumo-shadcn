@@ -4,7 +4,8 @@
   "type": "module",
   "description": "The kumo-shadcn docs page. Its Kumo components are installed from this registry at build time (apps/site/build.sh); they are not checked in.",
   "scripts": {
-    "build": "./build.sh"
+    "build": "./build.sh",
+    "dev": "vite"
   },
   "dependencies": {
     "@fontsource-variable/geist": "5.3.0",

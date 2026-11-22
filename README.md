@@ -331,6 +331,7 @@ The repository is a [Turborepo](https://turborepo.com) with npm workspaces:
 npm ci --ignore-scripts
 npm run registry   # fetch the latest Kumo release, generate, shadcn build, type-check, icon and directory checks
 npm run site       # the same, plus the docs page
+npm run dev        # the docs page's dev server, straight from registry.json and registry/ in the checkout
 npm run check      # everything, plus wrangler dev on the result (needs a system workerd can run on)
 npm run verify -- vite lucide kumo-theme   # one test app: framework, icon library, theme [aliases] [items|-] [transform]
 ```

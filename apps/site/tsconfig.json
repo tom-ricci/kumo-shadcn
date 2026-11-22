@@ -10,7 +10,20 @@
     "skipLibCheck": true,
     "isolatedModules": true,
     "types": ["vite/client"],
-    "paths": { "@/*": ["./src/*"] }
+    // The Kumo components are installed by build.sh in its build directory,
+    // not here. Each alias tries the installed file first, which is what the
+    // build type-checks. In this checkout there is none, so the editor falls
+    // back to the registry's source at the repository root (the same mapping
+    // as packages/registry/tsconfig.registry.json).
+    "paths": {
+      "@/components/ui/*": ["./src/components/ui/*", "../../registry/kumo/ui/*"],
+      "@/lib/kumo/*": ["./src/lib/kumo/*", "../../registry/kumo/lib/kumo/*"],
+      "@/lib/utils": ["./src/lib/utils", "../../registry/shadcn-utils.ts"],
+      "@/app/(create)/components/icon-placeholder": ["../../registry/icon-placeholder.tsx"],
+      "@/*": ["./src/*"]
+    }
   },
-  "include": ["src"]
+  // process-env.d.ts is installed into src/lib/kumo by the build; the second
+  // entry is the same file for the editor, and matches nothing in the build.
+  "include": ["src", "../../registry/kumo/lib/kumo/process-env.d.ts"]
 }
