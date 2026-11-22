@@ -2,6 +2,7 @@ node_modules/
 *.tsbuildinfo
 .check/
 .kumo/
-# The docs page, built by scripts/build-site.sh (deployed, not committed):
+# The docs page, built by apps/site/build.sh (deployed, not committed):
 public/index.html
 public/assets/
+.turbo/

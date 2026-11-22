@@ -3,15 +3,15 @@
 // theme, token by token, in light and dark mode. Colors are computed by a
 // headless Chromium; translucent tokens are composited over each theme's
 // --kumo-base. Prints the OKLab difference (ΔE × 100; under ~2 is hard to
-// see, under ~5 reads as the same color) for tuning scripts/themes.ts.
+// see, under ~5 reads as the same color) for tuning packages/registry/src/themes.ts.
 //
-//   CHROMIUM=/path/to/chromium node scripts/compare-themes.ts   (after generate + build)
+//   CHROMIUM=/path/to/chromium node packages/registry/src/compare-themes.ts   (after generate + build)
 import { execFileSync } from "node:child_process";
 import { mkdirSync, readFileSync, writeFileSync } from "node:fs";
 import { dirname, join, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 
-const root = resolve(dirname(fileURLToPath(import.meta.url)), "..");
+const root = resolve(dirname(fileURLToPath(import.meta.url)), "..", "..", ".."); // the repository root
 const chromium = process.env.CHROMIUM ?? "chromium";
 const registry = JSON.parse(readFileSync(join(root, "registry.json"), "utf8"));
 const item = (name: string) => registry.items.find((i: { name: string }) => i.name === name);

@@ -1,4 +1,4 @@
-# Errors a stock `shadcn init -t vite` app reports after adding every item (scripts/verify.sh).
+# Errors a stock `shadcn init -t vite` app reports after adding every item (packages/verify/verify.sh).
 # One line per error: file and code, or the build result and bundler errors. Rolldown prints only
 # some of its errors ("build <CODE> ..." lines), so those printed must be among the ones listed here.
 <components>/page-header/page-header.tsx TS1484

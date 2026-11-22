@@ -15,13 +15,13 @@
 //   (Registry Health, "Registry setup");
 // - the template is HTTPS and the project is open source (a LICENSE).
 //
-//   node scripts/check-directory.ts   (after npm run registry)
+//   node packages/registry/src/check-directory.ts   (after npm run registry)
 import { existsSync, readFileSync } from "node:fs";
 import { dirname, join, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import { registryItemSchema, registrySchema } from "shadcn/schema";
 
-const root = resolve(dirname(fileURLToPath(import.meta.url)), "..");
+const root = resolve(dirname(fileURLToPath(import.meta.url)), "..", "..", ".."); // the repository root
 const built = join(root, "public", "r");
 let failed = false;
 const report = (ok: boolean, line: string) => {

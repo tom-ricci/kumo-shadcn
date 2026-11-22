@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 // Generates the kumo-shadcn registry from Kumo's source code.
 //
-//   node scripts/generate.ts --kumo <path to a checkout of cloudflare/kumo> [--base-url <url>]
+//   node packages/registry/src/generate.ts --kumo <path to a checkout of cloudflare/kumo> [--base-url <url>]
 //
 // Deterministic: the same Kumo source gives the same output. It parses Kumo's
 // files (TypeScript compiler API, PostCSS) and never runs them. It fails on
@@ -30,8 +30,9 @@ const ICON_PLACEHOLDER_IMPORT = "@/app/(create)/components/icon-placeholder";
 const { values: args } = parseArgs({
   options: { kumo: { type: "string" }, "base-url": { type: "string" }, "deps": { type: "string" } },
 });
-if (!args.kumo) fail("usage: node scripts/generate.ts --kumo <kumo checkout> [--base-url <url>]");
-const root = resolve(dirname(fileURLToPath(import.meta.url)), "..");
+if (!args.kumo) fail("usage: node packages/registry/src/generate.ts --kumo <kumo checkout> [--base-url <url>]");
+const root = resolve(dirname(fileURLToPath(import.meta.url)), "..", "..", ".."); // the repository root
+const pkgDir = resolve(dirname(fileURLToPath(import.meta.url)), ".."); // packages/registry
 const kumoRepo = resolve(args.kumo);
 const kumoPkgDir = join(kumoRepo, "packages", "kumo");
 const src = join(kumoPkgDir, "src");
@@ -160,7 +161,7 @@ const appliedPatches = new Set<string>();
 // (kumo-cloudflare does). Unset, they are Kumo's tint. Only class tokens
 // whose variant chain has one of these states and whose utility is exactly
 // bg-kumo-tint change; static tint, semantic tints and other tokens don't.
-// scripts/expected-highlights.txt lists every match; a difference fails
+// packages/registry/src/expected-highlights.txt lists every match; a difference fails
 // generation, so new occurrences get reviewed.
 const HIGHLIGHT_STATES = new Set([
   "hover", "group-hover", "data-highlighted", "data-[highlighted]", "data-active", "data-[active]",
@@ -678,10 +679,10 @@ function themeCss(blocks: TokenBlock[]): CssObject {
 // isolatedModules (Next.js requires it), bundler resolution. Stricter app
 // settings that Kumo's own code doesn't meet (erasableSyntaxOnly,
 // noUnusedLocals/Parameters, verbatimModuleSyntax) are left to fail in the
-// app, as they would with any shadcn component; scripts/verify.sh asserts
+// app, as they would with any shadcn component; packages/verify/verify.sh asserts
 // exactly which errors a stock template reports. Nothing is suppressed.
 function typeCheck(files: string[]) {
-  const config = ts.parseJsonConfigFileContent(ts.readConfigFile(join(root, "tsconfig.json"), ts.sys.readFile).config, ts.sys, root);
+  const config = ts.parseJsonConfigFileContent(ts.readConfigFile(join(pkgDir, "tsconfig.registry.json"), ts.sys.readFile).config, ts.sys, pkgDir);
   const program = ts.createProgram(files, { ...config.options, noEmit: true });
   return [...program.getSyntacticDiagnostics(), ...program.getSemanticDiagnostics(), ...program.getGlobalDiagnostics()];
 }
@@ -710,14 +711,14 @@ while (pending.length) {
 
 for (const p of SOURCE_PATCHES) if (!appliedPatches.has(p.find)) fail(`source patch target ${p.file} not found`);
 {
-  const expectedFile = join(root, "scripts", "expected-highlights.txt");
+  const expectedFile = join(pkgDir, "src", "expected-highlights.txt");
   const expected = readFileSync(expectedFile, "utf8").split("\n").filter((l) => l.trim() && !l.startsWith("#"));
   const found = sorted(highlightHits);
   console.log(`Highlight hook on ${found.length} interactive tint backgrounds:\n${found.map((h) => `  ${h}`).join("\n")}`);
   const strip = (l: string) => l.replace(/:\d+ /, " "); // compare without line numbers
   const [want, got] = [sorted(expected.map(strip)), sorted(found.map(strip))];
   if (want.join("\n") !== got.join("\n"))
-    fail(`highlight hook matches differ from scripts/expected-highlights.txt. Review them, then update the file.\n  new: ${got.filter((g) => !want.includes(g)).join(", ") || "-"}\n  gone: ${want.filter((w) => !got.includes(w)).join(", ") || "-"}`);
+    fail(`highlight hook matches differ from packages/registry/src/expected-highlights.txt. Review them, then update the file.\n  new: ${got.filter((g) => !want.includes(g)).join(", ") || "-"}\n  gone: ${want.filter((w) => !got.includes(w)).join(", ") || "-"}`);
 }
 for (const c of copies.values()) {
   const out = join(root, outPath(c.area));
@@ -873,13 +874,13 @@ items.push({
 const exported = new Set(Object.keys(kumoPkg.exports ?? {}).filter((k) => k.startsWith("./components/")).map((k) => k.slice(13)));
 
 // Kumo's own component metadata (ai/component-registry.json in the npm
-// package of the same version; scripts/fetch-kumo.sh puts it in .npm-ai/).
+// package of the same version; packages/registry/src/fetch-kumo.sh puts it in .npm-ai/).
 // An entry belongs to the item whose source defines the exported name; an
 // item's primary entry is the one whose kebab-cased name is the item name,
 // or its only entry. Items without one keep generic text.
 type KumoMeta = { name: string; type: string; description?: string; category?: string };
 const kumoMetaFile = join(kumoRepo, ".npm-ai", "component-registry.json");
-if (!existsSync(kumoMetaFile)) fail(`missing ${relative(root, kumoMetaFile)} (run scripts/fetch-kumo.sh)`);
+if (!existsSync(kumoMetaFile)) fail(`missing ${relative(root, kumoMetaFile)} (run packages/registry/src/fetch-kumo.sh)`);
 const kumoMeta = JSON.parse(readFileSync(kumoMetaFile, "utf8")) as { components: Record<string, KumoMeta>; blocks: Record<string, KumoMeta> };
 const kebab = (s: string) => s.replace(/([a-z0-9])([A-Z])/g, "$1-$2").toLowerCase();
 const metaByItem = new Map<string, KumoMeta[]>();

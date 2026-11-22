@@ -1,0 +1,11 @@
+# Registry items this page uses; apps/site/build.sh adds them with the shadcn CLI.
+kumo-theme
+badge
+banner
+button
+clipboard-text
+code
+layer-card
+link
+tabs
+text

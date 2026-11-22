@@ -3,9 +3,9 @@
 # what users get: the docs page at /, its files under /assets/, and the
 # registry under /r/ exactly as before (JSON, CORS, short cache).
 #
-#   scripts/check-worker.sh   (after npm run registry and scripts/build-site.sh)
+#   packages/verify/check-worker.sh   (after npm run registry and apps/site/build.sh)
 set -uo pipefail
-repo=$(cd "$(dirname "$0")/.." && pwd)
+repo=$(cd "$(dirname "$0")/../.." && pwd)
 cd "$repo"
 port=${WORKER_PORT:-8799}
 log=$(mktemp)

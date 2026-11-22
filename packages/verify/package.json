@@ -1,0 +1,15 @@
+{
+  "name": "@kumo-shadcn/verify",
+  "private": true,
+  "type": "module",
+  "license": "MIT",
+  "description": "The verification harness: installs the registry into fresh apps with the shadcn CLI, and checks the Worker.",
+  "scripts": {
+    "verify": "./verify.sh",
+    "check-worker": "./check-worker.sh",
+    "typecheck": "tsc -p tsconfig.json"
+  },
+  "devDependencies": {
+    "wrangler": "4.158.0"
+  }
+}

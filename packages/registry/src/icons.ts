@@ -6,7 +6,7 @@
 //
 // Keys are Phosphor names without the "Icon" suffix: Kumo imports both `X` and
 // `XIcon`, and both map to the entry `X`. Values are export names in each
-// library's package. scripts/check-icons.ts checks every name against the real
+// library's package. packages/registry/src/check-icons.ts checks every name against the real
 // packages. The generator fails with "unmapped icon: <name>" when Kumo imports
 // an icon that is missing here.
 //

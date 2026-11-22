@@ -1,5 +1,5 @@
 # Kumo class tokens the generator points at --kumo-highlight (see hookHighlights
-# in scripts/generate.ts). Generation fails when the list it finds differs, so
+# in packages/registry/src/generate.ts). Generation fails when the list it finds differs, so
 # a new or removed occurrence gets reviewed. Line numbers are informational.
 components/autocomplete/autocomplete.tsx:243 data-highlighted:bg-kumo-tint
 components/button/button.tsx:62 not-disabled:hover:bg-kumo-tint
