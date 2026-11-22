@@ -150,6 +150,33 @@ const SOURCE_PATCHES: { file: string; find: string; replace: string; why: string
     replace: "[--sidebar-active-bg:var(--kumo-sidebar-active-bg,var(--kumo-highlight,var(--color-kumo-tint)))] [--sidebar-bg:var(--kumo-sidebar-bg,var(--color-kumo-base))]",
     why: "the sidebar's default colors read --kumo-sidebar-bg and --kumo-sidebar-active-bg (then --kumo-highlight) first",
   },
+  // The bevel hook. Kumo draws primary and destructive buttons with a
+  // gradient from gradient-start to gradient-end, a 1px inset top line in
+  // emphasis-bg, and a hover that moves the gradient's start to emphasis-bg.
+  // Four derived variables scale that with --kumo-button-bevel (a number,
+  // clamped to 0..1): unset or 1 is Kumo's bevel, 0 is flat (solid token, no
+  // line; hover is a solid gradient-start, the token with 15% white). They mix
+  // Kumo's own four variables rather than the token, so a component that
+  // overrides those (BannerAction) still gets its colors.
+  {
+    file: "components/button/button.tsx",
+    find: '    "--kumo-button-emphasis-gradient-end": token,\n',
+    replace: [
+      '    "--kumo-button-emphasis-gradient-end": token,',
+      '    "--kumo-button-emphasis-from": "color-mix(in oklch, var(--kumo-button-emphasis-gradient-end), var(--kumo-button-emphasis-gradient-start) calc(100% * clamp(0, var(--kumo-button-bevel, 1), 1)))",',
+      '    "--kumo-button-emphasis-hover-from": "color-mix(in oklch, var(--kumo-button-emphasis-gradient-start), var(--kumo-button-emphasis-bg) calc(100% * clamp(0, var(--kumo-button-bevel, 1), 1)))",',
+      '    "--kumo-button-emphasis-hover-to": "color-mix(in oklch, var(--kumo-button-emphasis-gradient-end), var(--kumo-button-emphasis-gradient-start) calc(100% - 100% * clamp(0, var(--kumo-button-bevel, 1), 1)))",',
+      '    "--kumo-button-emphasis-inset": "color-mix(in oklch, var(--kumo-button-emphasis-bg) calc(100% * clamp(0, var(--kumo-button-bevel, 1), 1)), transparent)",',
+      "",
+    ].join("\n"),
+    why: "the emphasis gradient, inset line and hover read --kumo-button-bevel (unset: Kumo's bevel; 0: flat)",
+  },
+  {
+    file: "components/button/button.tsx",
+    find: "from-(--kumo-button-emphasis-gradient-start) to-(--kumo-button-emphasis-gradient-end) shadow-[inset_0_1px_0_0_var(--kumo-button-emphasis-bg)] group-hover:from-(--kumo-button-emphasis-bg)",
+    replace: "from-(--kumo-button-emphasis-from) to-(--kumo-button-emphasis-gradient-end) shadow-[inset_0_1px_0_0_var(--kumo-button-emphasis-inset)] group-hover:from-(--kumo-button-emphasis-hover-from) group-hover:to-(--kumo-button-emphasis-hover-to)",
+    why: "the emphasis gradient, inset line and hover read --kumo-button-bevel (unset: Kumo's bevel; 0: flat)",
+  },
 ];
 const appliedPatches = new Set<string>();
 
@@ -199,7 +226,7 @@ function patchSource(where: string, text: string): { text: string; notes: string
     if (count !== 1) fail(`source patch for ${where} matched ${count} times (expected 1): ${p.find}`);
     text = text.replace(p.find, p.replace);
     appliedPatches.add(p.find);
-    notes.push(p.why);
+    if (p.why && !notes.includes(p.why)) notes.push(p.why);
   }
   return { text, notes };
 }

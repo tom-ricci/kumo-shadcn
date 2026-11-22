@@ -193,6 +193,41 @@ reads `--kumo-sidebar-bg` and `--kumo-sidebar-active-bg`. Only `kumo-cloudflare`
 The dashboard has a few other overrides on single pages (a tinted notice, table striping, a scoped brand
 color). They are left out.
 
+### Button bevel
+
+Kumo's primary and destructive buttons have a bevel: a gradient that is lighter at the top, a 1px light
+line along the top edge, and a hover that lightens the top of the gradient. Earlier Kumo releases drew them
+flatter. The registry's `Button` (and `LinkButton`, and `Banner.Action`, which build on it) reads a
+`--kumo-button-bevel` variable to choose:
+
+- unset or `1`: Kumo's bevel, exactly as Kumo ships it;
+- `0`: flat. A solid color, no top line, and on hover a solid lighter color (the token mixed with 15%
+  white, the color at the top of Kumo's gradient);
+- anything between `0` and `1` scales the bevel. Values outside that range are clamped.
+
+It is an inherited CSS variable, so set it as widely or narrowly as you like:
+
+```css
+/* the whole app */
+:root {
+  --kumo-button-bevel: 0;
+}
+```
+
+```tsx
+{/* one part of the page */}
+<div style={{ "--kumo-button-bevel": 0 } as React.CSSProperties}>...</div>
+
+{/* one button */}
+<Button variant="primary" className="[--kumo-button-bevel:0]">Save</Button>
+```
+
+None of the theme items set it, so every theme looks as Kumo ships it; a theme of your own can set it in
+`:root`. The change to Kumo's `Button` is a source patch in
+[`packages/registry/src/generate.ts`](packages/registry/src/generate.ts) (`SOURCE_PATCHES`): four derived variables mixed from
+Kumo's own emphasis colors, and the overlay's classes pointed at them. If a Kumo release changes that
+code, generation fails until the patch is updated.
+
 ### kumo-binding
 
 Each Kumo token is set from a shadcn variable. Where Kumo has more levels than shadcn (Kumo has four
@@ -307,9 +342,9 @@ PostCSS. It never runs Kumo's code, and it uses no AI. For each component it:
   npm package of the same version);
 - turns Kumo's CSS files into `kumo-base` and the theme items.
 
-Kumo's class names and logic are not changed, and nothing is suppressed (no `@ts-ignore`, no lint
-comments, no casts). Each file's header lists the edits: import paths, and the highlight and sidebar
-hooks above. `"use client"` is exactly where Kumo's source has it. `lib/kumo/process-env.d.ts` gives `process.env.NODE_ENV`, which Kumo
+Kumo's logic is not changed, and nothing is suppressed (no `@ts-ignore`, no lint comments, no casts).
+Class names change only for the highlight, sidebar and button bevel hooks above. Each file's header lists
+the edits: import paths, and those hooks. `"use client"` is exactly where Kumo's source has it. `lib/kumo/process-env.d.ts` gives `process.env.NODE_ENV`, which Kumo
 reads for development warnings, a type in apps without `@types/node`.
 
 The generator stops with an error instead of guessing: on an icon with no mapping
