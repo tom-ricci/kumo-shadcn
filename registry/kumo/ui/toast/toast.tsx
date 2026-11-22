@@ -8,6 +8,8 @@ import {
 // Kumo, packages/kumo/src/components/toast/toast.tsx from https://github.com/cloudflare/kumo
 // (release cloudflare/kumo@2.19.0), copied by the kumo-shadcn registry (https://github.com/tom-ricci/kumo-shadcn).
 // Changes from Kumo's file: import paths.
+// Also changed: transitions without a duration-* class use --kumo-transition-duration (Kumo's 100ms), not your theme's default duration.
+// Also changed: Kumo's helper classes, animations and data attributes carry a kumo- prefix.
 // Also changed: cn comes from your shadcn utils (@/lib/utils).
 // Unofficial; not affiliated with or endorsed by Cloudflare.
 //
@@ -406,7 +408,7 @@ function getBumpAnimation(toast: KumoToastOptions<any>) {
   // drop focus from a focused action or close button inside the toast.
   return (
     shouldBump &&
-    (updateKey % 2 === 0 ? "animate-toast-bump-alternate" : "animate-toast-bump")
+    (updateKey % 2 === 0 ? "animate-kumo-toast-bump-alternate" : "animate-kumo-toast-bump")
   );
 }
 
@@ -440,7 +442,7 @@ function ToastList() {
         )}
       >
         <ToastBackground variant={toast.variant} />
-        <Toast.Content className="isolate flex flex-col gap-1 transition-opacity [transition-duration:250ms] data-[behind]:pointer-events-none data-[behind]:opacity-0 data-[expanded]:pointer-events-auto data-[expanded]:opacity-100">
+        <Toast.Content className="isolate flex flex-col gap-1 transition-opacity duration-(--kumo-transition-duration) [transition-duration:250ms] data-[behind]:pointer-events-none data-[behind]:opacity-0 data-[expanded]:pointer-events-auto data-[expanded]:opacity-100">
           {toast.content ?? (
             <>
               <div className="flex items-start gap-2">

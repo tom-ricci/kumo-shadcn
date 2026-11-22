@@ -3,6 +3,7 @@ import { Meter as BaseMeter } from "@base-ui/react/meter";
 // Kumo, packages/kumo/src/components/meter/meter.tsx from https://github.com/cloudflare/kumo
 // (release cloudflare/kumo@2.19.0), copied by the kumo-shadcn registry (https://github.com/tom-ricci/kumo-shadcn).
 // Changes from Kumo's file: import paths.
+// Also changed: Kumo's type scale classes (text-xs, text-sm, text-base, text-lg) read --kumo-font-size-* and --kumo-line-height-*, not your theme's --text-*.
 // Also changed: cn comes from your shadcn utils (@/lib/utils).
 // Unofficial; not affiliated with or endorsed by Cloudflare.
 //
@@ -100,17 +101,17 @@ export function Meter({
       className={cn("flex w-full flex-col gap-2", className)}
     >
       <div className="flex items-center justify-between gap-4">
-        <BaseMeter.Label className="text-xs text-kumo-subtle">
+        <BaseMeter.Label className="text-(length:--kumo-font-size-xs)/[var(--tw-leading,var(--kumo-line-height-xs))] text-kumo-subtle">
           {label}
         </BaseMeter.Label>
         {customValue ? (
-          <span className="text-sm font-medium text-kumo-default tabular-nums">
+          <span className="text-(length:--kumo-font-size-sm)/[var(--tw-leading,var(--kumo-line-height-sm))] font-medium text-kumo-default tabular-nums">
             {customValue}
           </span>
         ) : (
           <>
             {showValue && (
-              <BaseMeter.Value className="text-sm font-medium text-kumo-default tabular-nums" />
+              <BaseMeter.Value className="text-(length:--kumo-font-size-sm)/[var(--tw-leading,var(--kumo-line-height-sm))] font-medium text-kumo-default tabular-nums" />
             )}
           </>
         )}

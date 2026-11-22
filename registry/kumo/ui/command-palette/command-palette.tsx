@@ -10,6 +10,8 @@ import {
 // Kumo, packages/kumo/src/components/command-palette/command-palette.tsx from https://github.com/cloudflare/kumo
 // (release cloudflare/kumo@2.19.0), copied by the kumo-shadcn registry (https://github.com/tom-ricci/kumo-shadcn).
 // Changes from Kumo's file: import paths.
+// Also changed: Kumo's type scale classes (text-xs, text-sm, text-base, text-lg) read --kumo-font-size-* and --kumo-line-height-*, not your theme's --text-*.
+// Also changed: transitions without a duration-* class use --kumo-transition-duration (Kumo's 100ms), not your theme's default duration.
 // Also changed: cn comes from your shadcn utils (@/lib/utils).
 // Unofficial; not affiliated with or endorsed by Cloudflare.
 //
@@ -348,7 +350,7 @@ function GroupLabel({
   return (
     <Autocomplete.GroupLabel
       className={cn(
-        "mb-2 px-2 pt-1 text-xs font-semibold text-kumo-subtle",
+        "mb-2 px-2 pt-1 text-(length:--kumo-font-size-xs)/[var(--tw-leading,var(--kumo-line-height-xs))] font-semibold text-kumo-subtle",
         className,
       )}
     >
@@ -378,7 +380,7 @@ function Item<T>({
       disabled={disabled}
       onClick={onClick}
       className={cn(
-        "group flex w-full items-center gap-3 px-2 py-1.5 text-left text-base transition-colors",
+        "group flex w-full items-center gap-3 px-2 py-1.5 text-left text-(length:--kumo-font-size-base)/[var(--tw-leading,var(--kumo-line-height-base))] transition-colors duration-(--kumo-transition-duration)",
         "cursor-pointer data-[highlighted]:bg-kumo-overlay",
         "rounded-lg",
         disabled && "cursor-default opacity-50",
@@ -426,7 +428,7 @@ function Loading({ children }: CommandPaletteLoadingProps) {
  */
 function Footer({ children }: CommandPaletteFooterProps) {
   return (
-    <div className="flex items-center justify-between rounded-b-lg bg-kumo-elevated px-4 py-3 text-xs text-kumo-subtle">
+    <div className="flex items-center justify-between rounded-b-lg bg-kumo-elevated px-4 py-3 text-(length:--kumo-font-size-xs)/[var(--tw-leading,var(--kumo-line-height-xs))] text-kumo-subtle">
       {children}
     </div>
   );
@@ -519,7 +521,7 @@ function ResultItem<T>({
       value={value}
       onClick={nonInteractive ? undefined : (e: React.MouseEvent) => onClick(e)}
       className={cn(
-        "group flex w-full items-center gap-3 rounded-lg px-2 py-1.5 text-left transition-colors",
+        "group flex w-full items-center gap-3 rounded-lg px-2 py-1.5 text-left transition-colors duration-(--kumo-transition-duration)",
         nonInteractive
           ? "cursor-default"
           : "cursor-pointer data-[highlighted]:bg-kumo-overlay",
@@ -537,7 +539,7 @@ function ResultItem<T>({
               <HighlightedText
                 text={crumb}
                 highlights={breadcrumbHighlights?.[index]}
-                className="text-base text-kumo-default"
+                className="text-(length:--kumo-font-size-base)/[var(--tw-leading,var(--kumo-line-height-base))] text-kumo-default"
               />
               <CaretRightIcon
                 className="h-3 w-3 flex-shrink-0 text-kumo-subtle"
@@ -548,7 +550,7 @@ function ResultItem<T>({
           <HighlightedText
             text={title}
             highlights={titleHighlights}
-            className="text-base text-kumo-default"
+            className="text-(length:--kumo-font-size-base)/[var(--tw-leading,var(--kumo-line-height-base))] text-kumo-default"
           />
           {external && (
             <ArrowSquareOutIcon className="h-3.5 w-3.5 flex-shrink-0 text-kumo-subtle" />
@@ -556,7 +558,7 @@ function ResultItem<T>({
           {description && (
             <>
               <span className="text-kumo-subtle">—</span>
-              <span className="truncate text-sm text-kumo-subtle">
+              <span className="truncate text-(length:--kumo-font-size-sm)/[var(--tw-leading,var(--kumo-line-height-sm))] text-kumo-subtle">
                 {description}
               </span>
             </>
@@ -564,7 +566,7 @@ function ResultItem<T>({
         </div>
       </div>
       {showArrow && !external && !nonInteractive && (
-        <ArrowRightIcon className="h-4 w-4 flex-shrink-0 text-kumo-subtle opacity-0 transition-opacity group-data-[highlighted]:opacity-100" />
+        <ArrowRightIcon className="h-4 w-4 flex-shrink-0 text-kumo-subtle opacity-0 transition-opacity duration-(--kumo-transition-duration) group-data-[highlighted]:opacity-100" />
       )}
     </Autocomplete.Item>
   );
@@ -784,7 +786,7 @@ function PanelInput({
       <Autocomplete.Input
         placeholder={placeholder}
         className={cn(
-          "kumo-input-placeholder flex-1 border-none bg-transparent text-base",
+          "kumo-input-placeholder flex-1 border-none bg-transparent text-(length:--kumo-font-size-base)/[var(--tw-leading,var(--kumo-line-height-base))]",
           "outline-none",
           className,
         )}

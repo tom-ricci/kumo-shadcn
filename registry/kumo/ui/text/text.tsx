@@ -10,6 +10,7 @@ import {
 // Kumo, packages/kumo/src/components/text/text.tsx from https://github.com/cloudflare/kumo
 // (release cloudflare/kumo@2.19.0), copied by the kumo-shadcn registry (https://github.com/tom-ricci/kumo-shadcn).
 // Changes from Kumo's file: import paths.
+// Also changed: Kumo's type scale classes (text-xs, text-sm, text-base, text-lg) read --kumo-font-size-* and --kumo-line-height-*, not your theme's --text-*.
 // Also changed: cn comes from your shadcn utils (@/lib/utils).
 // Unofficial; not affiliated with or endorsed by Cloudflare.
 //
@@ -42,7 +43,7 @@ import { resolveVariant } from "@/lib/kumo/resolve-variant";
 export const KUMO_TEXT_VARIANTS = {
   variant: {
     heading: {
-      classes: "text-lg font-semibold",
+      classes: "text-(length:--kumo-font-size-lg)/[var(--tw-leading,var(--kumo-line-height-lg))] font-semibold",
       description: "Heading text (16px by default, 20px at large size)",
     },
     /** @deprecated Use `heading` and set `size` and `as` explicitly. */
@@ -59,7 +60,7 @@ export const KUMO_TEXT_VARIANTS = {
     },
     /** @deprecated Use `heading` and set `size` and `as` explicitly. */
     heading3: {
-      classes: "text-lg font-semibold",
+      classes: "text-(length:--kumo-font-size-lg)/[var(--tw-leading,var(--kumo-line-height-lg))] font-semibold",
       description:
         "Deprecated small heading for subsections; use heading instead",
     },
@@ -90,19 +91,19 @@ export const KUMO_TEXT_VARIANTS = {
   },
   size: {
     xs: {
-      classes: "text-xs/[inherit]",
+      classes: "text-(length:--kumo-font-size-xs)/[inherit]",
       description: "Extra small text",
     },
     sm: {
-      classes: "text-sm/[inherit]",
+      classes: "text-(length:--kumo-font-size-sm)/[inherit]",
       description: "Small text",
     },
     base: {
-      classes: "text-base/[inherit]",
+      classes: "text-(length:--kumo-font-size-base)/[inherit]",
       description: "Default text size",
     },
     lg: {
-      classes: "text-lg/[inherit]",
+      classes: "text-(length:--kumo-font-size-lg)/[inherit]",
       description: "Large text",
     },
   },

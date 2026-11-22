@@ -3,6 +3,7 @@ import { Collapsible as CollapsibleBase } from "@base-ui/react/collapsible";
 // Kumo, packages/kumo/src/components/collapsible/collapsible.tsx from https://github.com/cloudflare/kumo
 // (release cloudflare/kumo@2.19.0), copied by the kumo-shadcn registry (https://github.com/tom-ricci/kumo-shadcn).
 // Changes from Kumo's file: import paths.
+// Also changed: Kumo's type scale classes (text-xs, text-sm, text-base, text-lg) read --kumo-font-size-* and --kumo-line-height-*, not your theme's --text-*.
 // Also changed: cn comes from your shadcn utils (@/lib/utils).
 // Unofficial; not affiliated with or endorsed by Cloudflare.
 //
@@ -190,7 +191,7 @@ const CollapsibleDefaultTrigger = forwardRef<
         // Defensive resets to prevent global button styles from polluting the trigger
         "m-0 border-none bg-transparent p-0 shadow-none",
         // Base styles for the trigger
-        "flex cursor-pointer items-center gap-1 text-base font-medium text-kumo-default select-none",
+        "flex cursor-pointer items-center gap-1 text-(length:--kumo-font-size-base)/[var(--tw-leading,var(--kumo-line-height-base))] font-medium text-kumo-default select-none",
         className,
       )}
     >

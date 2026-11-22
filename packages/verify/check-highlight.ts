@@ -4,9 +4,11 @@
 // sidebar's active item, with real mouse events in headless Chromium (CDP).
 // Under kumo-theme the backgrounds must be Kumo's tint (light 97%, dark
 // 26.9%); under kumo-cloudflare the highlight shade (light 96.5%, dark 20.5%).
+// Under every theme, plain elements outside Kumo (kumo-demo.tsx) must keep
+// Tailwind's defaults: Kumo's items change nothing outside Kumo's names.
 // Also saves a screenshot of the states for each app and mode.
 //
-//   CHROMIUM=... node packages/verify/check-highlight.ts <out-dir> <dist-dir>=<kumo-theme|kumo-cloudflare> ...
+//   CHROMIUM=... node packages/verify/check-highlight.ts <out-dir> <dist-dir>=<kumo-theme|kumo-cloudflare|kumo-binding> ...
 import { spawn } from "node:child_process";
 import { readFile, writeFile, mkdir, mkdtemp } from "node:fs/promises";
 import { tmpdir } from "node:os";
@@ -14,10 +16,13 @@ import { createServer } from "node:http";
 import { extname, join } from "node:path";
 
 const [outDir, ...apps] = process.argv.slice(2);
-const EXPECTED_L: Record<string, { light: number; dark: number }> = {
+const EXPECTED_L: Record<string, { light: number; dark: number } | undefined> = {
   "kumo-theme": { light: 97, dark: 26.9 },
   "kumo-cloudflare": { light: 96.5, dark: 20.5 },
 };
+// Tailwind's defaults (theme.css) for the plain elements in kumo-demo.tsx:
+// font size and line height in px, the transition duration, no animation.
+const PLAIN: Record<string, [string, string]> = { "plain-xs": ["12px", "16px"], "plain-sm": ["14px", "20px"], "plain-base": ["16px", "24px"], "plain-lg": ["18px", "28px"] };
 const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms));
 let failed = false;
 const report = (ok: boolean, line: string) => {
@@ -104,9 +109,16 @@ for (const [i, arg] of apps.entries()) {
     await cdp("Emulation.setEmulatedMedia", { features: [{ name: "prefers-color-scheme", value: mode }] });
     await cdp("Page.navigate", { url: urls[i] });
     await sleep(2500);
-    const want = EXPECTED_L[theme][mode];
+    const plain: [string, string, string, string, string][] = await evaluate(`[...document.querySelectorAll("[data-check^=plain-]")].map((e) => { const s = getComputedStyle(e); return [e.dataset.check, s.fontSize, s.lineHeight, s.transitionDuration, s.animationName]; })`);
+    for (const [check, size, lineHeight, duration, animation] of plain) {
+      const [wantSize, wantLine] = PLAIN[check] ?? ["", ""];
+      report(size === wantSize && lineHeight === wantLine && duration === "0.15s" && animation === "none",
+        `${name} ${mode}: plain ${check.slice(6)} element outside Kumo: ${size}/${lineHeight}, transition ${duration}, animation ${animation} (want Tailwind's ${wantSize}/${wantLine}, 0.15s, none)`);
+    }
+    report(plain.length === Object.keys(PLAIN).length, `${name} ${mode}: ${plain.length} plain elements found (want ${Object.keys(PLAIN).length})`);
+    const want = EXPECTED_L[theme]?.[mode];
     const check = (what: string, got: number | null) =>
-      report(got !== null && Math.abs(got - want) <= 0.6, `${name} ${mode}: ${what} background L=${got}% (want ${want}%)`);
+      want === undefined || report(got !== null && Math.abs(got - want) <= 0.6, `${name} ${mode}: ${what} background L=${got}% (want ${want}%)`);
 
     await mouse("mouseMoved", [1, 1]);
     check("sidebar active item", await lightness('[data-check="sidebar-active"]'));

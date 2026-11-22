@@ -18,7 +18,7 @@ import postcss, { type AtRule, type ChildNode, type Container, type Rule } from 
 import nested from "postcss-nested";
 import ts from "typescript";
 import { ICON_LIBRARIES, SHIM_EXTRAS, iconNames } from "./icons.ts";
-import { RELATIVE_COLOR_SUPPORTS, binding, kumoCloudflare, kumoTheme, type KumoTheme } from "./themes.ts";
+import { RELATIVE_COLOR_SUPPORTS, binding, bindingTypeScale, kumoCloudflare, kumoTheme, type KumoTheme } from "./themes.ts";
 import { BASE_URL, HOMEPAGE, NAMESPACE, SITE } from "./config.ts";
 
 // IconPlaceholder is shadcn's marker element. The CLI removes this import when
@@ -138,8 +138,11 @@ function outPath(area: Area): string {
 }
 
 // ---------------------------------------------------------------------------
-// Source patches: the only changes to Kumo's code besides import paths.
-// Each must match exactly once, or generation fails.
+// Source patches: the only changes to Kumo's code besides import paths and
+// the class rewrites below (highlight hook, namespacing). Each must match
+// exactly once, or generation fails.
+const RDP_ANIMATIONS = ["caption_after_enter", "caption_after_exit", "caption_before_enter", "caption_before_exit", "weeks_after_enter", "weeks_after_exit", "weeks_before_enter", "weeks_before_exit"];
+const RDP_CLASSES = ["root", ...RDP_ANIMATIONS];
 const SOURCE_PATCHES: { file: string; find: string; replace: string; why: string }[] = [
   {
     // Kumo's Sidebar sets its colors with arbitrary-property classes on its
@@ -176,6 +179,26 @@ const SOURCE_PATCHES: { file: string; find: string; replace: string; why: string
     find: "from-(--kumo-button-emphasis-gradient-start) to-(--kumo-button-emphasis-gradient-end) shadow-[inset_0_1px_0_0_var(--kumo-button-emphasis-bg)] group-hover:from-(--kumo-button-emphasis-bg)",
     replace: "from-(--kumo-button-emphasis-from) to-(--kumo-button-emphasis-gradient-end) shadow-[inset_0_1px_0_0_var(--kumo-button-emphasis-inset)] group-hover:from-(--kumo-button-emphasis-hover-from) group-hover:to-(--kumo-button-emphasis-hover-to)",
     why: "the emphasis gradient, inset line and hover read --kumo-button-bevel (unset: Kumo's bevel; 0: flat)",
+  },
+  // Kumo styles DatePicker's month animations through react-day-picker's
+  // default class names (.rdp-root, .rdp-weeks_before_enter, ...), which a
+  // shadcn Calendar (also react-day-picker) has too. The CSS rules become
+  // .kumo-rdp-*, so DatePicker gives its root and animations those names.
+  // The animation classes must be single class names: react-day-picker
+  // passes them to classList.add. RDP_CLASSES must match the .rdp-* classes
+  // in Kumo's CSS (checked after generation).
+  {
+    file: "components/date-picker/date-picker.tsx",
+    find: "        ...classNames,\n        root: cn(\n          defaults.root,\n",
+    replace: [
+      ...RDP_ANIMATIONS.map((key) => `        ${key}: "kumo-rdp-${key}",`),
+      "        ...classNames,",
+      "        root: cn(",
+      "          defaults.root,",
+      '          "kumo-rdp-root",',
+      "",
+    ].join("\n"),
+    why: "react-day-picker's root and month animations get kumo-rdp-* class names, which Kumo's CSS styles",
   },
 ];
 const appliedPatches = new Set<string>();
@@ -216,6 +239,260 @@ function hookHighlights(where: string, text: string): string {
   });
 }
 
+// ---------------------------------------------------------------------------
+// Namespacing: the registry writes nothing outside Kumo's own names.
+//
+// Kumo's stylesheets assume they own the page. They set Tailwind's
+// --default-transition-duration and type scale (--text-xs .. --text-lg), add
+// shades to Tailwind's palette, and define helper classes, keyframes and
+// custom properties with generic names (.skeleton, @keyframes shimmer, ...).
+// In a shadcn app those would restyle the app's own code, so the generator
+// renames them and rewrites Kumo's code to match:
+//   - helper classes .X -> .kumo-X (.animate-X -> .animate-kumo-X), keyframes
+//     X -> kumo-X, custom properties and @property --X -> --kumo-X, data-X
+//     attributes in Kumo's selectors -> data-kumo-X, Tailwind theme variables
+//     --animate-X / --ease-X -> --animate-kumo-X / --ease-kumo-X (with their
+//     utilities);
+//   - palette shades Kumo adds (--color-red-650) -> --color-kumo-red-650;
+//     shades identical to Tailwind's default palette are dropped (Kumo reads
+//     them with var() and its own value as the fallback);
+//   - --default-transition-duration -> --kumo-transition-duration, which
+//     Kumo's transition classes now read through an explicit duration
+//     (DURATION_CLASS);
+//   - the type scale -> --kumo-font-size-<size> and --kumo-line-height-<size>,
+//     which Kumo's text-<size> classes now read (TYPE_SCALE_CLASS); the theme
+//     items set them (kumo-binding from your own --text-<size>).
+// Names that already contain "kumo", and selectors that only match inside a
+// Kumo element (.kumo-shiki .line), stay. Lists of every rename and every
+// rewritten class are in packages/registry/src/expected-namespace.txt,
+// expected-type-scale.txt and expected-durations.txt; any difference fails
+// generation. checkGlobals() then fails on anything a theme item writes
+// outside Kumo's names that packages/registry/src/allowed-globals.txt doesn't
+// list with a reason.
+
+// Kumo's text-<size>, as a class that the project's cn (tailwind-merge
+// rules) still sees as a font size. A text-kumo-<size> theme utility would
+// not work: cn takes it for a text color and drops it next to
+// text-kumo-subtle (or drops the color), and Tailwind resolves
+// text-kumo-base to the color token kumo-base. Same CSS as Tailwind's
+// text-<size>: a leading-* on the element still wins.
+// With a line-height modifier (text-xs/4, text-sm/[inherit]) the modifier
+// stays: it sets the line height itself, as it does on Tailwind's class.
+const TYPE_SCALE_CLASS = (size: string, modifier = "") => `text-(length:--kumo-font-size-${size})${modifier || `/[var(--tw-leading,var(--kumo-line-height-${size}))]`}`;
+const DURATION_CLASS = "duration-(--kumo-transition-duration)";
+// Transition utilities that set transition-property (and so read the default duration).
+const TRANSITION_PROPERTY = /^transition(-(all|colors|opacity|shadow|transform|\[[^\]]+\]))?$/;
+const TRANSITION_OTHER = /^transition-(none|discrete|normal)$/;
+// Kumo's theme markers: selectors on them only set Kumo's variables (checkGlobals).
+const KUMO_MARKERS = new Set(["data-mode", "data-theme"]);
+const hasKumo = (name: string) => name.includes("kumo");
+// Tailwind theme namespaces Kumo's base CSS uses, and their utility prefix.
+const THEME_NAMESPACES: Record<string, string> = { animate: "animate", ease: "ease" };
+
+interface NamespacePlan {
+  classes: Map<string, string>; // CSS class -> renamed class
+  keyframes: Map<string, string>;
+  props: Map<string, string>; // custom properties, @property, palette shades, theme variables
+  utilities: Map<string, string>; // utilities of renamed theme variables (animate-refresh -> animate-kumo-refresh)
+  attributes: Map<string, string>; // data-overflowing -> data-kumo-overflowing
+  dropped: Map<string, string>; // name -> why
+  sizes: Map<string, { fontSize: string; lineHeight: string }>; // Kumo's type scale
+  duration: string; // Kumo's default transition duration
+}
+let ns: NamespacePlan; // set in Build, before any file is copied
+
+const tailwindTheme = (): Record<string, string> =>
+  Object.fromEntries([...readFileSync(join(root, "node_modules", "tailwindcss", "theme.css"), "utf8").matchAll(/^\s*(--[\w.-]+):\s*([^;]+);/gm)].map((m) => [m[1], m[2].trim()]));
+
+// Classes and data attributes in one complex selector, in order.
+const selectorNames = (selector: string) => [...selector.matchAll(/\.(-?[_a-zA-Z][\w-]*)|\[([\w-]+)/g)].map((m) => (m[1] ? { kind: "class" as const, name: m[1] } : { kind: "attr" as const, name: m[2] }));
+// A selector that names a Kumo class or data-kumo-* attribute matches only Kumo's elements.
+const kumoScoped = (complex: string) => selectorNames(complex).some((n) => hasKumo(n.name) && (n.kind === "class" || n.name.startsWith("data-kumo")));
+
+function namespacePlan(): NamespacePlan {
+  const plan: NamespacePlan = { classes: new Map(), keyframes: new Map(), props: new Map(), utilities: new Map(), attributes: new Map(), dropped: new Map(), sizes: new Map(), duration: "" };
+  const tw = tailwindTheme();
+  for (const file of ["kumo-binding.css", "kumo.css"]) {
+    parseCss(join(src, "styles", file)).walk((node) => {
+      if (node.type === "atrule" && node.name === "keyframes" && !hasKumo(node.params)) plan.keyframes.set(node.params.trim(), `kumo-${node.params.trim()}`);
+      if (node.type === "atrule" && node.name === "property" && !hasKumo(node.params)) plan.props.set(node.params.trim(), `--kumo-${node.params.trim().slice(2)}`);
+      if (node.type === "rule" && !(node.parent?.type === "atrule" && (node.parent as AtRule).name === "keyframes")) {
+        for (const complex of postcss.list.comma(node.selector)) {
+          if (kumoScoped(complex)) continue;
+          for (const n of selectorNames(complex)) {
+            if (hasKumo(n.name)) continue;
+            if (n.kind === "class" && n.name !== "dark") plan.classes.set(n.name, n.name.startsWith("animate-") ? `animate-kumo-${n.name.slice(8)}` : `kumo-${n.name}`);
+            if (n.kind === "attr" && n.name.startsWith("data-") && !KUMO_MARKERS.has(n.name)) plan.attributes.set(n.name, `data-kumo-${n.name.slice(5)}`);
+          }
+        }
+      }
+      if (node.type !== "decl" || !node.prop.startsWith("--") || hasKumo(node.prop)) return;
+      const inTheme = node.parent?.type === "atrule" && (node.parent as AtRule).name === "theme";
+      if (!inTheme) {
+        plan.props.set(node.prop, `--kumo-${node.prop.slice(2)}`);
+        return;
+      }
+      const ns = node.prop.match(/^--([a-z]+)-(.+)$/);
+      if (node.prop.startsWith("--color-")) {
+        if (tw[node.prop] === node.value) plan.dropped.set(node.prop, "same value as Tailwind's default palette");
+        else plan.props.set(node.prop, `--color-kumo-${node.prop.slice(8)}`);
+      } else if (node.prop === "--default-transition-duration") {
+        plan.duration = node.value;
+        plan.dropped.set(node.prop, `Kumo's ${node.value}; Kumo's transitions read --kumo-transition-duration`);
+      } else if (ns && THEME_NAMESPACES[ns[1]]) {
+        plan.props.set(node.prop, `--${ns[1]}-kumo-${ns[2]}`);
+        plan.utilities.set(`${THEME_NAMESPACES[ns[1]]}-${ns[2]}`, `${THEME_NAMESPACES[ns[1]]}-kumo-${ns[2]}`);
+      } else fail(`Kumo's ${file} sets the theme variable ${node.prop}; teach generate.ts how to namespace it`);
+    });
+  }
+  if (!plan.duration) fail("Kumo no longer sets --default-transition-duration; review DURATION_CLASS");
+  // The type scale (theme-kumo.css @theme): --text-<size> and --text-<size>--line-height.
+  parseCss(join(src, "styles", "theme-kumo.css")).walkAtRules("theme", (at) => {
+    for (const [prop, value] of Object.entries(declsOf(at, (p, v) => (isToken(p) ? undefined : v)))) {
+      const m = prop.match(/^--text-([a-z0-9]+)(--line-height)?$/);
+      if (!m) fail(`theme-kumo.css sets the theme variable ${prop}; teach generate.ts how to namespace it`);
+      const size = plan.sizes.get(m[1]) ?? { fontSize: "", lineHeight: "" };
+      if (m[2]) size.lineHeight = value;
+      else size.fontSize = value;
+      plan.sizes.set(m[1], size);
+    }
+  });
+  for (const [size, v] of plan.sizes) if (!v.fontSize || !v.lineHeight) fail(`theme-kumo.css: --text-${size} needs both a size and a line height`);
+  return plan;
+}
+
+// Renames in a CSS value: custom properties, and keyframes where a value names them.
+const wordRe = (name: string) => new RegExp(`(?<![\\w-])${name.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}(?![\\w-])`, "g");
+const byLength = (m: Map<string, string>) => [...m].sort(([a], [b]) => b.length - a.length);
+function renameValue(value: string, prop = ""): string {
+  for (const [from, to] of byLength(ns.props)) value = value.replace(wordRe(from), to);
+  if (/^(animation|animation-name)$|^--animate-/.test(prop)) for (const [from, to] of byLength(ns.keyframes)) value = value.replace(wordRe(from), to);
+  return value;
+}
+function renameSelector(selector: string): string {
+  for (const [from, to] of byLength(ns.classes)) selector = selector.replace(new RegExp(`\\.${from}(?![\\w-])`, "g"), `.${to}`);
+  for (const [from, to] of byLength(ns.attributes)) selector = selector.replace(new RegExp(`\\[${from}(?![\\w-])`, "g"), `[${to}`);
+  return selector;
+}
+// Kumo's base CSS, renamed in place.
+function namespaceCss(rootNode: postcss.Root) {
+  rootNode.walk((node) => {
+    if (node.type === "atrule" && node.name === "keyframes") node.params = ns.keyframes.get(node.params.trim()) ?? node.params;
+    else if (node.type === "atrule" && node.name === "property") node.params = ns.props.get(node.params.trim()) ?? node.params;
+    else if (node.type === "rule" && !(node.parent?.type === "atrule" && (node.parent as AtRule).name === "keyframes")) node.selector = renameSelector(node.selector);
+    else if (node.type === "decl") {
+      if (ns.dropped.has(node.prop)) return void node.remove();
+      node.value = renameValue(node.value, node.prop);
+      node.prop = ns.props.get(node.prop) ?? node.prop;
+    }
+  });
+}
+
+// Kumo's source: class strings and data attributes, to match the renamed CSS.
+const typeScaleHits: string[] = [];
+const durationHits: string[] = [];
+const renameUses = new Map<string, number>(); // renamed name -> uses in the generated code
+function splitClass(token: string) {
+  let depth = 0, cut = 0;
+  for (let i = 0; i < token.length; i++) {
+    const ch = token[i];
+    if (ch === "[" || ch === "(") depth++;
+    else if (ch === "]" || ch === ")") depth--;
+    else if (ch === ":" && depth === 0) cut = i + 1;
+  }
+  let utility = token.slice(cut), pre = "", post = "";
+  if (utility.startsWith("!")) [pre, utility] = ["!", utility.slice(1)];
+  if (utility.endsWith("!")) [post, utility] = ["!", utility.slice(0, -1)];
+  return { variants: token.slice(0, cut), pre, utility, post };
+}
+// Content ranges of the string literals in a file (not module specifiers).
+function literalRanges(sf: ts.SourceFile): { start: number; end: number }[] {
+  const out: { start: number; end: number }[] = [];
+  const visit = (node: ts.Node) => {
+    const p = node.parent;
+    const specifier = p && ((ts.isImportDeclaration(p) || ts.isExportDeclaration(p)) && p.moduleSpecifier === node || ts.isExternalModuleReference(p) || ts.isLiteralTypeNode(p) && ts.isImportTypeNode(p.parent) || ts.isCallExpression(p) && (p.expression.kind === ts.SyntaxKind.ImportKeyword || ts.isIdentifier(p.expression) && p.expression.text === "require"));
+    const [s, e] = [node.getStart(sf), node.getEnd()];
+    if ((ts.isStringLiteral(node) || ts.isNoSubstitutionTemplateLiteral(node)) && !specifier) out.push({ start: s + 1, end: e - 1 });
+    else if (ts.isTemplateHead(node) || ts.isTemplateMiddle(node)) out.push({ start: s + 1, end: e - 2 });
+    else if (ts.isTemplateTail(node)) out.push({ start: s + 1, end: e - 1 });
+    ts.forEachChild(node, visit);
+  };
+  visit(sf);
+  return out;
+}
+// Returns the rewritten content, and whether a Kumo name in it was renamed.
+function namespaceClasses(where: string, line: number, content: string): { text: string; renamed: boolean } {
+  let renamed = false;
+  const parts = content.split(/(\s+)/);
+  const tokens = parts.filter((_, i) => i % 2 === 0).map(splitClass);
+  const out: string[] = [];
+  parts.forEach((part, i) => {
+    if (i % 2 === 1 || !part) return void out.push(part);
+    const { variants, pre, post } = splitClass(part);
+    let { utility } = splitClass(part);
+    const rename = ns.classes.get(utility) ?? ns.utilities.get(utility);
+    if (rename) [utility, renamed] = [rename, true];
+    if (/^animate-\[|^\[animation(-name)?:/.test(utility))
+      for (const [from, to] of byLength(ns.keyframes)) {
+        const next = utility.replace(new RegExp(`(?<=[\\[:_,])${from}(?=[_,\\]])`, "g"), to);
+        if (next !== utility) [utility, renamed] = [next, true];
+      }
+    const size = utility.match(/^text-([a-z0-9]+)(\/.*)?$/);
+    if (size && ns.sizes.has(size[1])) {
+      typeScaleHits.push(`${where}:${line} ${part}`);
+      utility = TYPE_SCALE_CLASS(size[1], size[2]);
+    }
+    out.push(`${variants}${pre}${utility}${post}`);
+    if (/^transition(-|$)/.test(utility) && !TRANSITION_PROPERTY.test(utility) && !TRANSITION_OTHER.test(utility))
+      fail(`${where}:${line}: unknown transition utility ${part}; teach generate.ts whether it reads the default duration`);
+    if (TRANSITION_PROPERTY.test(utility) && !tokens.some((t) => t.variants === variants && t.utility.startsWith("duration-"))) {
+      durationHits.push(`${where}:${line} ${part}`);
+      out.push(" ", `${variants}${DURATION_CLASS}`);
+    }
+  });
+  const joined = out.join("");
+  let result = joined;
+  for (const [from, to] of byLength(ns.props)) result = result.replace(wordRe(from), to);
+  for (const [from, to] of byLength(ns.attributes)) result = result.replace(wordRe(from), to).replace(new RegExp(`data-\\[${from.slice(5)}\\]`, "g"), `data-[${to.slice(5)}]`);
+  if (result !== joined) renamed = true;
+  for (const t of result.split(/\s+/)) {
+    const u = splitClass(t).utility;
+    if ([...ns.classes.values(), ...ns.utilities.values()].includes(u)) renameUses.set(u, (renameUses.get(u) ?? 0) + 1);
+  }
+  return { text: result, renamed };
+}
+function namespaceSource(where: string, text: string): { text: string; notes: string[] } {
+  if (text.includes("--default-transition-duration")) fail(`${where} reads --default-transition-duration; it should read --kumo-transition-duration`);
+  const sf = ts.createSourceFile(where, text, ts.ScriptTarget.Latest, true, where.endsWith(".tsx") ? ts.ScriptKind.TSX : ts.ScriptKind.TS);
+  const edits: { start: number; end: number; text: string }[] = [];
+  const lineOf = (pos: number) => sf.getLineAndCharacterOfPosition(pos).line + 1;
+  const [sizesBefore, durationsBefore] = [typeScaleHits.length, durationHits.length];
+  let renamed = false;
+  for (const r of literalRanges(sf)) {
+    const content = text.slice(r.start, r.end);
+    const next = namespaceClasses(where, lineOf(r.start), content);
+    if (next.text !== content) edits.push({ ...r, text: next.text });
+    if (next.renamed) renamed = true;
+  }
+  // data-* attributes on JSX elements
+  const visit = (node: ts.Node) => {
+    if (ts.isJsxAttribute(node) && ts.isIdentifier(node.name) && ns.attributes.has(node.name.text)) {
+      const to = ns.attributes.get(node.name.text)!;
+      edits.push({ start: node.name.getStart(sf), end: node.name.getEnd(), text: to });
+      renameUses.set(to, (renameUses.get(to) ?? 0) + 1);
+      renamed = true;
+    }
+    ts.forEachChild(node, visit);
+  };
+  visit(sf);
+  for (const e of edits.sort((a, b) => b.start - a.start)) text = text.slice(0, e.start) + e.text + text.slice(e.end);
+  const notes: string[] = [];
+  if (typeScaleHits.length > sizesBefore) notes.push("Kumo's type scale classes (text-xs, text-sm, text-base, text-lg) read --kumo-font-size-* and --kumo-line-height-*, not your theme's --text-*");
+  if (durationHits.length > durationsBefore) notes.push("transitions without a duration-* class use --kumo-transition-duration (Kumo's 100ms), not your theme's default duration");
+  if (renamed) notes.push("Kumo's helper classes, animations and data attributes carry a kumo- prefix");
+  return { text, notes };
+}
+
 function patchSource(where: string, text: string): { text: string; notes: string[] } {
   const notes: string[] = [];
   const hooked = hookHighlights(where, text);
@@ -228,7 +505,9 @@ function patchSource(where: string, text: string): { text: string; notes: string
     appliedPatches.add(p.find);
     if (p.why && !notes.includes(p.why)) notes.push(p.why);
   }
-  return { text, notes };
+  const named = namespaceSource(where, text);
+  for (const n of named.notes) if (!notes.includes(n)) notes.push(n);
+  return { text: named.text, notes };
 }
 
 // ---------------------------------------------------------------------------
@@ -550,7 +829,7 @@ ${exports.map((e) => `  ${e},`).join("\n")}
 
 type CssObject = { [key: string]: string | CssObject };
 const KUMO_TOKEN = /^--(color|text-color)-kumo-(.+)$/;
-const NOT_TOKEN = /^--color-kumo-neutral-/; // primitives, not theme tokens
+const NOT_TOKEN = /^--color-kumo-[a-z]+-\d+$/; // primitives (a palette family and shade: --color-kumo-neutral-50, --color-kumo-red-650), not theme tokens
 // Kumo token -> the plain variable a theme sets.
 function tokenVar(prop: string): string {
   const m = prop.match(KUMO_TOKEN)!;
@@ -640,13 +919,15 @@ function baseCss(tokenNames: string[]) {
       if (at.type === "atrule" && at.name === "import" && !/^["']\.\/(kumo-binding|theme-[a-z]+)\.css["']$/.test(at.params))
         fail(`unknown CSS import ${at.params} in ${file}`);
     }
+    namespaceCss(rootNode);
     cssObject(rootNode.nodes, css, { top: true, theme });
   }
   for (const prop of Object.keys(theme)) if (isToken(prop)) fail(`token ${prop} defined outside the theme files`);
-  // Kumo's color primitives (--color-kumo-neutral-*, --color-red-650, ...)
-  // are only read through var() by the theme values. They become plain
+  // Kumo's color primitives (--color-kumo-neutral-*, --color-kumo-red-650,
+  // ...) are only read through var() by the theme values. They become plain
   // variables: as cssVars.theme colors the CLI would add junk
-  // --color-color-* entries next to them.
+  // --color-color-* entries next to them. Kumo's default transition duration
+  // goes with them, as --kumo-transition-duration.
   const primitives: Record<string, string> = {};
   for (const [prop, value] of Object.entries(theme)) {
     if (!prop.startsWith("--color-")) continue;
@@ -659,7 +940,7 @@ function baseCss(tokenNames: string[]) {
     const hit = c.code.replace(/var\(--color-[\w-]+/g, "").match(asUtility);
     if (hit) fail(`${outPath(c.area)} uses the color primitive "${hit[1]}" as a utility class; kumo-base only defines it as a variable`);
   }
-  merge(((css["@layer base"] ??= {}) as CssObject), ":root", primitives);
+  merge(((css["@layer base"] ??= {}) as CssObject), ":root", { ...primitives, "--kumo-transition-duration": ns.duration });
   // Tailwind utilities (bg-kumo-base, text-kumo-subtle, ...) read the plain
   // variables; the @theme inline block below tells Tailwind they exist.
   for (const prop of tokenNames) theme[prop] = `var(${tokenVar(prop)})`;
@@ -688,6 +969,12 @@ function kumoThemeBlocks(file: string): TokenBlock[] {
     }
   });
   return blocks;
+}
+
+// Kumo's theme values read renamed palette shades (var(--color-orange-650,
+// ...) -> var(--color-kumo-orange-650, ...)).
+function namespaceValues(css: CssObject): CssObject {
+  return Object.fromEntries(Object.entries(css).map(([k, v]) => [k, typeof v === "string" ? renameValue(v, k) : namespaceValues(v)]));
 }
 
 function themeCss(blocks: TokenBlock[]): CssObject {
@@ -720,6 +1007,7 @@ const formatDiagnostic = (d: ts.Diagnostic) =>
 rmSync(outDir, { recursive: true, force: true });
 rmSync(join(root, "public", "r"), { recursive: true, force: true });
 
+ns = namespacePlan();
 const copies = new Map<string, Copied>();
 const pending = [...included].filter((f) => areaOf(f)!.kind !== "lib");
 const libFiles = new Set<string>();
@@ -735,15 +1023,57 @@ while (pending.length) {
 }
 
 for (const p of SOURCE_PATCHES) if (!appliedPatches.has(p.find)) fail(`source patch target ${p.file} not found`);
-{
-  const expectedFile = join(pkgDir, "src", "expected-highlights.txt");
-  const expected = readFileSync(expectedFile, "utf8").split("\n").filter((l) => l.trim() && !l.startsWith("#"));
-  const found = sorted(highlightHits);
-  console.log(`Highlight hook on ${found.length} interactive tint backgrounds:\n${found.map((h) => `  ${h}`).join("\n")}`);
-  const strip = (l: string) => l.replace(/:\d+ /, " "); // compare without line numbers
+// A transform's matches against the list of them in packages/registry/src/<file>
+// (compared without line numbers). Any difference fails: review the new and
+// gone lines, then update the file (KUMO_RECORD=1 rewrites it, keeping its
+// # comment lines).
+function checkExpected(file: string, what: string, hits: string[]) {
+  const lines = readFileSync(join(pkgDir, "src", file), "utf8").split("\n");
+  const expected = lines.filter((l) => l.trim() && !l.startsWith("#"));
+  const found = sorted(hits);
+  console.log(`${what}: ${found.length}`);
+  if (process.env.KUMO_RECORD) return writeFileSync(join(pkgDir, "src", file), [...lines.filter((l) => l.startsWith("#")), ...found, ""].join("\n"));
+  const strip = (l: string) => l.replace(/:\d+ /, " ");
   const [want, got] = [sorted(expected.map(strip)), sorted(found.map(strip))];
   if (want.join("\n") !== got.join("\n"))
-    fail(`highlight hook matches differ from packages/registry/src/expected-highlights.txt. Review them, then update the file.\n  new: ${got.filter((g) => !want.includes(g)).join(", ") || "-"}\n  gone: ${want.filter((w) => !got.includes(w)).join(", ") || "-"}`);
+    fail(`${what} differ from packages/registry/src/${file}. Review them, then update the file.\n  new: ${got.filter((g) => !want.includes(g)).join(", ") || "-"}\n  gone: ${want.filter((w) => !got.includes(w)).join(", ") || "-"}`);
+}
+checkExpected("expected-highlights.txt", "Highlight hook matches (interactive tint backgrounds)", highlightHits);
+checkExpected("expected-type-scale.txt", "Type scale classes rewritten to TYPE_SCALE_CLASS", typeScaleHits);
+checkExpected("expected-durations.txt", "Transitions given DURATION_CLASS", durationHits);
+{
+  const uses = (name: string) => ` (${renameUses.get(name) ?? 0} uses)`;
+  checkExpected("expected-namespace.txt", "Namespace renames", [
+    ...[...ns.classes].map(([a, b]) => `class .${a} -> .${b}${uses(b)}`),
+    ...[...ns.keyframes].map(([a, b]) => `keyframes ${a} -> ${b}`),
+    ...[...ns.props].map(([a, b]) => `variable ${a} -> ${b}`),
+    ...[...ns.utilities].map(([a, b]) => `utility ${a} -> ${b}${uses(b)}`),
+    ...[...ns.attributes].map(([a, b]) => `attribute ${a} -> ${b}${uses(b)}`),
+    ...[...ns.dropped].map(([a, why]) => `drop ${a} (${why})`),
+    ...[...ns.sizes].map(([size, v]) => `type scale --text-${size} (${v.fontSize}, line height ${v.lineHeight}) -> --kumo-font-size-${size}, --kumo-line-height-${size}`),
+  ]);
+  const rdp = sorted([...ns.classes.keys()].filter((c) => c.startsWith("rdp-")).map((c) => c.slice(4)));
+  if (rdp.join() !== sorted(RDP_CLASSES).join()) fail(`Kumo's CSS styles react-day-picker classes ${rdp.join(", ")}; RDP_CLASSES (the date-picker source patch) has ${sorted(RDP_CLASSES).join(", ")}`);
+  // No Kumo string may still use a bare type scale size, or build a text-*
+  // class from parts (`text-${size}`), which the rewrite can't see. A React
+  // key (`text-${i}`) is not a class.
+  const bare = new RegExp(`(?<![\\w-])text-(${[...ns.sizes.keys()].join("|")})(?![\\w-])`);
+  for (const c of copies.values()) {
+    const sf = ts.createSourceFile(outPath(c.area), c.code, ts.ScriptTarget.Latest, true, ts.ScriptKind.TSX);
+    const at = (pos: number) => `${outPath(c.area)}:${sf.getLineAndCharacterOfPosition(pos).line + 1}`;
+    for (const r of literalRanges(sf)) {
+      const hit = c.code.slice(r.start, r.end).match(bare);
+      if (hit) fail(`${at(r.start)} still has "${hit[0]}" in a string; the type scale rewrite missed it`);
+    }
+    const visit = (node: ts.Node) => {
+      if ((ts.isTemplateHead(node) || ts.isTemplateMiddle(node)) && /(?<![\w-])text-$/.test(node.text)) {
+        const attr = node.parent.parent?.parent;
+        if (!(attr && ts.isJsxAttribute(attr) && ts.isIdentifier(attr.name) && attr.name.text === "key")) fail(`${at(node.getStart(sf))} builds a text-* class from parts; the type scale rewrite can't see it`);
+      }
+      ts.forEachChild(node, visit);
+    };
+    visit(sf);
+  }
 }
 for (const c of copies.values()) {
   const out = join(root, outPath(c.area));
@@ -786,11 +1116,13 @@ const rootLight = lightKumo.find((b) => postcss.list.comma(b.selector).includes(
 const rootDark = lightKumo.find((b) => postcss.list.comma(b.selector).includes(':root[data-mode="dark"]'));
 if (!rootLight || !rootDark) fail("theme-kumo.css: no :root or :root[data-mode=\"dark\"] block");
 const tokenNames = sorted(new Set([...Object.keys(rootLight.vars), ...Object.keys(rootDark.vars)]));
-// Typography and other non-color @theme values of Kumo's theme.
-const kumoThemeVars: Record<string, string> = {};
-parseCss(join(src, "styles", "theme-kumo.css")).walkAtRules("theme", (at) => {
-  Object.assign(kumoThemeVars, declsOf(at, (p, v) => (isToken(p) ? undefined : v)));
-});
+// Kumo's type scale (theme-kumo.css @theme, read by namespacePlan), as the
+// variables TYPE_SCALE_CLASS reads.
+const typeScaleVars = (value: (size: string, v: { fontSize: string; lineHeight: string }) => { fontSize: string; lineHeight: string }) =>
+  Object.fromEntries([...ns.sizes].flatMap(([size, v]) => {
+    const out = value(size, v);
+    return [[`--kumo-font-size-${size}`, out.fontSize], [`--kumo-line-height-${size}`, out.lineHeight]];
+  }));
 
 const base = baseCss(tokenNames);
 
@@ -804,7 +1136,6 @@ function bindingBlocks(): { css: CssObject; fallbacks: string[] } {
     });
   const modeVars = (mode: "light" | "dark", tokens: Record<string, string>, all: boolean) => {
     const out: Record<string, string> = {};
-    for (const [k, v] of Object.entries(binding.extras[mode])) if (all) out[k] = resolveKumo(v, mode);
     for (const prop of tokenNames) {
       const key = prop.slice(2);
       if (key in tokens) out[tokenVar(prop)] = resolveKumo(tokens[key], mode);
@@ -816,12 +1147,20 @@ function bindingBlocks(): { css: CssObject; fallbacks: string[] } {
     for (const key of [...Object.keys(tokens), ...binding.keepKumo]) if (!tokenNames.includes(`--${key}`)) fail(`themes.ts names ${key}, which Kumo no longer has`);
     return out;
   };
-  const layer: CssObject = { ":root": modeVars("light", binding.tokens.light, true), ".dark": modeVars("dark", binding.tokens.dark, true) };
+  // The binding's type scale: your theme's size of the same name (see
+  // bindingTypeScale in themes.ts), with Tailwind's default as the fallback.
+  const tw = tailwindTheme();
+  const sizes = typeScaleVars((size) => {
+    const [fontSize, lineHeight] = [tw[`--text-${size}`], tw[`--text-${size}--line-height`]];
+    if (!fontSize || !lineHeight) fail(`Tailwind's theme has no --text-${size}; review bindingTypeScale`);
+    return bindingTypeScale(size, { fontSize, lineHeight });
+  });
+  const layer: CssObject = { ":root": { ...modeVars("light", binding.tokens.light, true), ...sizes }, ".dark": modeVars("dark", binding.tokens.dark, true) };
   layer[`@supports ${RELATIVE_COLOR_SUPPORTS}`] = {
     ":root": modeVars("light", binding.supportsTokens.light, false),
     ".dark": modeVars("dark", binding.supportsTokens.dark, false),
   };
-  return { css: { "@layer base": layer }, fallbacks };
+  return { css: { "@layer base": namespaceValues(layer) }, fallbacks };
 }
 const bound = bindingBlocks();
 
@@ -833,7 +1172,7 @@ items.push({
   name: "kumo-base",
   type: "registry:item",
   title: "Kumo base styles",
-  description: `Kumo's keyframes, helper classes and Tailwind token registration (from ${release}). Every Kumo component installs it. Add a theme item too.`,
+  description: `Kumo's keyframes, helper classes and Tailwind token registration (from ${release}), all under kumo- names. Every Kumo component installs it. Add a theme item too.`,
   cssVars: { theme: base.theme },
   css: base.css,
   docs: docsTheme,
@@ -843,7 +1182,7 @@ items.push({
 function kumoThemeItem(theme: KumoTheme) {
   const blocks = [...lightKumo, ...fedramp].map((b) => ({
     selector: b.selector,
-    vars: { ...b.vars, ...(b === rootLight ? theme.extras.light : b === rootDark ? theme.extras.dark : {}) },
+    vars: { ...b.vars, ...(b === rootLight ? { ...typeScaleVars((_, v) => v), ...theme.extras.light } : b === rootDark ? theme.extras.dark : {}) },
   }));
   return {
     name: theme.name,
@@ -851,8 +1190,7 @@ function kumoThemeItem(theme: KumoTheme) {
     title: theme.title,
     description: `${theme.description} From ${release}.`,
     registryDependencies: [depRef("kumo-base")],
-    cssVars: { theme: kumoThemeVars },
-    css: { "@layer base": themeCss(blocks) },
+    css: { "@layer base": namespaceValues(themeCss(blocks)) },
     docs: docsOneTheme,
   };
 }
@@ -991,6 +1329,53 @@ for (const item of items) for (const key of ["dependencies", "devDependencies", 
       }
   }
 }
+
+// Everything the style items write into the user's CSS, checked against
+// Kumo's namespace: theme variables, keyframes, @property and custom
+// properties must contain "kumo"; a selector may only name Kumo's classes
+// and data attributes (or the dark-mode and theme markers .dark,
+// [data-mode], [data-theme]) unless it is inside a Kumo element; and a rule
+// that can match an element outside Kumo may set only Kumo's variables.
+// Exceptions are listed in packages/registry/src/allowed-globals.txt, each
+// with its reason; an exception that no longer occurs fails too.
+function checkGlobals(styleItems: { name: string; cssVars?: { theme?: Record<string, string> }; css?: CssObject }[]) {
+  const writes: string[] = [];
+  const walk = (item: string, css: CssObject) => {
+    for (const [key, value] of Object.entries(css)) {
+      if (typeof value === "string") fail(`${item}: top-level declaration ${key}`);
+      const at = key.match(/^@(keyframes|property|layer|media|supports) ?(.*)$/);
+      if (at?.[1] === "keyframes" || at?.[1] === "property") {
+        if (!hasKumo(at[2])) writes.push(`${item} | @${at[1]} ${at[2]}`);
+        continue;
+      }
+      if (at) {
+        walk(item, value);
+        continue;
+      }
+      if (key.startsWith("@")) fail(`${item}: unknown at-rule ${key}`);
+      const complexes = postcss.list.comma(key);
+      for (const complex of complexes.filter((c) => !kumoScoped(c)))
+        for (const n of selectorNames(complex))
+          if (!hasKumo(n.name) && (n.kind === "class" ? n.name !== "dark" : n.name.startsWith("data-") && !KUMO_MARKERS.has(n.name))) writes.push(`${item} | ${n.kind === "class" ? "." : "["}${n.name} in ${key}`);
+      const outsideKumo = complexes.some((c) => !kumoScoped(c));
+      for (const prop of Object.keys(value))
+        if (prop.startsWith("--") ? !hasKumo(prop) : outsideKumo) writes.push(`${item} | ${key} | ${prop}`);
+    }
+  };
+  for (const item of styleItems) {
+    for (const key of Object.keys(item.cssVars?.theme ?? {})) if (!hasKumo(key)) writes.push(`${item.name} | @theme ${key}`);
+    walk(item.name, item.css ?? {});
+  }
+  const file = join(pkgDir, "src", "allowed-globals.txt");
+  const allowed = readFileSync(file, "utf8").split("\n").filter((l) => l.trim() && !l.startsWith("#")).map((l) => l.replace(/\s+#.*$/, "").trim());
+  const found = new Set(writes);
+  const leaks = [...found].filter((w) => !allowed.includes(w));
+  const stale = allowed.filter((a) => !found.has(a));
+  if (leaks.length) fail(`registry items write outside Kumo's names (namespace them in generate.ts, or list them with a reason in packages/registry/src/allowed-globals.txt):\n  ${leaks.join("\n  ")}`);
+  if (stale.length) fail(`packages/registry/src/allowed-globals.txt lists writes that no longer happen:\n  ${stale.join("\n  ")}`);
+  console.log(`Writes outside Kumo's names: ${found.size}, all in allowed-globals.txt`);
+}
+checkGlobals(items.filter((i) => ["registry:item", "registry:theme"].includes(i.type as string)) as Parameters<typeof checkGlobals>[0]);
 
 writeFileSync(
   join(root, "registry.json"),

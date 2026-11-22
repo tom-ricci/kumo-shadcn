@@ -94,6 +94,16 @@ export function KumoDemo() {
             </Sidebar.Provider>
           </div>
         </div>
+        {/* The app's own elements, read by packages/verify/check-highlight.ts:
+            with Kumo's items installed they keep Tailwind's type scale and
+            transition duration, and Kumo's helper class names (before
+            namespacing: skeleton, float, animate-refresh, ...) do nothing. */}
+        <div className="grid gap-1">
+          <p data-check="plain-xs" className="text-xs transition skeleton float animate-refresh">Plain text-xs</p>
+          <p data-check="plain-sm" className="text-sm transition skeleton-line animate-bounce-in">Plain text-sm</p>
+          <p data-check="plain-base" className="text-base transition animate-toast-bump">Plain text-base</p>
+          <p data-check="plain-lg" className="text-lg transition animate-clipboard-toast-bump">Plain text-lg</p>
+        </div>
         <div className="flex flex-wrap items-center gap-4">
           <ClipboardText text="0c239dd2" />
           <Pagination page={page} setPage={setPage} perPage={10} totalCount={100} />

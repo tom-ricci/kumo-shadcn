@@ -60,9 +60,6 @@ export interface BindingTheme {
   name: string;
   title: string;
   description: string;
-  // New variables for things shadcn has no variable for. They are defined
-  // in `@layer base`, so a value set in your own :root / .dark wins.
-  extras: { light: Record<string, string>; dark: Record<string, string> };
   // Tokens with no shadcn counterpart: they keep Kumo's value (override them
   // in your own :root / .dark).
   keepKumo: string[];
@@ -74,18 +71,29 @@ export interface BindingTheme {
   supportsTokens: { light: Record<string, string>; dark: Record<string, string> };
 }
 
-const status = {
-  "--success": kumo("color-kumo-success"),
-  "--warning": kumo("color-kumo-warning"),
-  "--info": kumo("color-kumo-info"),
-};
+// Status colors: shadcn has no standard --success, --warning or --info, but
+// some themes define them. The binding reads them when they exist and falls
+// back to Kumo's own value for the mode; it never defines them. Every other
+// status shade derives from the resulting --kumo-<status>.
+const status = (name: "success" | "warning" | "info") => `var(--${name}, ${kumo(`color-kumo-${name}`)})`;
+
+// Kumo's type scale (Kumo's own text-xs, text-sm, text-base and text-lg; the
+// generator rewrites those classes to read --kumo-font-size-<size> and
+// --kumo-line-height-<size>). The binding maps each one onto your theme's
+// size of the same name, so Kumo components use your type scale exactly as
+// they did before kumo-shadcn namespaced it (Tailwind's defaults: 12, 14, 16
+// and 18px, where Kumo's own scale is 12, 13, 14 and 16px). The fallback is
+// Tailwind's default for that size, from the tailwindcss package.
+export const bindingTypeScale = (size: string, fallback: { fontSize: string; lineHeight: string }) => ({
+  fontSize: `var(--text-${size}, ${fallback.fontSize})`,
+  lineHeight: `var(--text-${size}--line-height, ${fallback.lineHeight})`,
+});
 
 export const binding: BindingTheme = {
   name: "kumo-binding",
   title: "Kumo binding to your shadcn theme",
   description:
     "Sets Kumo's color tokens from your shadcn CSS variables (--background, --foreground, --primary, ...), so Kumo components follow your theme. Needs tailwind.cssVariables: true in components.json (with false there are no shadcn variables to read). Install one theme item: kumo-theme, kumo-cloudflare or kumo-binding.",
-  extras: { light: status, dark: status },
   keepKumo: [
     "color-kumo-badge-blue",
     "color-kumo-badge-green",
@@ -126,14 +134,14 @@ export const binding: BindingTheme = {
       // Status
       "color-kumo-danger": "var(--destructive)",
       "color-kumo-danger-tint": alpha("var(--destructive)", 5),
-      "color-kumo-success": "var(--success)",
-      "color-kumo-success-tint": alpha("var(--success)", 5),
-      "color-kumo-warning": "var(--warning)",
-      "color-kumo-warning-tint": alpha("var(--warning)", 7),
-      "color-kumo-info": "var(--info)",
-      "color-kumo-info-tint": alpha("var(--info)", 7),
-      "color-kumo-banner-info": alpha("var(--info)", 12),
-      "color-kumo-banner-warning": alpha("var(--warning)", 9),
+      "color-kumo-success": status("success"),
+      "color-kumo-success-tint": alpha("var(--kumo-success)", 5),
+      "color-kumo-warning": status("warning"),
+      "color-kumo-warning-tint": alpha("var(--kumo-warning)", 7),
+      "color-kumo-info": status("info"),
+      "color-kumo-info-tint": alpha("var(--kumo-info)", 7),
+      "color-kumo-banner-info": alpha("var(--kumo-info)", 12),
+      "color-kumo-banner-warning": alpha("var(--kumo-warning)", 9),
       "color-kumo-badge-neutral": "var(--muted-foreground)",
       "color-kumo-badge-inverted": "var(--foreground)",
       // Text
@@ -144,10 +152,10 @@ export const binding: BindingTheme = {
       "text-color-kumo-placeholder": mix("var(--muted-foreground)", "var(--background)", 35),
       "text-color-kumo-inactive": mix("var(--muted-foreground)", "var(--background)", 70),
       "text-color-kumo-danger": mix("var(--destructive)", "black", 15),
-      "text-color-kumo-success": mix("var(--success)", "black", 28),
-      "text-color-kumo-warning": mix("var(--warning)", "black", 20),
-      "text-color-kumo-info": mix("var(--info)", "black", 31),
-      "text-color-kumo-link": mix("var(--info)", "black", 31),
+      "text-color-kumo-success": mix("var(--kumo-success)", "black", 28),
+      "text-color-kumo-warning": mix("var(--kumo-warning)", "black", 20),
+      "text-color-kumo-info": mix("var(--kumo-info)", "black", 31),
+      "text-color-kumo-link": mix("var(--kumo-info)", "black", 31),
       "text-color-kumo-badge-neutral-subtle": mix("var(--foreground)", "var(--background)", 15),
       "text-color-kumo-badge-inverted": "var(--background)",
     },
@@ -172,14 +180,14 @@ export const binding: BindingTheme = {
       "color-kumo-arrow-stroke": "var(--kumo-line)",
       "color-kumo-danger": "var(--destructive)",
       "color-kumo-danger-tint": alpha("var(--destructive)", 6),
-      "color-kumo-success": "var(--success)",
-      "color-kumo-success-tint": alpha("var(--success)", 7),
-      "color-kumo-warning": "var(--warning)",
-      "color-kumo-warning-tint": alpha("var(--warning)", 13),
-      "color-kumo-info": "var(--info)",
-      "color-kumo-info-tint": alpha("var(--info)", 9),
-      "color-kumo-banner-info": alpha("var(--info)", 21),
-      "color-kumo-banner-warning": alpha("var(--warning)", 40),
+      "color-kumo-success": status("success"),
+      "color-kumo-success-tint": alpha("var(--kumo-success)", 7),
+      "color-kumo-warning": status("warning"),
+      "color-kumo-warning-tint": alpha("var(--kumo-warning)", 13),
+      "color-kumo-info": status("info"),
+      "color-kumo-info-tint": alpha("var(--kumo-info)", 9),
+      "color-kumo-banner-info": alpha("var(--kumo-info)", 21),
+      "color-kumo-banner-warning": alpha("var(--kumo-warning)", 40),
       "color-kumo-badge-neutral": mix("var(--muted-foreground)", "var(--background)", 48),
       "color-kumo-badge-inverted": "var(--foreground)",
       "text-color-kumo-default": mix("var(--foreground)", "var(--background)", 2),
@@ -189,10 +197,10 @@ export const binding: BindingTheme = {
       "text-color-kumo-placeholder": mix("var(--muted-foreground)", "var(--background)", 25),
       "text-color-kumo-inactive": mix("var(--muted-foreground)", "var(--background)", 45),
       "text-color-kumo-danger": "var(--destructive)",
-      "text-color-kumo-success": mix("var(--success)", "white", 55),
-      "text-color-kumo-warning": mix("var(--warning)", "white", 28),
-      "text-color-kumo-info": mix("var(--info)", "white", 22),
-      "text-color-kumo-link": mix("var(--info)", "white", 22),
+      "text-color-kumo-success": mix("var(--kumo-success)", "white", 55),
+      "text-color-kumo-warning": mix("var(--kumo-warning)", "white", 28),
+      "text-color-kumo-info": mix("var(--kumo-info)", "white", 22),
+      "text-color-kumo-link": mix("var(--kumo-info)", "white", 22),
       "text-color-kumo-badge-neutral-subtle": mix("var(--foreground)", "var(--background)", 8),
       "text-color-kumo-badge-inverted": "var(--background)",
     },

@@ -3,6 +3,7 @@ import { Popover as PopoverBase } from "@base-ui/react/popover";
 // Kumo, packages/kumo/src/components/popover/popover.tsx from https://github.com/cloudflare/kumo
 // (release cloudflare/kumo@2.19.0), copied by the kumo-shadcn registry (https://github.com/tom-ricci/kumo-shadcn).
 // Changes from Kumo's file: import paths.
+// Also changed: Kumo's type scale classes (text-xs, text-sm, text-base, text-lg) read --kumo-font-size-* and --kumo-line-height-*, not your theme's --text-*.
 // Also changed: cn comes from your shadcn utils (@/lib/utils).
 // Unofficial; not affiliated with or endorsed by Cloudflare.
 //
@@ -207,7 +208,7 @@ type BasePopoverPopupProps = ComponentPropsWithoutRef<typeof PopoverBase.Popup>;
 export type PopoverPopupProps = BasePopoverPopupProps;
 
 const popupBaseClassName =
-  "flex flex-col rounded-lg bg-kumo-base px-4 py-3 text-sm text-kumo-default shadow-md outline outline-kumo-line kumo-popover-popup";
+  "flex flex-col rounded-lg bg-kumo-base px-4 py-3 text-(length:--kumo-font-size-sm)/[var(--tw-leading,var(--kumo-line-height-sm))] text-kumo-default shadow-md outline outline-kumo-line kumo-popover-popup";
 
 function PopoverPopup({ className, ...props }: PopoverPopupProps) {
   return (
@@ -413,7 +414,7 @@ export type PopoverTitleProps = BasePopoverTitleProps;
 function PopoverTitle({ className, ...props }: PopoverTitleProps) {
   return (
     <PopoverBase.Title
-      className={cn("m-0 text-base leading-6 font-medium", className)}
+      className={cn("m-0 text-(length:--kumo-font-size-base)/[var(--tw-leading,var(--kumo-line-height-base))] leading-6 font-medium", className)}
       {...props}
     />
   );
@@ -434,7 +435,7 @@ export type PopoverDescriptionProps = BasePopoverDescriptionProps;
 function PopoverDescription({ className, ...props }: PopoverDescriptionProps) {
   return (
     <PopoverBase.Description
-      className={cn("m-0 text-base leading-6 text-kumo-subtle", className)}
+      className={cn("m-0 text-(length:--kumo-font-size-base)/[var(--tw-leading,var(--kumo-line-height-base))] leading-6 text-kumo-subtle", className)}
       {...props}
     />
   );

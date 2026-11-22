@@ -1,0 +1,31 @@
+# Kumo transition classes without a duration-* in the same class string (and
+# variant) that the generator gives DURATION_CLASS, so they keep Kumo's 100ms
+# without setting the app's --default-transition-duration (see "Namespacing"
+# in packages/registry/src/generate.ts). The duration goes right after the
+# transition class, so a duration-* in a later cn() argument still wins.
+# Generation fails when the list it finds differs, so a new or removed
+# occurrence gets reviewed. Line numbers are informational.
+components/breadcrumbs/breadcrumbs.tsx:164 transition-[opacity]
+components/button/button.tsx:82 transition-colors
+components/chart/GlobeMap.tsx:522 transition-opacity
+components/cloudflare-logo/cloudflare-logo.tsx:266 transition-all
+components/command-palette/command-palette.tsx:355 transition-colors
+components/command-palette/command-palette.tsx:496 transition-colors
+components/command-palette/command-palette.tsx:541 transition-opacity
+components/date-picker/date-picker.tsx:77 transition-colors
+components/dropdown/dropdown.tsx:502 transition-colors
+components/inline-copy-text/inline-copy-text.tsx:236 transition-opacity
+components/layer-dialog/layer-dialog.tsx:483 transition-opacity
+components/layer-dialog/layer-dialog.tsx:485 transition-opacity
+components/link/link.tsx:47 transition-colors
+components/link/link.tsx:52 transition-colors
+components/link/link.tsx:58 transition-colors
+components/menubar/menubar.tsx:128 transition-colors
+components/menubar/menubar.tsx:20 transition-colors
+components/menubar/menubar.tsx:51 transition-colors
+components/menubar/menubar.tsx:53 transition-colors
+components/sensitive-input/sensitive-input.tsx:447 transition-opacity
+components/sidebar/sidebar.tsx:2037 transition-all
+components/sidebar/sidebar.tsx:2182 after:transition-colors
+components/tabs/tabs.tsx:356 transition-colors
+components/toast/toast.tsx:417 transition-opacity

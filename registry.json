@@ -7,13 +7,12 @@
       "name": "kumo-base",
       "type": "registry:item",
       "title": "Kumo base styles",
-      "description": "Kumo's keyframes, helper classes and Tailwind token registration (from @cloudflare/kumo@2.19.0). Every Kumo component installs it. Add a theme item too.",
+      "description": "Kumo's keyframes, helper classes and Tailwind token registration (from @cloudflare/kumo@2.19.0), all under kumo- names. Every Kumo component installs it. Add a theme item too.",
       "cssVars": {
         "theme": {
-          "--ease-bounce": "cubic-bezier(0.2, 0, 0, 1.5)",
-          "--default-transition-duration": "100ms",
-          "--animate-refresh": "refresh 0.5s ease-in-out infinite",
-          "--animate-right": "right 15s linear infinite",
+          "--ease-kumo-bounce": "cubic-bezier(0.2, 0, 0, 1.5)",
+          "--animate-kumo-refresh": "kumo-refresh 0.5s ease-in-out infinite",
+          "--animate-kumo-right": "kumo-right 15s linear infinite",
           "--color-kumo-arrow-edge": "var(--kumo-arrow-edge)",
           "--color-kumo-arrow-stroke": "var(--kumo-arrow-stroke)",
           "--color-kumo-badge-blue": "var(--kumo-badge-blue)",
@@ -74,12 +73,10 @@
         "@layer base": {
           ":root": {
             "color-scheme": "light",
-            "--color-red-650": "oklch(55% 0.238 27.4)",
-            "--color-red-750": "oklch(46% 0.195 27.2)",
-            "--color-blue-400": "oklch(70.7% 0.165 254.624)",
-            "--color-blue-800": "oklch(42.4% 0.199 265.638)",
-            "--color-orange-650": "oklch(81.5% 0.197 76)",
-            "--color-teal-650": "oklch(54.9% 0.096 184.565)",
+            "--color-kumo-red-650": "oklch(55% 0.238 27.4)",
+            "--color-kumo-red-750": "oklch(46% 0.195 27.2)",
+            "--color-kumo-orange-650": "oklch(81.5% 0.197 76)",
+            "--color-kumo-teal-650": "oklch(54.9% 0.096 184.565)",
             "--color-kumo-neutral-50": "oklch(98.75% 0 0)",
             "--color-kumo-neutral-75": "oklch(98% 0 0)",
             "--color-kumo-neutral-125": "oklch(96.5% 0 0)",
@@ -89,22 +86,23 @@
             "--color-kumo-neutral-925": "oklch(17% 0 0)",
             "--color-kumo-neutral-950": "oklch(15% 0 0)",
             "--color-kumo-neutral-975": "oklch(12% 0 0)",
-            "--color-kumo-neutral-1000": "oklch(10% 0 0)"
+            "--color-kumo-neutral-1000": "oklch(10% 0 0)",
+            "--kumo-transition-duration": "100ms"
           },
           "[data-mode=\"dark\"], .dark": {
             "color-scheme": "dark"
           },
-          "@keyframes right": {
+          "@keyframes kumo-right": {
             "to": {
               "transform": "translateX(100%)"
             }
           },
-          "@keyframes float": {
+          "@keyframes kumo-float": {
             "to": {
               "transform": "translate(5px, 15px)"
             }
           },
-          "@keyframes refresh": {
+          "@keyframes kumo-refresh": {
             "from": {
               "transform": "rotate(0deg)"
             },
@@ -112,7 +110,7 @@
               "transform": "rotate(360deg)"
             }
           },
-          "@keyframes bounce-in": {
+          "@keyframes kumo-bounce-in": {
             "0%": {
               "transform": "scale(0.6)",
               "opacity": "0"
@@ -125,7 +123,7 @@
               "transform": "scale(1)"
             }
           },
-          "@keyframes shimmer": {
+          "@keyframes kumo-shimmer": {
             "0%": {
               "transform": "translateX(-100%)"
             },
@@ -133,7 +131,7 @@
               "transform": "translateX(100%)"
             }
           },
-          "@keyframes toast-bump": {
+          "@keyframes kumo-toast-bump": {
             "0%": {
               "transform": "scale(1)"
             },
@@ -144,7 +142,7 @@
               "transform": "scale(1)"
             }
           },
-          "@keyframes toast-bump-alternate": {
+          "@keyframes kumo-toast-bump-alternate": {
             "0%": {
               "transform": "scale(1)"
             },
@@ -155,7 +153,7 @@
               "transform": "scale(1)"
             }
           },
-          "@keyframes clipboard-toast-bump": {
+          "@keyframes kumo-clipboard-toast-bump": {
             "0%": {
               "transform": "scale(1)"
             },
@@ -166,7 +164,7 @@
               "transform": "scale(1)"
             }
           },
-          ".skeleton-line": {
+          ".kumo-skeleton-line": {
             "position": "relative",
             "overflow": "hidden",
             "border-radius": "2px",
@@ -174,39 +172,39 @@
             "width": "var(--skeleton-width)",
             "background-color": "#f3f4f6"
           },
-          ".skeleton-line::after": {
+          ".kumo-skeleton-line::after": {
             "position": "absolute",
             "top": "0",
             "right": "0",
             "bottom": "0",
             "left": "0",
-            "animation": "shimmer var(--shimmer-duration, 1.5s) var(--shimmer-delay, 0s)\n      infinite ease-in-out",
+            "animation": "kumo-shimmer var(--shimmer-duration, 1.5s) var(--shimmer-delay, 0s)\n      infinite ease-in-out",
             "content": "\"\"",
             "background": "linear-gradient(\n      90deg,\n      rgba(0, 0, 0, 0) 0%,\n      rgba(0, 0, 0, 0.08) 50%,\n      rgba(0, 0, 0, 0) 100%\n    )"
           },
-          "[data-mode=\"dark\"] .skeleton-line, .dark .skeleton-line": {
+          "[data-mode=\"dark\"] .kumo-skeleton-line, .dark .kumo-skeleton-line": {
             "background-color": "rgba(255, 255, 255, 0.06)"
           },
-          "[data-mode=\"dark\"] .skeleton-line::after, .dark .skeleton-line::after": {
+          "[data-mode=\"dark\"] .kumo-skeleton-line::after, .dark .kumo-skeleton-line::after": {
             "background": "linear-gradient(\n      90deg,\n      rgba(255, 255, 255, 0) 0%,\n      rgba(255, 255, 255, 0.05) 50%,\n      rgba(255, 255, 255, 0) 100%\n    )"
           },
-          "@keyframes scroll-fade-x-left": {
+          "@keyframes kumo-scroll-fade-x-left": {
             "from": {
-              "--fade-left-n": "0"
+              "--kumo-fade-left-n": "0"
             },
             "to": {
-              "--fade-left-n": "1"
+              "--kumo-fade-left-n": "1"
             }
           },
-          "@keyframes scroll-fade-x-right": {
+          "@keyframes kumo-scroll-fade-x-right": {
             "from": {
-              "--fade-right-n": "1"
+              "--kumo-fade-right-n": "1"
             },
             "to": {
-              "--fade-right-n": "0"
+              "--kumo-fade-right-n": "0"
             }
           },
-          "@keyframes rdp-slide_in_left": {
+          "@keyframes kumo-rdp-slide_in_left": {
             "from": {
               "transform": "translateX(-100%)"
             },
@@ -214,7 +212,7 @@
               "transform": "translateX(0)"
             }
           },
-          "@keyframes rdp-slide_in_right": {
+          "@keyframes kumo-rdp-slide_in_right": {
             "from": {
               "transform": "translateX(100%)"
             },
@@ -222,7 +220,7 @@
               "transform": "translateX(0)"
             }
           },
-          "@keyframes rdp-slide_out_left": {
+          "@keyframes kumo-rdp-slide_out_left": {
             "from": {
               "transform": "translateX(0)"
             },
@@ -230,7 +228,7 @@
               "transform": "translateX(-100%)"
             }
           },
-          "@keyframes rdp-slide_out_right": {
+          "@keyframes kumo-rdp-slide_out_right": {
             "from": {
               "transform": "translateX(0)"
             },
@@ -238,7 +236,7 @@
               "transform": "translateX(100%)"
             }
           },
-          "@keyframes rdp-fade_in": {
+          "@keyframes kumo-rdp-fade_in": {
             "from": {
               "opacity": "0"
             },
@@ -246,7 +244,7 @@
               "opacity": "1"
             }
           },
-          "@keyframes rdp-fade_out": {
+          "@keyframes kumo-rdp-fade_out": {
             "from": {
               "opacity": "1"
             },
@@ -254,7 +252,7 @@
               "opacity": "0"
             }
           },
-          "@keyframes skeleton": {
+          "@keyframes kumo-skeleton": {
             "0%": {
               "background-position": "200% 0"
             },
@@ -320,43 +318,43 @@
           }
         },
         "@layer utilities": {
-          ".no-scrollbar::-webkit-scrollbar": {
+          ".kumo-no-scrollbar::-webkit-scrollbar": {
             "display": "none"
           },
-          ".no-scrollbar": {
+          ".kumo-no-scrollbar": {
             "-ms-overflow-style": "none",
             "scrollbar-width": "none"
           },
-          ".no-input-spinner": {
+          ".kumo-no-input-spinner": {
             "appearance": "textfield"
           },
-          ".no-input-spinner ::-webkit-outer-spin-button, .no-input-spinner ::-webkit-inner-spin-button": {
+          ".kumo-no-input-spinner ::-webkit-outer-spin-button, .kumo-no-input-spinner ::-webkit-inner-spin-button": {
             "appearance": "none"
           },
-          ".link-current": {
+          ".kumo-link-current": {
             "text-decoration-color": "color-mix(in oklch, currentColor 35%, transparent)"
           },
-          "[data-mode=\"dark\"] .link-current, .dark .link-current": {
+          "[data-mode=\"dark\"] .kumo-link-current, .dark .kumo-link-current": {
             "text-decoration-color": "color-mix(in oklch, currentColor 65%, transparent)"
           },
-          ".link-current:hover": {
+          ".kumo-link-current:hover": {
             "text-decoration-color": "currentColor"
           },
-          ".link-external-icon": {
+          ".kumo-link-external-icon": {
             "stroke-width": "1.75"
           },
-          "[data-mode=\"dark\"] .link-external-icon, .dark .link-external-icon": {
+          "[data-mode=\"dark\"] .kumo-link-external-icon, .dark .kumo-link-external-icon": {
             "stroke-width": "2"
           }
         },
-        ".float": {
-          "animation": "float 5s linear infinite alternate"
+        ".kumo-float": {
+          "animation": "kumo-float 5s linear infinite alternate"
         },
-        ".animate-bounce-in": {
-          "animation": "bounce-in 0.4s ease-out"
+        ".animate-kumo-bounce-in": {
+          "animation": "kumo-bounce-in 0.4s ease-out"
         },
         ".kumo-chart-shimmer": {
-          "animation": "shimmer 1.8s ease-in-out infinite",
+          "animation": "kumo-shimmer 1.8s ease-in-out infinite",
           "transform-box": "fill-box"
         },
         "@media (prefers-reduced-motion: reduce)": {
@@ -364,42 +362,42 @@
             "animation": "none",
             "transform": "none"
           },
-          ".animate-toast-bump, .animate-toast-bump-alternate": {
+          ".animate-kumo-toast-bump, .animate-kumo-toast-bump-alternate": {
             "animation": "none"
           },
-          ".animate-clipboard-toast-bump": {
+          ".animate-kumo-clipboard-toast-bump": {
             "animation": "none"
           },
-          ".rdp-root": {
-            "--rdp-animation_duration": "0.01ms"
+          ".kumo-rdp-root": {
+            "--kumo-rdp-animation_duration": "0.01ms"
           }
         },
-        ".animate-toast-bump": {
-          "animation": "toast-bump 0.4s cubic-bezier(0.34, 1.56, 0.64, 1)",
+        ".animate-kumo-toast-bump": {
+          "animation": "kumo-toast-bump 0.4s cubic-bezier(0.34, 1.56, 0.64, 1)",
           "transform-origin": "center"
         },
-        ".animate-toast-bump-alternate": {
-          "animation": "toast-bump-alternate 0.4s cubic-bezier(0.34, 1.56, 0.64, 1)",
+        ".animate-kumo-toast-bump-alternate": {
+          "animation": "kumo-toast-bump-alternate 0.4s cubic-bezier(0.34, 1.56, 0.64, 1)",
           "transform-origin": "center"
         },
-        ".animate-clipboard-toast-bump": {
-          "animation": "clipboard-toast-bump 0.35s cubic-bezier(0.34, 1.56, 0.64, 1)",
+        ".animate-kumo-clipboard-toast-bump": {
+          "animation": "kumo-clipboard-toast-bump 0.35s cubic-bezier(0.34, 1.56, 0.64, 1)",
           "transform-origin": "center"
         },
-        "@property --fade-left-n": {
+        "@property --kumo-fade-left-n": {
           "syntax": "\"<number>\"",
           "inherits": "false",
           "initial-value": "0"
         },
-        "@property --fade-right-n": {
+        "@property --kumo-fade-right-n": {
           "syntax": "\"<number>\"",
           "inherits": "false",
           "initial-value": "0"
         },
         "@supports (animation-timeline: scroll())": {
-          "[data-overflowing]": {
-            "mask-image": "linear-gradient(\n      to right,\n      transparent,\n      white calc(var(--fade-left-n) * var(--scroll-fade-width, 3rem)),\n      white calc(100% - var(--fade-right-n) * var(--scroll-fade-width, 3rem)),\n      transparent\n    )",
-            "animation-name": "scroll-fade-x-left, scroll-fade-x-right",
+          "[data-kumo-overflowing]": {
+            "mask-image": "linear-gradient(\n      to right,\n      transparent,\n      white calc(var(--kumo-fade-left-n) * var(--scroll-fade-width, 3rem)),\n      white calc(100% - var(--kumo-fade-right-n) * var(--scroll-fade-width, 3rem)),\n      transparent\n    )",
+            "animation-name": "kumo-scroll-fade-x-left, kumo-scroll-fade-x-right",
             "animation-timing-function": "linear, linear",
             "animation-timeline": "scroll(self x)",
             "animation-range": "0 var(--scroll-fade-range, 3rem),\n      calc(100% - var(--scroll-fade-range, 3rem)) 100%",
@@ -422,59 +420,59 @@
         ".kumo-input-placeholder::placeholder": {
           "color": "var(--text-color-kumo-placeholder)"
         },
-        ".rdp-root": {
-          "--rdp-animation_duration": "0.2s",
-          "--rdp-animation_timing": "ease-out"
+        ".kumo-rdp-root": {
+          "--kumo-rdp-animation_duration": "0.2s",
+          "--kumo-rdp-animation_timing": "ease-out"
         },
-        ".rdp-weeks_before_enter": {
-          "animation": "rdp-slide_in_left var(--rdp-animation_duration)\n    var(--rdp-animation_timing) forwards"
+        ".kumo-rdp-weeks_before_enter": {
+          "animation": "kumo-rdp-slide_in_left var(--kumo-rdp-animation_duration)\n    var(--kumo-rdp-animation_timing) forwards"
         },
-        ".rdp-weeks_before_exit": {
-          "animation": "rdp-slide_out_left var(--rdp-animation_duration)\n    var(--rdp-animation_timing) forwards"
+        ".kumo-rdp-weeks_before_exit": {
+          "animation": "kumo-rdp-slide_out_left var(--kumo-rdp-animation_duration)\n    var(--kumo-rdp-animation_timing) forwards"
         },
-        ".rdp-weeks_after_enter": {
-          "animation": "rdp-slide_in_right var(--rdp-animation_duration)\n    var(--rdp-animation_timing) forwards"
+        ".kumo-rdp-weeks_after_enter": {
+          "animation": "kumo-rdp-slide_in_right var(--kumo-rdp-animation_duration)\n    var(--kumo-rdp-animation_timing) forwards"
         },
-        ".rdp-weeks_after_exit": {
-          "animation": "rdp-slide_out_right var(--rdp-animation_duration)\n    var(--rdp-animation_timing) forwards"
+        ".kumo-rdp-weeks_after_exit": {
+          "animation": "kumo-rdp-slide_out_right var(--kumo-rdp-animation_duration)\n    var(--kumo-rdp-animation_timing) forwards"
         },
-        ".rdp-root[dir=\"rtl\"] .rdp-weeks_after_enter": {
-          "animation": "rdp-slide_in_left var(--rdp-animation_duration)\n    var(--rdp-animation_timing) forwards"
+        ".kumo-rdp-root[dir=\"rtl\"] .kumo-rdp-weeks_after_enter": {
+          "animation": "kumo-rdp-slide_in_left var(--kumo-rdp-animation_duration)\n    var(--kumo-rdp-animation_timing) forwards"
         },
-        ".rdp-root[dir=\"rtl\"] .rdp-weeks_before_exit": {
-          "animation": "rdp-slide_out_right var(--rdp-animation_duration)\n    var(--rdp-animation_timing) forwards"
+        ".kumo-rdp-root[dir=\"rtl\"] .kumo-rdp-weeks_before_exit": {
+          "animation": "kumo-rdp-slide_out_right var(--kumo-rdp-animation_duration)\n    var(--kumo-rdp-animation_timing) forwards"
         },
-        ".rdp-root[dir=\"rtl\"] .rdp-weeks_before_enter": {
-          "animation": "rdp-slide_in_right var(--rdp-animation_duration)\n    var(--rdp-animation_timing) forwards"
+        ".kumo-rdp-root[dir=\"rtl\"] .kumo-rdp-weeks_before_enter": {
+          "animation": "kumo-rdp-slide_in_right var(--kumo-rdp-animation_duration)\n    var(--kumo-rdp-animation_timing) forwards"
         },
-        ".rdp-root[dir=\"rtl\"] .rdp-weeks_after_exit": {
-          "animation": "rdp-slide_out_left var(--rdp-animation_duration)\n    var(--rdp-animation_timing) forwards"
+        ".kumo-rdp-root[dir=\"rtl\"] .kumo-rdp-weeks_after_exit": {
+          "animation": "kumo-rdp-slide_out_left var(--kumo-rdp-animation_duration)\n    var(--kumo-rdp-animation_timing) forwards"
         },
-        ".rdp-caption_after_enter": {
-          "animation": "rdp-fade_in var(--rdp-animation_duration)\n    var(--rdp-animation_timing) forwards"
+        ".kumo-rdp-caption_after_enter": {
+          "animation": "kumo-rdp-fade_in var(--kumo-rdp-animation_duration)\n    var(--kumo-rdp-animation_timing) forwards"
         },
-        ".rdp-caption_after_exit": {
-          "animation": "rdp-fade_out var(--rdp-animation_duration)\n    var(--rdp-animation_timing) forwards"
+        ".kumo-rdp-caption_after_exit": {
+          "animation": "kumo-rdp-fade_out var(--kumo-rdp-animation_duration)\n    var(--kumo-rdp-animation_timing) forwards"
         },
-        ".rdp-caption_before_enter": {
-          "animation": "rdp-fade_in var(--rdp-animation_duration)\n    var(--rdp-animation_timing) forwards"
+        ".kumo-rdp-caption_before_enter": {
+          "animation": "kumo-rdp-fade_in var(--kumo-rdp-animation_duration)\n    var(--kumo-rdp-animation_timing) forwards"
         },
-        ".rdp-caption_before_exit": {
-          "animation": "rdp-fade_out var(--rdp-animation_duration)\n    var(--rdp-animation_timing) forwards"
+        ".kumo-rdp-caption_before_exit": {
+          "animation": "kumo-rdp-fade_out var(--kumo-rdp-animation_duration)\n    var(--kumo-rdp-animation_timing) forwards"
         },
         ":where( a[href], button, input[type=\"button\"], input[type=\"checkbox\"], input[type=\"radio\"], input[type=\"submit\"], input[type=\"reset\"], label[for], select, summary, [role=\"button\"], [role=\"link\"], [role=\"menuitem\"], [role=\"menuitemcheckbox\"], [role=\"menuitemradio\"], [role=\"option\"], [role=\"tab\"], [role=\"checkbox\"], [role=\"radio\"], [role=\"switch\"] ):where([data-kumo-component], [data-kumo-part]):where(:not(:disabled)):where( :not([disabled]) ):where(:not([aria-disabled=\"true\"])):where(:not([data-disabled]))": {
           "cursor": "pointer"
         },
-        ".skeleton": {
+        ".kumo-skeleton": {
           "background": "linear-gradient(\n    90deg,\n    transparent 0%,\n    rgba(0, 0, 0, 0.05) 50%,\n    transparent 100%\n  )",
           "background-size": "200% 100%",
-          "animation": "skeleton 1.5s ease-in-out infinite"
+          "animation": "kumo-skeleton 1.5s ease-in-out infinite"
         },
-        "[data-mode=\"dark\"] .skeleton, .dark .skeleton": {
+        "[data-mode=\"dark\"] .kumo-skeleton, .dark .kumo-skeleton": {
           "background": "linear-gradient(\n    90deg,\n    transparent 0%,\n    rgba(255, 255, 255, 0.05) 50%,\n    transparent 100%\n  )"
         },
-        ".animate-refresh": {
-          "animation": "refresh 1s linear infinite"
+        ".animate-kumo-refresh": {
+          "animation": "kumo-refresh 1s linear infinite"
         },
         ".kumo-shiki pre": {
           "background-color": "transparent !important"
@@ -520,18 +518,6 @@
       "registryDependencies": [
         "https://kumo-shadcn.thomasricci.dev/r/kumo-base.json"
       ],
-      "cssVars": {
-        "theme": {
-          "--text-xs": "12px",
-          "--text-xs--line-height": "calc(1 / 0.75)",
-          "--text-sm": "13px",
-          "--text-sm--line-height": "calc(1 / 0.85)",
-          "--text-base": "14px",
-          "--text-base--line-height": "1.5",
-          "--text-lg": "16px",
-          "--text-lg--line-height": "1.5"
-        }
-      },
       "css": {
         "@layer base": {
           ":root, [data-theme=\"kumo\"]": {
@@ -583,12 +569,20 @@
             "--kumo-banner-warning": "var(\n      --color-yellow-100,\n      oklch(97.3% 0.071 103.193)\n    )",
             "--kumo-badge-red": "var(--color-red-600, oklch(57.7% 0.245 27.325))",
             "--kumo-badge-green": "var(\n      --color-emerald-600,\n      oklch(59.6% 0.145 163.225)\n    )",
-            "--kumo-badge-orange": "var(--color-orange-650, oklch(81.5% 0.197 76))",
+            "--kumo-badge-orange": "var(--color-kumo-orange-650, oklch(81.5% 0.197 76))",
             "--kumo-badge-purple": "var(\n      --color-purple-600,\n      oklch(55.8% 0.288 302.321)\n    )",
-            "--kumo-badge-teal": "var(--color-teal-650, oklch(54.9% 0.096 184.565))",
+            "--kumo-badge-teal": "var(--color-kumo-teal-650, oklch(54.9% 0.096 184.565))",
             "--kumo-badge-blue": "var(--color-blue-600, oklch(54.6% 0.245 262.881))",
             "--kumo-badge-neutral": "var(--color-neutral-500, oklch(55.6% 0 0))",
-            "--kumo-badge-inverted": "var(--color-neutral-950, oklch(14.5% 0 0))"
+            "--kumo-badge-inverted": "var(--color-neutral-950, oklch(14.5% 0 0))",
+            "--kumo-font-size-xs": "12px",
+            "--kumo-line-height-xs": "calc(1 / 0.75)",
+            "--kumo-font-size-sm": "13px",
+            "--kumo-line-height-sm": "calc(1 / 0.85)",
+            "--kumo-font-size-base": "14px",
+            "--kumo-line-height-base": "1.5",
+            "--kumo-font-size-lg": "16px",
+            "--kumo-line-height-lg": "1.5"
           },
           ":root[data-mode=\"dark\"], [data-mode=\"dark\"]:not([data-theme]), [data-mode=\"dark\"] [data-theme=\"kumo\"], [data-theme=\"kumo\"][data-mode=\"dark\"], [data-theme=\"kumo\"] [data-mode=\"dark\"], :root.dark, .dark:not([data-theme]), .dark [data-theme=\"kumo\"], [data-theme=\"kumo\"].dark, [data-theme=\"kumo\"] .dark": {
             "--kumo-text-default": "var(--color-neutral-100, oklch(97% 0 0))",
@@ -639,7 +633,7 @@
             "--kumo-banner-warning": "oklch(55.4% 0.135 66.442 / 0.5)",
             "--kumo-badge-red": "var(--color-red-700, oklch(50.5% 0.213 27.518))",
             "--kumo-badge-green": "var(\n      --color-emerald-700,\n      oklch(50.8% 0.118 165.612)\n    )",
-            "--kumo-badge-orange": "var(--color-orange-650, oklch(81.5% 0.197 76))",
+            "--kumo-badge-orange": "var(--color-kumo-orange-650, oklch(81.5% 0.197 76))",
             "--kumo-badge-purple": "var(\n      --color-purple-700,\n      oklch(49.6% 0.265 301.924)\n    )",
             "--kumo-badge-teal": "var(--color-teal-700, oklch(51.1% 0.096 186.391))",
             "--kumo-badge-blue": "var(--color-blue-700, oklch(48.8% 0.243 264.376))",
@@ -668,18 +662,6 @@
       "registryDependencies": [
         "https://kumo-shadcn.thomasricci.dev/r/kumo-base.json"
       ],
-      "cssVars": {
-        "theme": {
-          "--text-xs": "12px",
-          "--text-xs--line-height": "calc(1 / 0.75)",
-          "--text-sm": "13px",
-          "--text-sm--line-height": "calc(1 / 0.85)",
-          "--text-base": "14px",
-          "--text-base--line-height": "1.5",
-          "--text-lg": "16px",
-          "--text-lg--line-height": "1.5"
-        }
-      },
       "css": {
         "@layer base": {
           ":root, [data-theme=\"kumo\"]": {
@@ -731,12 +713,20 @@
             "--kumo-banner-warning": "var(\n      --color-yellow-100,\n      oklch(97.3% 0.071 103.193)\n    )",
             "--kumo-badge-red": "var(--color-red-600, oklch(57.7% 0.245 27.325))",
             "--kumo-badge-green": "var(\n      --color-emerald-600,\n      oklch(59.6% 0.145 163.225)\n    )",
-            "--kumo-badge-orange": "var(--color-orange-650, oklch(81.5% 0.197 76))",
+            "--kumo-badge-orange": "var(--color-kumo-orange-650, oklch(81.5% 0.197 76))",
             "--kumo-badge-purple": "var(\n      --color-purple-600,\n      oklch(55.8% 0.288 302.321)\n    )",
-            "--kumo-badge-teal": "var(--color-teal-650, oklch(54.9% 0.096 184.565))",
+            "--kumo-badge-teal": "var(--color-kumo-teal-650, oklch(54.9% 0.096 184.565))",
             "--kumo-badge-blue": "var(--color-blue-600, oklch(54.6% 0.245 262.881))",
             "--kumo-badge-neutral": "var(--color-neutral-500, oklch(55.6% 0 0))",
             "--kumo-badge-inverted": "var(--color-neutral-950, oklch(14.5% 0 0))",
+            "--kumo-font-size-xs": "12px",
+            "--kumo-line-height-xs": "calc(1 / 0.75)",
+            "--kumo-font-size-sm": "13px",
+            "--kumo-line-height-sm": "calc(1 / 0.85)",
+            "--kumo-font-size-base": "14px",
+            "--kumo-line-height-base": "1.5",
+            "--kumo-font-size-lg": "16px",
+            "--kumo-line-height-lg": "1.5",
             "--kumo-highlight": "var(--color-kumo-neutral-125, oklch(96.5% 0 0))",
             "--kumo-sidebar-bg": "var(--color-kumo-canvas)"
           },
@@ -789,7 +779,7 @@
             "--kumo-banner-warning": "oklch(55.4% 0.135 66.442 / 0.5)",
             "--kumo-badge-red": "var(--color-red-700, oklch(50.5% 0.213 27.518))",
             "--kumo-badge-green": "var(\n      --color-emerald-700,\n      oklch(50.8% 0.118 165.612)\n    )",
-            "--kumo-badge-orange": "var(--color-orange-650, oklch(81.5% 0.197 76))",
+            "--kumo-badge-orange": "var(--color-kumo-orange-650, oklch(81.5% 0.197 76))",
             "--kumo-badge-purple": "var(\n      --color-purple-700,\n      oklch(49.6% 0.265 301.924)\n    )",
             "--kumo-badge-teal": "var(--color-teal-700, oklch(51.1% 0.096 186.391))",
             "--kumo-badge-blue": "var(--color-blue-700, oklch(48.8% 0.243 264.376))",
@@ -823,21 +813,18 @@
       "css": {
         "@layer base": {
           ":root": {
-            "--success": "var(--color-emerald-600, oklch(59.6% 0.145 163.225))",
-            "--warning": "oklch(73.9% 0.177 58.2)",
-            "--info": "var(--color-blue-500, oklch(68.5% 0.169 237.323))",
             "--kumo-arrow-edge": "var(--border)",
             "--kumo-arrow-stroke": "transparent",
             "--kumo-badge-blue": "var(--color-blue-600, oklch(54.6% 0.245 262.881))",
             "--kumo-badge-green": "var(\n      --color-emerald-600,\n      oklch(59.6% 0.145 163.225)\n    )",
             "--kumo-badge-inverted": "var(--foreground)",
             "--kumo-badge-neutral": "var(--muted-foreground)",
-            "--kumo-badge-orange": "var(--color-orange-650, oklch(81.5% 0.197 76))",
+            "--kumo-badge-orange": "var(--color-kumo-orange-650, oklch(81.5% 0.197 76))",
             "--kumo-badge-purple": "var(\n      --color-purple-600,\n      oklch(55.8% 0.288 302.321)\n    )",
             "--kumo-badge-red": "var(--color-red-600, oklch(57.7% 0.245 27.325))",
-            "--kumo-badge-teal": "var(--color-teal-650, oklch(54.9% 0.096 184.565))",
-            "--kumo-banner-info": "color-mix(in oklab, var(--info) 12%, transparent)",
-            "--kumo-banner-warning": "color-mix(in oklab, var(--warning) 9%, transparent)",
+            "--kumo-badge-teal": "var(--color-kumo-teal-650, oklch(54.9% 0.096 184.565))",
+            "--kumo-banner-info": "color-mix(in oklab, var(--kumo-info) 12%, transparent)",
+            "--kumo-banner-warning": "color-mix(in oklab, var(--kumo-warning) 9%, transparent)",
             "--kumo-base": "var(--card)",
             "--kumo-brand": "var(--primary)",
             "--kumo-brand-hover": "color-mix(in oklab, var(--kumo-brand), black 15%)",
@@ -851,19 +838,19 @@
             "--kumo-fill-hover": "var(--accent)",
             "--kumo-focus": "var(--ring)",
             "--kumo-hairline": "color-mix(in oklab, var(--border), var(--background) 25%)",
-            "--kumo-info": "var(--info)",
-            "--kumo-info-tint": "color-mix(in oklab, var(--info) 7%, transparent)",
+            "--kumo-info": "var(--info, var(--color-blue-500, oklch(68.5% 0.169 237.323)))",
+            "--kumo-info-tint": "color-mix(in oklab, var(--kumo-info) 7%, transparent)",
             "--kumo-interact": "color-mix(in oklab, var(--accent), var(--accent-foreground) 13%)",
             "--kumo-line": "var(--border)",
             "--kumo-overlay": "color-mix(in oklab, var(--popover), var(--popover-foreground) 1.4%)",
             "--kumo-recessed": "color-mix(in oklab, var(--background), var(--foreground) 4%)",
             "--kumo-shadow-drop": "oklch(0% 0 0 / 0.08)",
             "--kumo-shadow-edge": "oklch(0% 0 0 / 0.12)",
-            "--kumo-success": "var(--success)",
-            "--kumo-success-tint": "color-mix(in oklab, var(--success) 5%, transparent)",
+            "--kumo-success": "var(--success, var(--color-emerald-600, oklch(59.6% 0.145 163.225)))",
+            "--kumo-success-tint": "color-mix(in oklab, var(--kumo-success) 5%, transparent)",
             "--kumo-tint": "var(--muted)",
-            "--kumo-warning": "var(--warning)",
-            "--kumo-warning-tint": "color-mix(in oklab, var(--warning) 7%, transparent)",
+            "--kumo-warning": "var(--warning, oklch(73.9% 0.177 58.2))",
+            "--kumo-warning-tint": "color-mix(in oklab, var(--kumo-warning) 7%, transparent)",
             "--kumo-text-badge-inverted": "var(--background)",
             "--kumo-text-badge-neutral-subtle": "color-mix(in oklab, var(--foreground), var(--background) 15%)",
             "--kumo-text-badge-orange-subtle": "var(\n      --color-orange-800,\n      oklch(47% 0.157 37.304)\n    )",
@@ -872,31 +859,36 @@
             "--kumo-text-danger": "color-mix(in oklab, var(--destructive), black 15%)",
             "--kumo-text-default": "color-mix(in oklab, var(--foreground), var(--background) 6%)",
             "--kumo-text-inactive": "color-mix(in oklab, var(--muted-foreground), var(--background) 70%)",
-            "--kumo-text-info": "color-mix(in oklab, var(--info), black 31%)",
+            "--kumo-text-info": "color-mix(in oklab, var(--kumo-info), black 31%)",
             "--kumo-text-inverse": "color-mix(in oklab, var(--background), var(--foreground) 3%)",
-            "--kumo-text-link": "color-mix(in oklab, var(--info), black 31%)",
+            "--kumo-text-link": "color-mix(in oklab, var(--kumo-info), black 31%)",
             "--kumo-text-placeholder": "color-mix(in oklab, var(--muted-foreground), var(--background) 35%)",
             "--kumo-text-strong": "var(--foreground)",
             "--kumo-text-subtle": "var(--muted-foreground)",
-            "--kumo-text-success": "color-mix(in oklab, var(--success), black 28%)",
-            "--kumo-text-warning": "color-mix(in oklab, var(--warning), black 20%)"
+            "--kumo-text-success": "color-mix(in oklab, var(--kumo-success), black 28%)",
+            "--kumo-text-warning": "color-mix(in oklab, var(--kumo-warning), black 20%)",
+            "--kumo-font-size-xs": "var(--text-xs, 0.75rem)",
+            "--kumo-line-height-xs": "var(--text-xs--line-height, calc(1 / 0.75))",
+            "--kumo-font-size-sm": "var(--text-sm, 0.875rem)",
+            "--kumo-line-height-sm": "var(--text-sm--line-height, calc(1.25 / 0.875))",
+            "--kumo-font-size-base": "var(--text-base, 1rem)",
+            "--kumo-line-height-base": "var(--text-base--line-height, calc(1.5 / 1))",
+            "--kumo-font-size-lg": "var(--text-lg, 1.125rem)",
+            "--kumo-line-height-lg": "var(--text-lg--line-height, calc(1.75 / 1.125))"
           },
           ".dark": {
-            "--success": "var(--color-emerald-400, oklch(76.5% 0.177 163.223))",
-            "--warning": "oklch(64.5% 0.168 50)",
-            "--info": "var(--color-blue-500, oklch(68.5% 0.169 237.323))",
             "--kumo-arrow-edge": "transparent",
             "--kumo-arrow-stroke": "var(--kumo-line)",
             "--kumo-badge-blue": "var(--color-blue-700, oklch(48.8% 0.243 264.376))",
             "--kumo-badge-green": "var(\n      --color-emerald-700,\n      oklch(50.8% 0.118 165.612)\n    )",
             "--kumo-badge-inverted": "var(--foreground)",
             "--kumo-badge-neutral": "color-mix(in oklab, var(--muted-foreground), var(--background) 48%)",
-            "--kumo-badge-orange": "var(--color-orange-650, oklch(81.5% 0.197 76))",
+            "--kumo-badge-orange": "var(--color-kumo-orange-650, oklch(81.5% 0.197 76))",
             "--kumo-badge-purple": "var(\n      --color-purple-700,\n      oklch(49.6% 0.265 301.924)\n    )",
             "--kumo-badge-red": "var(--color-red-700, oklch(50.5% 0.213 27.518))",
             "--kumo-badge-teal": "var(--color-teal-700, oklch(51.1% 0.096 186.391))",
-            "--kumo-banner-info": "color-mix(in oklab, var(--info) 21%, transparent)",
-            "--kumo-banner-warning": "color-mix(in oklab, var(--warning) 40%, transparent)",
+            "--kumo-banner-info": "color-mix(in oklab, var(--kumo-info) 21%, transparent)",
+            "--kumo-banner-warning": "color-mix(in oklab, var(--kumo-warning) 40%, transparent)",
             "--kumo-base": "color-mix(in oklab, var(--card), var(--background) 50%)",
             "--kumo-brand": "var(--primary)",
             "--kumo-brand-hover": "color-mix(in oklab, var(--kumo-brand), black 8%)",
@@ -910,19 +902,19 @@
             "--kumo-fill-hover": "var(--accent)",
             "--kumo-focus": "var(--ring)",
             "--kumo-hairline": "var(--border)",
-            "--kumo-info": "var(--info)",
-            "--kumo-info-tint": "color-mix(in oklab, var(--info) 9%, transparent)",
+            "--kumo-info": "var(--info, var(--color-blue-500, oklch(68.5% 0.169 237.323)))",
+            "--kumo-info-tint": "color-mix(in oklab, var(--kumo-info) 9%, transparent)",
             "--kumo-interact": "color-mix(in oklab, var(--accent), var(--accent-foreground) 14%)",
             "--kumo-line": "color-mix(in oklab, var(--border), var(--foreground) 4%)",
             "--kumo-overlay": "color-mix(in oklab, var(--popover), var(--popover-foreground) 7%)",
             "--kumo-recessed": "var(--background)",
             "--kumo-shadow-drop": "oklch(0% 0 0 / 0.3)",
             "--kumo-shadow-edge": "oklch(100% 0 0 / 0.1)",
-            "--kumo-success": "var(--success)",
-            "--kumo-success-tint": "color-mix(in oklab, var(--success) 7%, transparent)",
+            "--kumo-success": "var(--success, var(--color-emerald-400, oklch(76.5% 0.177 163.223)))",
+            "--kumo-success-tint": "color-mix(in oklab, var(--kumo-success) 7%, transparent)",
             "--kumo-tint": "var(--muted)",
-            "--kumo-warning": "var(--warning)",
-            "--kumo-warning-tint": "color-mix(in oklab, var(--warning) 13%, transparent)",
+            "--kumo-warning": "var(--warning, oklch(64.5% 0.168 50))",
+            "--kumo-warning-tint": "color-mix(in oklab, var(--kumo-warning) 13%, transparent)",
             "--kumo-text-badge-inverted": "var(--background)",
             "--kumo-text-badge-neutral-subtle": "color-mix(in oklab, var(--foreground), var(--background) 8%)",
             "--kumo-text-badge-orange-subtle": "var(\n      --color-orange-200,\n      oklch(90.1% 0.076 70.697)\n    )",
@@ -931,14 +923,14 @@
             "--kumo-text-danger": "var(--destructive)",
             "--kumo-text-default": "color-mix(in oklab, var(--foreground), var(--background) 2%)",
             "--kumo-text-inactive": "color-mix(in oklab, var(--muted-foreground), var(--background) 45%)",
-            "--kumo-text-info": "color-mix(in oklab, var(--info), white 22%)",
+            "--kumo-text-info": "color-mix(in oklab, var(--kumo-info), white 22%)",
             "--kumo-text-inverse": "color-mix(in oklab, var(--background), var(--foreground) 7%)",
-            "--kumo-text-link": "color-mix(in oklab, var(--info), white 22%)",
+            "--kumo-text-link": "color-mix(in oklab, var(--kumo-info), white 22%)",
             "--kumo-text-placeholder": "color-mix(in oklab, var(--muted-foreground), var(--background) 25%)",
             "--kumo-text-strong": "var(--foreground)",
             "--kumo-text-subtle": "var(--muted-foreground)",
-            "--kumo-text-success": "color-mix(in oklab, var(--success), white 55%)",
-            "--kumo-text-warning": "color-mix(in oklab, var(--warning), white 28%)"
+            "--kumo-text-success": "color-mix(in oklab, var(--kumo-success), white 55%)",
+            "--kumo-text-warning": "color-mix(in oklab, var(--kumo-warning), white 28%)"
           },
           "@supports (color: oklch(from red l c h))": {
             ":root": {

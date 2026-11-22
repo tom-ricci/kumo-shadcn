@@ -1,0 +1,65 @@
+# Every name in Kumo's base CSS that the generator renames into Kumo's
+# namespace or drops, with how often Kumo's code uses each renamed class,
+# utility and attribute (see "Namespacing" in packages/registry/src/generate.ts).
+# Generation fails when the list it finds differs, so a change in Kumo's CSS
+# gets reviewed.
+attribute data-overflowing -> data-kumo-overflowing (1 uses)
+class .animate-bounce-in -> .animate-kumo-bounce-in (1 uses)
+class .animate-clipboard-toast-bump -> .animate-kumo-clipboard-toast-bump (1 uses)
+class .animate-refresh -> .animate-kumo-refresh (1 uses)
+class .animate-toast-bump -> .animate-kumo-toast-bump (1 uses)
+class .animate-toast-bump-alternate -> .animate-kumo-toast-bump-alternate (1 uses)
+class .float -> .kumo-float (0 uses)
+class .link-current -> .kumo-link-current (2 uses)
+class .link-external-icon -> .kumo-link-external-icon (1 uses)
+class .no-input-spinner -> .kumo-no-input-spinner (0 uses)
+class .no-scrollbar -> .kumo-no-scrollbar (3 uses)
+class .rdp-caption_after_enter -> .kumo-rdp-caption_after_enter (1 uses)
+class .rdp-caption_after_exit -> .kumo-rdp-caption_after_exit (1 uses)
+class .rdp-caption_before_enter -> .kumo-rdp-caption_before_enter (1 uses)
+class .rdp-caption_before_exit -> .kumo-rdp-caption_before_exit (1 uses)
+class .rdp-root -> .kumo-rdp-root (1 uses)
+class .rdp-weeks_after_enter -> .kumo-rdp-weeks_after_enter (1 uses)
+class .rdp-weeks_after_exit -> .kumo-rdp-weeks_after_exit (1 uses)
+class .rdp-weeks_before_enter -> .kumo-rdp-weeks_before_enter (1 uses)
+class .rdp-weeks_before_exit -> .kumo-rdp-weeks_before_exit (1 uses)
+class .skeleton -> .kumo-skeleton (0 uses)
+class .skeleton-line -> .kumo-skeleton-line (1 uses)
+drop --color-blue-400 (same value as Tailwind's default palette)
+drop --color-blue-800 (same value as Tailwind's default palette)
+drop --default-transition-duration (Kumo's 100ms; Kumo's transitions read --kumo-transition-duration)
+keyframes bounce-in -> kumo-bounce-in
+keyframes clipboard-toast-bump -> kumo-clipboard-toast-bump
+keyframes float -> kumo-float
+keyframes rdp-fade_in -> kumo-rdp-fade_in
+keyframes rdp-fade_out -> kumo-rdp-fade_out
+keyframes rdp-slide_in_left -> kumo-rdp-slide_in_left
+keyframes rdp-slide_in_right -> kumo-rdp-slide_in_right
+keyframes rdp-slide_out_left -> kumo-rdp-slide_out_left
+keyframes rdp-slide_out_right -> kumo-rdp-slide_out_right
+keyframes refresh -> kumo-refresh
+keyframes right -> kumo-right
+keyframes scroll-fade-x-left -> kumo-scroll-fade-x-left
+keyframes scroll-fade-x-right -> kumo-scroll-fade-x-right
+keyframes shimmer -> kumo-shimmer
+keyframes skeleton -> kumo-skeleton
+keyframes toast-bump -> kumo-toast-bump
+keyframes toast-bump-alternate -> kumo-toast-bump-alternate
+type scale --text-base (14px, line height 1.5) -> --kumo-font-size-base, --kumo-line-height-base
+type scale --text-lg (16px, line height 1.5) -> --kumo-font-size-lg, --kumo-line-height-lg
+type scale --text-sm (13px, line height calc(1 / 0.85)) -> --kumo-font-size-sm, --kumo-line-height-sm
+type scale --text-xs (12px, line height calc(1 / 0.75)) -> --kumo-font-size-xs, --kumo-line-height-xs
+utility animate-refresh -> animate-kumo-refresh (1 uses)
+utility animate-right -> animate-kumo-right (0 uses)
+utility ease-bounce -> ease-kumo-bounce (0 uses)
+variable --animate-refresh -> --animate-kumo-refresh
+variable --animate-right -> --animate-kumo-right
+variable --color-orange-650 -> --color-kumo-orange-650
+variable --color-red-650 -> --color-kumo-red-650
+variable --color-red-750 -> --color-kumo-red-750
+variable --color-teal-650 -> --color-kumo-teal-650
+variable --ease-bounce -> --ease-kumo-bounce
+variable --fade-left-n -> --kumo-fade-left-n
+variable --fade-right-n -> --kumo-fade-right-n
+variable --rdp-animation_duration -> --kumo-rdp-animation_duration
+variable --rdp-animation_timing -> --kumo-rdp-animation_timing

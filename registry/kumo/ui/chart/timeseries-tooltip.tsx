@@ -3,6 +3,7 @@ import { memo } from "react";
 // Kumo, packages/kumo/src/components/chart/timeseries-tooltip.tsx from https://github.com/cloudflare/kumo
 // (release cloudflare/kumo@2.19.0), copied by the kumo-shadcn registry (https://github.com/tom-ricci/kumo-shadcn).
 // Changes from Kumo's file: import paths.
+// Also changed: Kumo's type scale classes (text-xs, text-sm, text-base, text-lg) read --kumo-font-size-* and --kumo-line-height-*, not your theme's --text-*.
 // Unofficial; not affiliated with or endorsed by Cloudflare.
 //
 // MIT License Copyright (c) 2026 Cloudflare, Inc.
@@ -77,7 +78,7 @@ export const TooltipContent = memo(function TooltipContent({
         />
       ) : (
         <>
-          <div className="mb-1 text-xs font-semibold text-kumo-default">
+          <div className="mb-1 text-(length:--kumo-font-size-xs)/[var(--tw-leading,var(--kumo-line-height-xs))] font-semibold text-kumo-default">
             {formatTimestamp(state.ts)}
           </div>
           <SeriesTooltipRows
@@ -110,14 +111,14 @@ function MarkerTooltipContent({
   return (
     <>
       {state.markers.length === 1 && (
-        <div className="mb-1 text-xs font-semibold text-kumo-default">
+        <div className="mb-1 text-(length:--kumo-font-size-xs)/[var(--tw-leading,var(--kumo-line-height-xs))] font-semibold text-kumo-default">
           {formatTimestamp(state.markers[0].timestamp)}
         </div>
       )}
       <div className="space-y-1">
         {state.markers.map((marker, index) => (
           <div key={`${marker.timestamp}-${marker.label}-${index}`}>
-            <div className="flex items-center gap-2 text-xs text-kumo-default">
+            <div className="flex items-center gap-2 text-(length:--kumo-font-size-xs)/[var(--tw-leading,var(--kumo-line-height-xs))] text-kumo-default">
               <span
                 className="h-3 w-3 shrink-0 rounded-full"
                 style={{ backgroundColor: marker.color ?? state.color }}
@@ -132,7 +133,7 @@ function MarkerTooltipContent({
               )}
             </div>
             {marker.description && (
-              <div className="mt-0.5 ml-5 text-xs text-kumo-default">
+              <div className="mt-0.5 ml-5 text-(length:--kumo-font-size-xs)/[var(--tw-leading,var(--kumo-line-height-xs))] text-kumo-default">
                 {marker.description}
               </div>
             )}
@@ -174,13 +175,13 @@ function SeriesTooltipRows({
               style={{ backgroundColor: row.color }}
             />
             <span
-              className="truncate text-xs font-medium text-kumo-default"
+              className="truncate text-(length:--kumo-font-size-xs)/[var(--tw-leading,var(--kumo-line-height-xs))] font-medium text-kumo-default"
               title={row.name}
             >
               {row.name}
             </span>
           </div>
-          <span className="shrink-0 text-xs font-semibold text-kumo-default">
+          <span className="shrink-0 text-(length:--kumo-font-size-xs)/[var(--tw-leading,var(--kumo-line-height-xs))] font-semibold text-kumo-default">
             {formatValue
               ? formatValue(row.value)
               : formatDefaultValue(row.value)}
@@ -188,7 +189,7 @@ function SeriesTooltipRows({
         </div>
       ))}
       {hiddenCount > 0 && (
-        <div className="mt-1 text-xs text-kumo-subtle">+{hiddenCount} more</div>
+        <div className="mt-1 text-(length:--kumo-font-size-xs)/[var(--tw-leading,var(--kumo-line-height-xs))] text-kumo-subtle">+{hiddenCount} more</div>
       )}
     </>
   );

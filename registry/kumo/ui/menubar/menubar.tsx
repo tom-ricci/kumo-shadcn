@@ -3,6 +3,7 @@ import { Tooltip } from "@/components/ui/tooltip/tooltip";
 // Kumo, packages/kumo/src/components/menubar/menubar.tsx from https://github.com/cloudflare/kumo
 // (release cloudflare/kumo@2.19.0), copied by the kumo-shadcn registry (https://github.com/tom-ricci/kumo-shadcn).
 // Changes from Kumo's file: import paths.
+// Also changed: transitions without a duration-* class use --kumo-transition-duration (Kumo's 100ms), not your theme's default duration.
 // Also changed: cn comes from your shadcn utils (@/lib/utils).
 // Unofficial; not affiliated with or endorsed by Cloudflare.
 //
@@ -46,7 +47,7 @@ export interface KumoMenuBarVariantsProps {}
 export function menuBarVariants(_props: KumoMenuBarVariantsProps = {}) {
   return cn(
     // Base styles
-    "flex rounded-lg border border-kumo-recessed bg-kumo-recessed pl-px shadow-xs transition-colors",
+    "flex rounded-lg border border-kumo-recessed bg-kumo-recessed pl-px shadow-xs transition-colors duration-(--kumo-transition-duration)",
   );
 }
 
@@ -77,9 +78,9 @@ const MenuOption = ({
       data-kumo-part="option"
       aria-label={tooltip}
       className={cn(
-        "relative -ml-px flex h-full w-11 cursor-pointer items-center justify-center rounded-md border-none bg-kumo-recessed transition-colors first:rounded-l-lg last:rounded-r-lg focus:z-3 focus:ring-kumo-focus/50 focus:outline-hidden focus-visible:z-3 focus-visible:ring-2 focus-visible:ring-kumo-brand",
+        "relative -ml-px flex h-full w-11 cursor-pointer items-center justify-center rounded-md border-none bg-kumo-recessed transition-colors duration-(--kumo-transition-duration) first:rounded-l-lg last:rounded-r-lg focus:z-3 focus:ring-kumo-focus/50 focus:outline-hidden focus-visible:z-3 focus-visible:ring-2 focus-visible:ring-kumo-brand",
         {
-          "z-2 bg-kumo-base shadow-xs transition-colors": isActive === id,
+          "z-2 bg-kumo-base shadow-xs transition-colors duration-(--kumo-transition-duration)": isActive === id,
         },
       )}
       onClick={onClick}
@@ -154,7 +155,7 @@ export const MenuBar = ({
   return (
     <nav
       className={cn(
-        "isolate flex rounded-lg bg-kumo-recessed pl-px shadow-xs ring ring-kumo-line transition-colors",
+        "isolate flex rounded-lg bg-kumo-recessed pl-px shadow-xs ring ring-kumo-line transition-colors duration-(--kumo-transition-duration)",
         className,
       )}
       ref={menuRef}

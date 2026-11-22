@@ -10,6 +10,8 @@ import {
 // Kumo, packages/kumo/src/components/breadcrumbs/breadcrumbs.tsx from https://github.com/cloudflare/kumo
 // (release cloudflare/kumo@2.19.0), copied by the kumo-shadcn registry (https://github.com/tom-ricci/kumo-shadcn).
 // Changes from Kumo's file: import paths.
+// Also changed: Kumo's type scale classes (text-xs, text-sm, text-base, text-lg) read --kumo-font-size-* and --kumo-line-height-*, not your theme's --text-*.
+// Also changed: transitions without a duration-* class use --kumo-transition-duration (Kumo's 100ms), not your theme's default duration.
 // Also changed: cn comes from your shadcn utils (@/lib/utils).
 // Unofficial; not affiliated with or endorsed by Cloudflare.
 //
@@ -48,11 +50,11 @@ import { useCopyFeedback } from "@/lib/kumo/use-copy-feedback";
 export const KUMO_BREADCRUMBS_VARIANTS = {
   size: {
     sm: {
-      classes: "text-sm h-10 gap-0.5",
+      classes: "text-(length:--kumo-font-size-sm)/[var(--tw-leading,var(--kumo-line-height-sm))] h-10 gap-0.5",
       description: "Compact breadcrumbs for dense UIs",
     },
     base: {
-      classes: "text-base h-12 gap-1",
+      classes: "text-(length:--kumo-font-size-base)/[var(--tw-leading,var(--kumo-line-height-base))] h-12 gap-1",
       description: "Default breadcrumbs size",
     },
   },
@@ -190,7 +192,7 @@ function Clipboard({ text }: { text: string }) {
       variant="ghost"
       shape="square"
       size="sm"
-      className="opacity-0 transition-[opacity] group-hover:opacity-100"
+      className="opacity-0 transition-[opacity] duration-(--kumo-transition-duration) group-hover:opacity-100"
       onClick={handleCopyDeeplink}
       title={breadcrumbs.copyTooltip}
       aria-label={breadcrumbs.copy}

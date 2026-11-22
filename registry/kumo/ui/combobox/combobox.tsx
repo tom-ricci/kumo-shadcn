@@ -4,6 +4,7 @@ import { Combobox as ComboboxBase } from "@base-ui/react/combobox";
 // (release cloudflare/kumo@2.19.0), copied by the kumo-shadcn registry (https://github.com/tom-ricci/kumo-shadcn).
 // Changes from Kumo's file: import paths.
 // Also changed: hover/selected backgrounds that use Kumo's tint read --kumo-highlight first.
+// Also changed: Kumo's type scale classes (text-xs, text-sm, text-base, text-lg) read --kumo-font-size-* and --kumo-line-height-*, not your theme's --text-*.
 // Also changed: cn comes from your shadcn utils (@/lib/utils).
 // Unofficial; not affiliated with or endorsed by Cloudflare.
 //
@@ -480,7 +481,7 @@ function Item({
       data-kumo-part="item"
       {...props}
       className={cn(
-        "group mx-1.5 grid grid-cols-[1fr_16px] gap-2 rounded px-2 py-1.5 text-base",
+        "group mx-1.5 grid grid-cols-[1fr_16px] gap-2 rounded px-2 py-1.5 text-(length:--kumo-font-size-base)/[var(--tw-leading,var(--kumo-line-height-base))]",
         "cursor-pointer data-highlighted:bg-(--kumo-highlight,var(--color-kumo-tint))",
         // Disabled rows: muted text, no pointer, suppress highlight bg even
         // when keyboard nav lands on them. Base UI sets `data-disabled` on
@@ -542,7 +543,7 @@ function GroupLabel(props: ComboboxBase.GroupLabel.Props) {
     <ComboboxBase.GroupLabel
       {...props}
       className={cn(
-        "mx-1.5 px-2 py-1.5 text-sm text-kumo-subtle",
+        "mx-1.5 px-2 py-1.5 text-(length:--kumo-font-size-sm)/[var(--tw-leading,var(--kumo-line-height-sm))] text-kumo-subtle",
         props.className,
       )}
     />
@@ -575,7 +576,7 @@ function Chip({
         "h-6 pr-[3px] pl-2", // Dimensions
         "rounded-sm ring-1 ring-kumo-hairline", // Border
         "bg-kumo-overlay", // Background
-        "text-sm", // Typography
+        "text-(length:--kumo-font-size-sm)/[var(--tw-leading,var(--kumo-line-height-sm))]", // Typography
       )}
     >
       {props.children}

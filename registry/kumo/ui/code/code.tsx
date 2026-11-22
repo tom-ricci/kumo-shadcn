@@ -3,6 +3,7 @@ import { type CSSProperties } from "react";
 // Kumo, packages/kumo/src/components/code/code.tsx from https://github.com/cloudflare/kumo
 // (release cloudflare/kumo@2.19.0), copied by the kumo-shadcn registry (https://github.com/tom-ricci/kumo-shadcn).
 // Changes from Kumo's file: import paths.
+// Also changed: Kumo's type scale classes (text-xs, text-sm, text-base, text-lg) read --kumo-font-size-* and --kumo-line-height-*, not your theme's --text-*.
 // Also changed: cn comes from your shadcn utils (@/lib/utils).
 // Unofficial; not affiliated with or endorsed by Cloudflare.
 //
@@ -70,7 +71,7 @@ export const KUMO_CODE_STYLING = {
   /** Typography and layout */
   typography: {
     fontFamily: "font-mono",
-    fontSize: "text-sm",
+    fontSize: "text-(length:--kumo-font-size-sm)/[var(--tw-leading,var(--kumo-line-height-sm))]",
     lineHeight: "leading-[20px]",
   },
   /** Container dimensions */
@@ -130,7 +131,7 @@ export function codeVariants({
 }: KumoCodeVariantsProps = {}) {
   return cn(
     // Base styles
-    "m-0 w-auto rounded-none border-none bg-transparent p-0 font-mono text-sm leading-[20px] text-kumo-subtle",
+    "m-0 w-auto rounded-none border-none bg-transparent p-0 font-mono text-(length:--kumo-font-size-sm)/[var(--tw-leading,var(--kumo-line-height-sm))] leading-[20px] text-kumo-subtle",
     // Apply lang-specific styles (fallback to default if lang not in map)
     resolveVariant(
       KUMO_CODE_VARIANTS.lang,

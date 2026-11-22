@@ -120,7 +120,13 @@ if merged=$(node --input-type=module -e '
 const { cn } = await import(process.argv[1]);
 const cases = [[["text-sm", "text-kumo-subtle"], "text-sm text-kumo-subtle"], [["text-kumo-default", "text-kumo-subtle"], "text-kumo-subtle"],
   [["bg-kumo-base", "bg-kumo-tint"], "bg-kumo-tint"], [["ring-kumo-line", "ring-kumo-hairline"], "ring-kumo-hairline"],
-  [["bg-kumo-base", "hover:bg-(--kumo-highlight,var(--color-kumo-tint))"], "bg-kumo-base hover:bg-(--kumo-highlight,var(--color-kumo-tint))"], [["px-2", "px-4"], "px-4"]];
+  [["bg-kumo-base", "hover:bg-(--kumo-highlight,var(--color-kumo-tint))"], "bg-kumo-base hover:bg-(--kumo-highlight,var(--color-kumo-tint))"], [["px-2", "px-4"], "px-4"],
+  // Kumo'"'"'s type scale and transition classes (TYPE_SCALE_CLASS, DURATION_CLASS in generate.ts).
+  [["text-(length:--kumo-font-size-sm)/[var(--tw-leading,var(--kumo-line-height-sm))]", "text-kumo-subtle"], "text-(length:--kumo-font-size-sm)/[var(--tw-leading,var(--kumo-line-height-sm))] text-kumo-subtle"],
+  [["text-kumo-subtle", "text-(length:--kumo-font-size-xs)/4"], "text-kumo-subtle text-(length:--kumo-font-size-xs)/4"],
+  [["text-(length:--kumo-font-size-sm)/[var(--tw-leading,var(--kumo-line-height-sm))] leading-5"], "text-(length:--kumo-font-size-sm)/[var(--tw-leading,var(--kumo-line-height-sm))] leading-5"],
+  [["text-(length:--kumo-font-size-sm)/[var(--tw-leading,var(--kumo-line-height-sm))]", "text-lg"], "text-lg"],
+  [["transition-colors duration-(--kumo-transition-duration)", "duration-200"], "transition-colors duration-200"]];
 const bad = cases.filter(([args, want]) => cn(...args) !== want).map(([args, want]) => `cn(${args.join(", ")}) = "${cn(...args)}", want "${want}"`);
 console.log(bad.length ? bad.join("; ") : `${cases.length} cases`); process.exit(bad.length ? 1 : 0);' "$app/$(utils_file)" 2>&1); then
   pass "Kumo class merges with the project's cn: $merged"
@@ -216,18 +222,20 @@ for flag in "${relax[@]}"; do sed -i -E "s/\"$flag\": true/\"$flag\": false/" "$
 [ "$transform" != jsx ] && step "tsc --noEmit${relax:+ (relaxed: ${relax[*]})}" "${tsc_cmd[@]}"
 step "${build_cmd[*]:1}" "${build_cmd[@]}"
 if [ "$framework" = vite ]; then css=$(ls dist/assets/*.css 2>/dev/null); else css=$(find .next/static -name '*.css' 2>/dev/null); fi
-if [ -n "$css" ] && grep -q "bg-kumo-base" $css && grep -q -- "--kumo-base:" $css && grep -q "@keyframes skeleton" $css; then
+if [ -n "$css" ] && grep -q "bg-kumo-base" $css && grep -q -- "--kumo-base:" $css && grep -q "@keyframes kumo-skeleton" $css; then
   pass "built CSS has Kumo utilities, $theme tokens and keyframes"
 else fail "built CSS is missing Kumo utilities, tokens or keyframes"; fi
 
-# 6. Hover/selected backgrounds in a real browser (needs $CHROMIUM), for the
-# themes whose values are known: Kumo's tint, or kumo-cloudflare's highlight.
-if [ "$framework" = vite ] && [ -z "$only" ] && [ "$theme" != kumo-binding ] && [ -n "${CHROMIUM:-}" ]; then
+# 6. In a real browser (needs $CHROMIUM): hover/selected backgrounds, for the
+# themes whose values are known (Kumo's tint, or kumo-cloudflare's
+# highlight), and for every theme, plain elements outside Kumo keep
+# Tailwind's defaults (type scale, transition duration, no Kumo animations).
+if [ "$framework" = vite ] && [ -z "$only" ] && [ -n "${CHROMIUM:-}" ]; then
   if node "$here/check-highlight.ts" "$work/$name-shots" "$app/dist=$theme" >"$work/$name.highlight.log" 2>&1; then ok=1; else ok=0; fi
   if [ "$transform" = prefix ]; then
     # The CLI prefixes className strings but not Kumo's variant objects, so
     # Kumo's styles must still be missing; if this changes, update the README.
-    if [ $ok = 0 ]; then pass "prefix stays unsupported: Kumo's styles don't apply ($(grep -c '^FAIL' "$work/$name.highlight.log") of 6 state checks fail, as documented)"
+    if [ $ok = 0 ]; then pass "prefix stays unsupported: Kumo's styles don't apply ($(grep -c '^FAIL.*background' "$work/$name.highlight.log") of 6 state checks fail, as documented)"
     else fail "prefix now styles Kumo's components; update the README"; fi
   else
     [ $ok = 1 ] || failed=1

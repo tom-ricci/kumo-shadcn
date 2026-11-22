@@ -7,6 +7,7 @@ import type {
 // Kumo, packages/kumo/src/components/chart/Legend.tsx from https://github.com/cloudflare/kumo
 // (release cloudflare/kumo@2.19.0), copied by the kumo-shadcn registry (https://github.com/tom-ricci/kumo-shadcn).
 // Changes from Kumo's file: import paths.
+// Also changed: Kumo's type scale classes (text-xs, text-sm, text-base, text-lg) read --kumo-font-size-* and --kumo-line-height-*, not your theme's --text-*.
 // Also changed: cn comes from your shadcn utils (@/lib/utils).
 // Unofficial; not affiliated with or endorsed by Cloudflare.
 //
@@ -130,13 +131,13 @@ function LargeItem({
           })}
           style={{ backgroundColor: color }}
         />
-        <span className={cn("text-xs", { "opacity-50": inactive })}>
+        <span className={cn("text-(length:--kumo-font-size-xs)/[var(--tw-leading,var(--kumo-line-height-xs))]", { "opacity-50": inactive })}>
           {name}
         </span>
       </div>
       <div className="flex items-baseline gap-0.5">
         <span
-          className={cn("text-lg leading-none font-medium", {
+          className={cn("text-(length:--kumo-font-size-lg)/[var(--tw-leading,var(--kumo-line-height-lg))] leading-none font-medium", {
             "opacity-50": inactive,
           })}
         >
@@ -144,7 +145,7 @@ function LargeItem({
         </span>
         {unit && (
           <span
-            className={cn("text-xs leading-none text-kumo-subtle", {
+            className={cn("text-(length:--kumo-font-size-xs)/[var(--tw-leading,var(--kumo-line-height-xs))] leading-none text-kumo-subtle", {
               "opacity-50": inactive,
             })}
           >
@@ -205,8 +206,8 @@ function SmallItem({
         })}
         style={{ backgroundColor: color }}
       />
-      <span className={cn("text-xs", { "opacity-50": inactive })}>{name}</span>
-      <span className={cn("text-xs font-medium", { "opacity-50": inactive })}>
+      <span className={cn("text-(length:--kumo-font-size-xs)/[var(--tw-leading,var(--kumo-line-height-xs))]", { "opacity-50": inactive })}>{name}</span>
+      <span className={cn("text-(length:--kumo-font-size-xs)/[var(--tw-leading,var(--kumo-line-height-xs))] font-medium", { "opacity-50": inactive })}>
         {value}
       </span>
     </div>

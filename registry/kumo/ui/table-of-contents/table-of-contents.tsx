@@ -3,6 +3,7 @@ import { cloneElement, forwardRef, isValidElement } from "react";
 // Kumo, packages/kumo/src/components/table-of-contents/table-of-contents.tsx from https://github.com/cloudflare/kumo
 // (release cloudflare/kumo@2.19.0), copied by the kumo-shadcn registry (https://github.com/tom-ricci/kumo-shadcn).
 // Changes from Kumo's file: import paths.
+// Also changed: Kumo's type scale classes (text-xs, text-sm, text-base, text-lg) read --kumo-font-size-* and --kumo-line-height-*, not your theme's --text-*.
 // Also changed: cn comes from your shadcn utils (@/lib/utils).
 // Unofficial; not affiliated with or endorsed by Cloudflare.
 //
@@ -53,7 +54,7 @@ export type KumoTableOfContentsState =
   keyof typeof KUMO_TABLE_OF_CONTENTS_VARIANTS.state;
 
 const ITEM_BASE =
-  "block w-full truncate border-l-2 border-transparent py-0.5 pl-4 text-sm text-left no-underline";
+  "block w-full truncate border-l-2 border-transparent py-0.5 pl-4 text-(length:--kumo-font-size-sm)/[var(--tw-leading,var(--kumo-line-height-sm))] text-left no-underline";
 
 export type TableOfContentsProps = React.HTMLAttributes<HTMLElement>;
 
@@ -76,7 +77,7 @@ const TableOfContentsTitle = forwardRef<
   <p
     ref={ref}
     className={cn(
-      "mb-3 text-xs font-semibold tracking-wide text-kumo-subtle uppercase",
+      "mb-3 text-(length:--kumo-font-size-xs)/[var(--tw-leading,var(--kumo-line-height-xs))] font-semibold tracking-wide text-kumo-subtle uppercase",
       className,
     )}
     {...props}
@@ -215,7 +216,7 @@ const TableOfContentsGroup = forwardRef<
         className={cn("-ml-0.5 flex flex-col gap-2", className)}
         {...props}
       >
-        <p className="py-0.5 pl-4 text-sm leading-5 font-medium text-kumo-subtle">
+        <p className="py-0.5 pl-4 text-(length:--kumo-font-size-sm)/[var(--tw-leading,var(--kumo-line-height-sm))] leading-5 font-medium text-kumo-subtle">
           {label}
         </p>
         <ul className={cn(NESTED_UL_CLASSES)}>{children}</ul>
