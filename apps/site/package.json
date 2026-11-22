@@ -2,10 +2,9 @@
   "name": "kumo-shadcn-site",
   "private": true,
   "type": "module",
-  "description": "The kumo-shadcn docs page. Its Kumo components are installed from this registry at build time (scripts/build-site.sh); they are not checked in.",
+  "description": "The kumo-shadcn docs page. Its Kumo components are installed from this registry at build time (apps/site/build.sh); they are not checked in.",
   "scripts": {
-    "typecheck": "tsc --noEmit",
-    "build": "vite build"
+    "build": "./build.sh"
   },
   "dependencies": {
     "@fontsource-variable/geist": "5.3.0",

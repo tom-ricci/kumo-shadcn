@@ -2,7 +2,7 @@
 # Installs every registry item with the real shadcn CLI into a fresh app and
 # checks the result. One app per run:
 #
-#   scripts/verify.sh <vite|next> <iconLibrary> <kumo-theme|kumo-cloudflare|kumo-binding> [default|custom-aliases] [items|-] [transform]
+#   packages/verify/verify.sh <vite|next> <iconLibrary> <kumo-theme|kumo-cloudflare|kumo-binding> [default|custom-aliases] [items|-] [transform]
 #
 # [items] is a comma-separated list (e.g. input) to add only those items and
 # their dependencies, as a user would, instead of every item ("-": all).
@@ -16,7 +16,7 @@
 # the repository).
 #
 # The app is made with `shadcn init` (Tailwind v4), items come from public/r
-# served on localhost (scripts/serve-registry.ts), then: no IconPlaceholder
+# served on localhost (packages/registry/src/serve-registry.ts), then: no IconPlaceholder
 # left, no @cloudflare/kumo dependency, files where components.json says,
 # tsc --noEmit, a production build, and Kumo's classes in the built CSS.
 # Prints PASS/FAIL lines and exits non-zero on any failure.
@@ -25,7 +25,8 @@ set -uo pipefail
 SHADCN="shadcn@4.23.0"
 framework=$1 icons=$2 theme=$3 aliases=${4:-default} only=${5:-} transform=${6:-none}
 [ "$only" = - ] && only=""
-repo=$(cd "$(dirname "$0")/.." && pwd)
+here=$(cd "$(dirname "$0")" && pwd) # packages/verify
+repo=$(cd "$here/../.." && pwd)
 # Outside the repository, so the apps can't resolve this repo's node_modules.
 work=${VERIFY_DIR:-${RUNNER_TEMP:-${TMPDIR:-/tmp}}/kumo-shadcn-verify}
 name="$framework-$icons-$theme${aliases/default/}"
@@ -50,7 +51,7 @@ step() { # step <description> <command...>: run, log, PASS/FAIL
 }
 
 mkdir -p "$work" && rm -rf "$app"
-node "$repo/scripts/serve-registry.ts" 0 >"$work/$name.server.log" 2>&1 &
+node "$repo/packages/registry/src/serve-registry.ts" 0 >"$work/$name.server.log" 2>&1 &
 server=$!
 trap 'kill $server 2>/dev/null' EXIT
 port=
@@ -149,7 +150,7 @@ const id = (n) => "kumo_" + n.replace(/-/g, "_");
 console.log(items.map((i) => `import * as ${id(i.name)} from "${i.type === "registry:ui" ? ui : comps}/${i.name}/index";`).join("\n"));
 console.log(`export const kumoModules = [${items.map((i) => id(i.name)).join(", ")}];`);' "$repo/registry.json" "$ui_alias" "$only" >"$src/kumo-all.ts"
 if [ -z "$only" ]; then
-  sed -e "s#@/components/ui/#$ui_alias/#g" -e "s#@/lib/kumo/#$lib_alias/kumo/#g" "$repo/scripts/verify/kumo-demo.tsx" >"$src/kumo-demo.tsx"
+  sed -e "s#@/components/ui/#$ui_alias/#g" -e "s#@/lib/kumo/#$lib_alias/kumo/#g" "$here/kumo-demo.tsx" >"$src/kumo-demo.tsx"
 else # only some items installed: a page that just imports them
   printf '"use client";\nimport { kumoModules } from "./kumo-all";\n\nexport function KumoDemo() {\n  return <div className="bg-kumo-base">{kumoModules.length}</div>;\n}\n' >"$src/kumo-demo.tsx"
 fi
@@ -168,9 +169,9 @@ fi
 # 5a. The template exactly as `shadcn init` made it. Kumo's code is copied
 # as-is, so stricter template settings report errors, as they would for any
 # shadcn component. The exact set (file and error code, alias folders written
-# as <ui>/<lib>/<components>) must match scripts/verify/expected-errors-<framework>.txt,
+# as <ui>/<lib>/<components>) must match packages/verify/expected-errors-<framework>.txt,
 # so any change shows up. VERIFY_RECORD=1 rewrites that file instead.
-expected="$repo/scripts/verify/expected-errors-$framework.txt"
+expected="$here/expected-errors-$framework.txt"
 normalize() {
   sed -E 's/\x1b\[[0-9;]*m//g' | sed -nE \
     -e 's#^([^ (]+)\([0-9]+,[0-9]+\): error (TS[0-9]+):.*#\1 \2#p' \
@@ -185,7 +186,7 @@ if [ -z "$only" ] && [ "$transform" = none ]; then
     normalize <"$work/$name.stock-build.log"
   } | LC_ALL=C sort >"$work/$name.stock-errors.txt"
   if [ -n "${VERIFY_RECORD:-}" ]; then
-    { echo "# Errors a stock \`shadcn init -t $framework\` app reports after adding every item (scripts/verify.sh)."
+    { echo "# Errors a stock \`shadcn init -t $framework\` app reports after adding every item (packages/verify/verify.sh)."
       echo "# One line per error: file and code, or the build result and bundler errors."
       cat "$work/$name.stock-errors.txt"; } >"$expected"
     pass "stock template: recorded $(grep -c . "$work/$name.stock-errors.txt") lines to $(basename "$expected")"
@@ -222,7 +223,7 @@ else fail "built CSS is missing Kumo utilities, tokens or keyframes"; fi
 # 6. Hover/selected backgrounds in a real browser (needs $CHROMIUM), for the
 # themes whose values are known: Kumo's tint, or kumo-cloudflare's highlight.
 if [ "$framework" = vite ] && [ -z "$only" ] && [ "$theme" != kumo-binding ] && [ -n "${CHROMIUM:-}" ]; then
-  if node "$repo/scripts/check-highlight.ts" "$work/$name-shots" "$app/dist=$theme" >"$work/$name.highlight.log" 2>&1; then ok=1; else ok=0; fi
+  if node "$here/check-highlight.ts" "$work/$name-shots" "$app/dist=$theme" >"$work/$name.highlight.log" 2>&1; then ok=1; else ok=0; fi
   if [ "$transform" = prefix ]; then
     # The CLI prefixes className strings but not Kumo's variant objects, so
     # Kumo's styles must still be missing; if this changes, update the README.

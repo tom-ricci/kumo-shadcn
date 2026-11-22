@@ -15,26 +15,26 @@
     "types": [],
     "paths": {
       "@/components/ui/*": [
-        "./registry/kumo/ui/*"
+        "../../registry/kumo/ui/*"
       ],
       "@/components/*": [
-        "./registry/kumo/blocks/*"
+        "../../registry/kumo/blocks/*"
       ],
       "@/lib/kumo/*": [
-        "./registry/kumo/lib/kumo/*"
+        "../../registry/kumo/lib/kumo/*"
       ],
       "@/app/(create)/components/icon-placeholder": [
-        "./registry/icon-placeholder.tsx"
+        "../../registry/icon-placeholder.tsx"
       ],
       "@/lib/utils": [
-        "./registry/shadcn-utils.ts"
+        "../../registry/shadcn-utils.ts"
       ]
     },
     "noFallthroughCasesInSwitch": true,
     "isolatedModules": true
   },
   "include": [
-    "registry/**/*.ts",
-    "registry/**/*.tsx"
+    "../../registry/**/*.ts",
+    "../../registry/**/*.tsx"
   ]
 }

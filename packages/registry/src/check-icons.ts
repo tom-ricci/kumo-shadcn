@@ -1,13 +1,13 @@
 #!/usr/bin/env node
 // Checks the icon shim against all five icon libraries shadcn supports:
-// 1. every name in scripts/icons.ts exists in the real package;
+// 1. every name in packages/registry/src/icons.ts exists in the real package;
 // 2. shadcn's own transform (the code `shadcn add` runs) turns the shim into
 //    valid code for each library: no IconPlaceholder left, and tsc passes on
 //    the result plus a file that uses the shim the way Kumo does;
 // 3. rendered on the server, Phosphor-only props (weight, mirrored) do not
 //    leak into the SVG, and size defaults to 1em.
 //
-//   node scripts/check-icons.ts   (after node scripts/generate.ts)
+//   node packages/registry/src/check-icons.ts   (after node packages/registry/src/generate.ts)
 import { execFileSync } from "node:child_process";
 import { mkdirSync, readFileSync, rmSync, writeFileSync } from "node:fs";
 import { join, resolve, dirname } from "node:path";
@@ -16,7 +16,7 @@ import ts from "typescript";
 import { transform } from "@shadcn/registry/internal/transformers/index";
 import { ICONS, ICON_LIBRARIES, iconNames, type IconLibrary } from "./icons.ts";
 
-const root = resolve(dirname(fileURLToPath(import.meta.url)), "..");
+const root = resolve(dirname(fileURLToPath(import.meta.url)), "..", "..", ".."); // the repository root
 const work = join(root, ".check", "icons");
 const PACKAGES: Record<IconLibrary, string> = {
   lucide: "lucide-react",

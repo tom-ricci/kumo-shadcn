@@ -1,46 +1,19 @@
 {
   "name": "kumo-shadcn",
   "private": true,
-  "type": "module",
   "license": "MIT",
+  "packageManager": "npm@10.9.9",
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
   "scripts": {
-    "fetch-kumo": "scripts/fetch-kumo.sh .kumo",
-    "generate": "node scripts/generate.ts --kumo .kumo",
-    "build": "shadcn build",
-    "typecheck": "tsc -p tsconfig.json && tsc -p tsconfig.scripts.json",
-    "check-icons": "node scripts/check-icons.ts",
-    "registry": "npm run generate && npm run build && npm run typecheck && npm run check-icons && npm run check-directory",
-    "verify": "scripts/verify.sh",
-    "compare-themes": "node scripts/compare-themes.ts",
-    "check-directory": "node scripts/check-directory.ts"
+    "registry": "turbo run typecheck check-icons check-directory --filter=@kumo-shadcn/registry",
+    "site": "turbo run kumo-shadcn-site#build",
+    "check": "turbo run typecheck check-icons check-directory check-worker",
+    "verify": "turbo run verify --only --env-mode=loose --filter=@kumo-shadcn/verify --"
   },
   "devDependencies": {
-    "@base-ui/react": "1.9.0",
-    "@hugeicons/core-free-icons": "4.4.0",
-    "@hugeicons/react": "1.1.10",
-    "@phosphor-icons/react": "2.1.10",
-    "@remixicon/react": "4.9.0",
-    "@tabler/icons-react": "3.50.0",
-    "@types/d3-geo": "3.1.0",
-    "@types/node": "22.19.1",
-    "@types/react": "19.3.0",
-    "@types/react-dom": "19.3.0",
-    "cn": "0.5.2",
-    "d3-geo": "3.1.1",
-    "echarts": "6.0.0",
-    "lucide-react": "1.69.0",
-    "motion": "12.38.0",
-    "postcss": "8.5.32",
-    "postcss-nested": "9.0.1",
-    "react": "19.3.1",
-    "react-day-picker": "9.14.0",
-    "react-dom": "19.3.1",
-    "shadcn": "4.23.0",
-    "tailwindcss": "4.3.4",
-    "typescript": "6.0.3",
-    "wrangler": "4.158.0"
-  },
-  "engines": {
-    "node": ">=22.18"
+    "turbo": "2.11.10"
   }
 }

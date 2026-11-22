@@ -1,6 +1,6 @@
 "use client";
 
-// Demo page for scripts/verify.sh: renders a sample of Kumo components and
+// Demo page for packages/verify/verify.sh: renders a sample of Kumo components and
 // imports every installed item (kumo-all.ts, written by the script), so the
 // type check and the production build cover all of them.
 import { useState } from "react";
@@ -67,7 +67,7 @@ export function KumoDemo() {
           ]}
           selectedValue="overview"
         />
-        {/* Interactive states, read by scripts/check-highlight.ts. */}
+        {/* Interactive states, read by packages/verify/check-highlight.ts. */}
         <div className="flex items-start gap-4" data-check="states">
           <Button variant="ghost" data-check="ghost">
             Ghost hover

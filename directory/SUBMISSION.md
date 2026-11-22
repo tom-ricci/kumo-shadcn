@@ -12,7 +12,7 @@ Sources: [Registry Directory](https://ui.shadcn.com/docs/registry/registry-index
 [Namespaces](https://ui.shadcn.com/docs/registry/namespace),
 [Registry Health](https://ui.shadcn.com/docs/registry/health), and the validator the directory runs
 (`pnpm validate:registries`: `apps/v4/scripts/validate-registries.mts` and
-`apps/v4/lib/registry-directory.ts` in shadcn-ui/ui). `npm run check-directory` checks every item
+`apps/v4/lib/registry-directory.ts` in shadcn-ui/ui). `npm run check-directory -w @kumo-shadcn/registry` checks every item
 below that can be checked from this repository; CI runs it on every build.
 
 | Requirement | Source | Status |
@@ -33,10 +33,10 @@ Not stated anywhere in the docs: rules about trademarks or third-party names. Se
 
 1. Deploy the Worker (secrets in the README, Hosting) and replace `SUBDOMAIN` in `directory/entry.json`
    with the real address, or use a custom domain.
-2. Decide the namespace (see "Naming"). If it changes, change `NAMESPACE` in `scripts/generate.ts`,
-   the registry `name` in `scripts/generate.ts` (it must match), and `name` in `directory/entry.json`.
+2. Decide the namespace (see "Naming"). If it changes, change `NAMESPACE` in `packages/registry/src/generate.ts`,
+   the registry `name` in `packages/registry/src/generate.ts` (it must match), and `name` in `directory/entry.json`.
 3. After the listing is merged, switch `registryDependencies` to the namespaced form
-   (`node scripts/generate.ts --deps namespace`, or make it the default). Until then they stay full URLs,
+   (`node packages/registry/src/generate.ts --kumo .kumo --deps namespace`, or make it the default). Until then they stay full URLs,
    because `@kumo/...` dependencies only resolve where `@kumo` is configured or listed.
 4. Run `npm run registry` (includes `check-directory`).
 

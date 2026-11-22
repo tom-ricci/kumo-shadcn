@@ -1,12 +1,12 @@
 #!/usr/bin/env node
-// Checks the highlight hook in built verification apps (scripts/verify.sh):
+// Checks the highlight hook in built verification apps (packages/verify/verify.sh):
 // hovers a ghost button, opens a dropdown and hovers an item, and reads the
 // sidebar's active item, with real mouse events in headless Chromium (CDP).
 // Under kumo-theme the backgrounds must be Kumo's tint (light 97%, dark
 // 26.9%); under kumo-cloudflare the highlight shade (light 96.5%, dark 20.5%).
 // Also saves a screenshot of the states for each app and mode.
 //
-//   CHROMIUM=... node scripts/check-highlight.ts <out-dir> <dist-dir>=<kumo-theme|kumo-cloudflare> ...
+//   CHROMIUM=... node packages/verify/check-highlight.ts <out-dir> <dist-dir>=<kumo-theme|kumo-cloudflare> ...
 import { spawn } from "node:child_process";
 import { readFile, writeFile, mkdir, mkdtemp } from "node:fs/promises";
 import { tmpdir } from "node:os";
@@ -63,6 +63,13 @@ const ws = new WebSocket(targets.find((t) => t.type === "page")!.webSocketDebugg
 await new Promise((r) => ws.addEventListener("open", r, { once: true }));
 let nextId = 0;
 const pending = new Map<number, (v: any) => void>();
+// If the browser goes away mid-run, fail now instead of waiting on replies that never come.
+let finished = false;
+ws.addEventListener("close", () => {
+  if (finished) return;
+  console.log("FAIL highlight: the browser closed the DevTools connection");
+  process.exit(1);
+});
 ws.addEventListener("message", (e) => {
   const msg = JSON.parse(String(e.data));
   if (msg.id !== undefined) pending.get(msg.id)?.(msg.result ?? msg);
@@ -118,6 +125,7 @@ for (const [i, arg] of apps.entries()) {
     await writeFile(join(outDir, `${name}-${mode}.png`), Buffer.from(shot.data, "base64"));
   }
 }
+finished = true;
 ws.close();
 chrome.kill();
 process.exit(failed ? 1 : 0);

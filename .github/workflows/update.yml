@@ -23,18 +23,22 @@ on:
         required: false
   pull_request:
     paths:
-      - "scripts/**"
+      - "packages/**"
+      - "apps/**"
+      - "turbo.json"
       - "package.json"
       - "package-lock.json"
-      - "tsconfig*.json"
       - "registry/icon-placeholder.tsx"
+      - "registry/shadcn-utils.ts"
       - "wrangler.jsonc"
       - "public/_headers"
       - "public/_redirects"
-      - "site/**"
       - ".github/workflows/update.yml"
 
 permissions: {}
+
+env:
+  TURBO_TELEMETRY_DISABLED: "1"
 
 concurrency:
   group: update-kumo-${{ github.ref }}
@@ -60,30 +64,22 @@ jobs:
       # Install scripts stay off: a freshly published package never runs code here.
       - run: npm ci --ignore-scripts
 
+      # The whole pipeline through turbo (turbo.json): fetch the Kumo release
+      # (never cached), generate, shadcn build, type-check, the icon shim and
+      # directory checks, the docs page (built with kumo-shadcn itself, writing
+      # only public/index.html and public/assets/), and wrangler dev on the
+      # result. No turbo cache is restored in CI, and --force skips cache
+      # reads anyway, so every run builds from the current Kumo release.
       # Kumo's source is only parsed (TypeScript compiler API, PostCSS), never run.
-      - name: Fetch the Kumo release
-        id: fetch
+      - name: Generate, build and check
         env:
           GH_TOKEN: ${{ github.token }}
           KUMO_TAG: ${{ inputs.kumo_tag }}
-        run: echo "tag=$(scripts/fetch-kumo.sh .kumo)" >> "$GITHUB_OUTPUT"
+        run: npx turbo run typecheck check-icons check-directory check-worker --force
 
-      # Fails on an unmapped icon, an unknown import, a type error or a shim
-      # that doesn't compile for one of the five icon libraries.
-      - name: Generate, build and check
-        run: npm run registry
-
-      # The docs page at /, built with kumo-shadcn itself from the registry
-      # just generated (its components come from public/r through the CLI).
-      # It writes public/index.html and public/assets/ only, and fails if
-      # public/r changes.
-      - name: Build the docs page
-        run: scripts/build-site.sh
-
-      # wrangler dev on the assembled public/: the page at /, the registry at
-      # /r/* with JSON, CORS and cache headers as before.
-      - name: Check the Worker
-        run: scripts/check-worker.sh
+      - name: Record the Kumo release
+        id: fetch
+        run: echo "tag=$(cat registry/kumo/VERSION)" >> "$GITHUB_OUTPUT"
 
       - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
         with:
@@ -143,7 +139,10 @@ jobs:
       - name: Install every item into a fresh app (${{ matrix.app }})
         env:
           CHROMIUM: google-chrome
-        run: scripts/verify.sh ${{ matrix.app }}
+        # --only: test the downloaded registry; don't regenerate it.
+        # --env-mode=loose: the browser check needs the runner's environment;
+        # verify is never cached, so nothing extra goes into a cache key.
+        run: npx turbo run verify --only --env-mode=loose --filter=@kumo-shadcn/verify -- ${{ matrix.app }}
 
   publish:
     needs: [generate, verify]

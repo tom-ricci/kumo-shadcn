@@ -3,15 +3,16 @@
 # root of public/: public/index.html and public/assets/. The registry in
 # public/r is never touched (checked at the end).
 #
-#   scripts/build-site.sh   (after npm run registry, so public/r is current)
+#   apps/site/build.sh   (after npm run registry, so public/r is current)
 #
 # The page's Kumo components are installed with the real shadcn CLI from the
-# registry that was just built: public/r is served on localhost (scripts/serve-registry.ts)
+# registry that was just built: public/r is served on localhost (packages/registry/src/serve-registry.ts)
 # and the site's "@kumo" namespace points at it. They are not checked in.
 set -euo pipefail
 
 SHADCN="shadcn@4.23.0"
-repo=$(cd "$(dirname "$0")/.." && pwd)
+here=$(cd "$(dirname "$0")" && pwd) # apps/site
+repo=$(cd "$here/../.." && pwd)
 work=${SITE_BUILD_DIR:-${RUNNER_TEMP:-${TMPDIR:-/tmp}}/kumo-shadcn-site}
 export npm_config_ignore_scripts=true npm_config_audit=false npm_config_fund=false npm_config_update_notifier=false
 
@@ -22,11 +23,11 @@ before=$(registry_sum)
 rm -rf "$work" && mkdir -p "$work"
 # Not site/.gitignore: it ignores the installed components, and Tailwind's
 # source detection skips ignored files, so their classes would be missing.
-(cd "$repo/site" && tar --exclude=.gitignore --exclude=node_modules --exclude=dist --exclude=src/components/ui --exclude=src/lib -cf - .) | tar -xf - -C "$work"
+(cd "$here" && tar --exclude=.gitignore --exclude=node_modules --exclude=dist --exclude=src/components/ui --exclude=src/lib -cf - .) | tar -xf - -C "$work"
 cd "$work"
 npm ci
 
-node "$repo/scripts/serve-registry.ts" 0 >server.log 2>&1 &
+node "$repo/packages/registry/src/serve-registry.ts" 0 >server.log 2>&1 &
 server=$!
 trap 'kill $server 2>/dev/null' EXIT
 port=

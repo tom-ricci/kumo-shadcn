@@ -118,7 +118,7 @@ reports 15 errors, and `vite build` fails.
 
 Set those three to `false` in `tsconfig.app.json` and `tsc` and `vite build` pass. If you add only some
 items, you see only the errors in their files. The exact list is in
-[`scripts/verify/expected-errors-vite.txt`](scripts/verify/expected-errors-vite.txt).
+[`packages/verify/expected-errors-vite.txt`](packages/verify/expected-errors-vite.txt).
 
 **Next.js** (`shadcn init -t next`): no errors. `tsc` and `next build` pass as the template comes.
 
@@ -184,7 +184,7 @@ dashboard pages.
 
 To make that possible, the registry's copies of Kumo's components read a `--kumo-highlight` variable
 first wherever a hover, highlighted, selected or open state uses the tint color (10 places in Kumo
-2.19.0, listed in [`scripts/expected-highlights.txt`](scripts/expected-highlights.txt)). The sidebar also
+2.19.0, listed in [`packages/registry/src/expected-highlights.txt`](packages/registry/src/expected-highlights.txt)). The sidebar also
 reads `--kumo-sidebar-bg` and `--kumo-sidebar-active-bg`. Only `kumo-cloudflare` sets these, so with
 `kumo-theme` or `kumo-binding` the components look exactly as Kumo ships them. You can also set
 `--kumo-highlight` yourself.
@@ -197,7 +197,7 @@ color). They are left out.
 Each Kumo token is set from a shadcn variable. Where Kumo has more levels than shadcn (Kumo has four
 surface colors, shadcn has two), the binding mixes colors with `color-mix(in oklab, ...)` to keep the
 levels apart. The amounts are tuned so that, on shadcn's default neutral theme, the binding comes out
-within a small distance of Kumo's own colors (most tokens within 1 ΔE; `npm run compare-themes` prints
+within a small distance of Kumo's own colors (most tokens within 1 ΔE; `npm run compare-themes -w @kumo-shadcn/registry` prints
 the table). The exceptions are on purpose: brand follows your `--primary`, and focus follows your
 `--ring`.
 
@@ -267,7 +267,7 @@ lucide, tabler, hugeicons, phosphor or remixicon.
 | X | XIcon | IconX | Cancel01Icon | RiCloseLine |
 
 With phosphor as your `iconLibrary` you get the original icons (`CheckIcon` and so on). The mapping is
-in [`scripts/icons.ts`](scripts/icons.ts).
+in [`packages/registry/src/icons.ts`](packages/registry/src/icons.ts).
 
 ## How updates work
 
@@ -290,7 +290,7 @@ update. That replaces your edits to those files, so check the diff.
 
 ### How the registry is generated
 
-[`scripts/generate.ts`](scripts/generate.ts) reads Kumo's source with the TypeScript compiler and
+[`packages/registry/src/generate.ts`](packages/registry/src/generate.ts) reads Kumo's source with the TypeScript compiler and
 PostCSS. It never runs Kumo's code, and it uses no AI. For each component it:
 
 - copies the source files (not tests or stories);
@@ -317,21 +317,42 @@ The generator stops with an error instead of guessing: on an icon with no mappin
 
 ### Developing
 
+The repository is a [Turborepo](https://turborepo.com) with npm workspaces:
+
+| Path | What |
+| --- | --- |
+| `packages/registry` | The generator and registry tooling: fetch Kumo, generate, `shadcn build`, type-check, icon shim and directory checks |
+| `apps/site` | The docs page, built with the registry itself |
+| `packages/verify` | The verification harness: test apps installed with the shadcn CLI, and the Worker check |
+| `registry.json`, `registry/`, `public/`, `wrangler.jsonc` | What is published. They stay at the repository root (the raw GitHub URLs, the `tom-ricci/kumo-shadcn/<item>` shorthand and the Worker read them there); the packages write them. |
+
 ```bash
 npm ci --ignore-scripts
-npm run fetch-kumo      # download the latest Kumo release into .kumo/
-npm run registry        # generate, shadcn build, type-check, check the icon shim
-npm run verify -- vite lucide kumo-theme   # one test app: framework, icon library, theme [aliases] [items]
+npm run registry   # fetch the latest Kumo release, generate, shadcn build, type-check, icon and directory checks
+npm run site       # the same, plus the docs page
+npm run check      # everything, plus wrangler dev on the result (needs a system workerd can run on)
+npm run verify -- vite lucide kumo-theme   # one test app: framework, icon library, theme [aliases] [items|-] [transform]
 ```
+
+`turbo.json` runs them in order: `fetch-kumo` → `generate` → `build` (shadcn build) → the docs page →
+`check-worker`, with `typecheck`, `check-icons` and `check-directory` after `generate`/`build`, and
+`verify` after `build`.
+
+Caching: `fetch-kumo` never caches, so every run takes the current Kumo release. `generate`'s cache key
+includes the Kumo source it reads (`.kumo/packages/kumo/src/**`, its `package.json` and `LICENSE`, and
+Kumo's component metadata) and the generator's own files, and each later task's key includes the keys of
+the tasks it depends on. A new Kumo release therefore rebuilds everything after it; an unchanged one
+replays from the cache (`.turbo/`, not committed). CI restores no cache and runs with `--force`, so a
+published registry is always built fresh.
 
 ## Hosting
 
 The Worker serves two things from `public/`: the registry under `/r/` (committed, written by the
 generator and `shadcn build`) and a one-page docs site at `/` (`index.html` and `assets/`, built by
-[`scripts/build-site.sh`](scripts/build-site.sh) from [`site/`](site) and not committed). The site is a
+[`apps/site/build.sh`](apps/site/build.sh) from [`apps/site/`](apps/site) and not committed). The site is a
 small Vite app that installs its Kumo components from the freshly built registry with the shadcn CLI,
 so it is also a test. The build fails if `public/r` changes, and
-[`scripts/check-worker.sh`](scripts/check-worker.sh) checks both with `wrangler dev`.
+[`packages/verify/check-worker.sh`](packages/verify/check-worker.sh) checks both with `wrangler dev`.
 
 The registry is static JSON in `public/`. A Cloudflare Worker serves it with
 [Workers Static Assets](https://developers.cloudflare.com/workers/static-assets/), configured in
@@ -353,7 +374,7 @@ Domains & Routes). Once the address is settled, replace the placeholder in the i
 
 Items refer to each other (`registryDependencies`) through the raw GitHub URLs, so they work from any of
 the three addresses. To point them at the Worker instead, change `DEFAULT_BASE_URL` in
-`scripts/generate.ts` and `PROD` in `scripts/serve-registry.ts`.
+`packages/registry/src/generate.ts` and `PROD` in `packages/registry/src/serve-registry.ts`.
 
 ## License
 
