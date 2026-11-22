@@ -140,7 +140,9 @@ jobs:
         env:
           CHROMIUM: google-chrome
         # --only: test the downloaded registry; don't regenerate it.
-        run: npx turbo run verify --only --filter=@kumo-shadcn/verify -- ${{ matrix.app }}
+        # --env-mode=loose: the browser check needs the runner's environment;
+        # verify is never cached, so nothing extra goes into a cache key.
+        run: npx turbo run verify --only --env-mode=loose --filter=@kumo-shadcn/verify -- ${{ matrix.app }}
 
   publish:
     needs: [generate, verify]

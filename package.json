@@ -11,7 +11,7 @@
     "registry": "turbo run typecheck check-icons check-directory --filter=@kumo-shadcn/registry",
     "site": "turbo run kumo-shadcn-site#build",
     "check": "turbo run typecheck check-icons check-directory check-worker",
-    "verify": "turbo run verify --only --filter=@kumo-shadcn/verify --"
+    "verify": "turbo run verify --only --env-mode=loose --filter=@kumo-shadcn/verify --"
   },
   "devDependencies": {
     "turbo": "2.11.10"

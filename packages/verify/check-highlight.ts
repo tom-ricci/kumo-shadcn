@@ -63,6 +63,13 @@ const ws = new WebSocket(targets.find((t) => t.type === "page")!.webSocketDebugg
 await new Promise((r) => ws.addEventListener("open", r, { once: true }));
 let nextId = 0;
 const pending = new Map<number, (v: any) => void>();
+// If the browser goes away mid-run, fail now instead of waiting on replies that never come.
+let finished = false;
+ws.addEventListener("close", () => {
+  if (finished) return;
+  console.log("FAIL highlight: the browser closed the DevTools connection");
+  process.exit(1);
+});
 ws.addEventListener("message", (e) => {
   const msg = JSON.parse(String(e.data));
   if (msg.id !== undefined) pending.get(msg.id)?.(msg.result ?? msg);
@@ -118,6 +125,7 @@ for (const [i, arg] of apps.entries()) {
     await writeFile(join(outDir, `${name}-${mode}.png`), Buffer.from(shot.data, "base64"));
   }
 }
+finished = true;
 ws.close();
 chrome.kill();
 process.exit(failed ? 1 : 0);
