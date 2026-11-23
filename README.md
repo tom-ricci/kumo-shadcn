@@ -1,69 +1,31 @@
 # kumo-shadcn
 
-A [shadcn/ui registry](https://ui.shadcn.com/docs/registry) for [Kumo](https://github.com/cloudflare/kumo),
-Cloudflare's React component library.
+A [shadcn](https://ui.shadcn.com) registry for [Kumo](https://kumo-ui.com), Cloudflare's React component
+library. Like any shadcn component, each Kumo component is copied into your project as source. No more
+installing `@cloudflare/kumo`!
 
-This registry is unofficial. It is not affiliated with or endorsed by Cloudflare.
+Not affiliated with or endorsed by Cloudflare.
 
-Docs page: https://kumo-shadcn.thomasricci.dev (built with this registry). Kumo's own docs, to browse the
-components: https://kumo-ui.com
-
-## What you get
-
-It works like shadcn/ui: `shadcn add` copies the source of a Kumo component into your project, and the
-code is yours to read and change. There is no `@cloudflare/kumo` package to install.
-
-- **49 components** (`button`, `dialog`, `select`, `chart`, ...) and **3 blocks** (`page-header`,
-  `resource-list`, `delete-resource`), copied from Kumo's source.
-- **Helpers** (`kumo-utils`): Kumo's own helpers: variant helpers, the link, locale and portal providers,
-  and `safeRandomId`. For `cn`, the components use your project's `@/lib/utils`, like any shadcn
-  component (see [cn](#cn)).
-- **Icons** (`kumo-icons`): the icons Kumo uses, drawn with the icon library from your `components.json`.
-- **Theme items**: `kumo-theme`, `kumo-cloudflare` and `kumo-binding`. Install exactly one.
-
-Files go where your `components.json` aliases say:
-
-| What | Where (default aliases) |
-| --- | --- |
-| Components | `components/ui/<name>/` (for example `components/ui/button/button.tsx`) |
-| Blocks | `components/<name>/` |
-| Helpers and icons | `lib/kumo/` |
-| Styles | your Tailwind CSS file |
-
-The list of items is in [`registry.json`](registry.json). The built item files are in [`public/r/`](public/r).
+Docs: https://kumo-shadcn.thomasricci.dev · Browse the components: https://kumo-ui.com
 
 ## Install
 
-You need a project set up with `npx shadcn@latest init`, Tailwind CSS v4, React 18 or 19, and shadcn CLI
-4.23 or later. Older CLIs don't understand the file targets this registry uses. The checks run with
-4.23.0.
-
-1. Add one theme item (see [Themes](#themes)):
-
-   ```bash
-   npx shadcn@latest add https://kumo-shadcn.thomasricci.dev/r/kumo-theme.json
-   ```
-
-2. Add components. Each one brings the components, helpers and icons it needs:
-
-   ```bash
-   npx shadcn@latest add https://kumo-shadcn.thomasricci.dev/r/button.json
-   ```
-
-   Replace `button` with any item name. You can list several URLs in one command.
-
-The registry is served by a Cloudflare Worker at https://kumo-shadcn.thomasricci.dev (see
-[Hosting](#hosting)). The same items install from GitHub too:
+Start from a shadcn project with CLI version 4.23 or later, choose a theme, and add your components. Any
+of these works:
 
 ```bash
-npx shadcn@latest add https://raw.githubusercontent.com/tom-ricci/kumo-shadcn/main/public/r/button.json
+# by URL
+npx shadcn@latest add https://kumo-shadcn.thomasricci.dev/r/kumo-theme.json
+npx shadcn@latest add https://kumo-shadcn.thomasricci.dev/r/button.json
+
+# by GitHub repo
+npx shadcn@latest add tom-ricci/kumo-shadcn/kumo-theme
 npx shadcn@latest add tom-ricci/kumo-shadcn/button
 ```
 
-Or give the registry a namespace in `components.json` (or under `"registries"` in `package.json`) and
-add items by name:
+Or add the namespace to `components.json`:
 
-```json
+```jsonc
 {
   "registries": {
     "@kumo-shadcn": "https://kumo-shadcn.thomasricci.dev/r/{name}.json"
@@ -72,409 +34,153 @@ add items by name:
 ```
 
 ```bash
-npx shadcn@latest add @kumo-shadcn/kumo-theme @kumo-shadcn/button
+npx shadcn@latest add @kumo-shadcn/kumo-theme
+npx shadcn@latest add @kumo-shadcn/button
 ```
 
-Items refer to the items they need by their full Worker URL, so dependencies come from the Worker
-whichever way you installed. The registry index is at `/r/registry.json`. Each item has Kumo's own title, description and category
-(from Kumo's component metadata).
+Then import your components:
 
-3. Import it:
+```tsx
+import { Button } from "@/components/ui/button/button"
+```
 
-   ```tsx
-   import { Button } from "@/components/ui/button/button";
-
-   <Button variant="primary">Deploy</Button>;
-   ```
-
-   Each component folder also has an `index.ts`. `@/components/ui/button` resolves to it, unless you
-   also have shadcn's own `components/ui/button.tsx`, which `shadcn init` adds. In that case
-   `@/components/ui/button` is shadcn's button, and Kumo's is `@/components/ui/button/button`. Kumo's own
-   files always import each other by file, so they never pick up the wrong one.
-
-Kumo's providers are in `lib/kumo`, for example `import { LinkProvider } from "@/lib/kumo/link-provider"`.
-
-### cn
-
-Kumo's components import `cn` from `@/lib/utils`, the shadcn utils file your `components.json` points
-to (`aliases.utils`). Items list shadcn's own `utils` item as a registry dependency, so a project without
-`lib/utils.ts` gets it, with the `cn` package. A project that has them keeps them: the registry doesn't
-pin a `cn` version, and CI checks that the `cn` version `shadcn init` installed is unchanged after adding
-every item. Kumo itself pins `cn` 0.4.0; the components work with shadcn's current `cn` (CI checks how it
-merges Kumo's classes).
-
-### TypeScript settings
-
-The components are Kumo's code, copied as it is, with nothing suppressed. Like any shadcn component,
-they have to compile under your project's settings, and a few strict settings reject parts of Kumo's code.
-
-**Vite** (the template `shadcn init -t vite` uses, from `create-vite`): with every item added, `tsc`
-reports 15 errors, and `vite build` fails.
-
-| Setting | What Kumo does | Errors |
-| --- | --- | --- |
-| `erasableSyntaxOnly` | uses `enum`s and one runtime `namespace` (`banner`, `chart/Color.ts`, `date-range-picker`) | 7 × TS1294 |
-| `verbatimModuleSyntax` | imports some types without `type` (`toast`, `chart/TimeseriesChart.tsx`, `page-header`) | 7 × TS1484, and `vite build` stops with 5 `MISSING_EXPORT` errors |
-| `noUnusedParameters` | has one unused callback parameter (`clipboard-text`) | 1 × TS6133 |
-
-Set those three to `false` in `tsconfig.app.json` and `tsc` and `vite build` pass. If you add only some
-items, you see only the errors in their files. The exact list is in
-[`packages/verify/expected-errors-vite.txt`](packages/verify/expected-errors-vite.txt).
-
-**Next.js** (`shadcn init -t next`): no errors. `tsc` and `next build` pass as the template comes.
-
-### Next.js
-
-The copied files have `"use client"` exactly where Kumo's source has it, which is one file
-(`loader/skeleton-line.tsx`). Kumo's npm package marks every file as a client module at build time; its
-source doesn't. So use Kumo components from your own `"use client"` files. Rendering them directly from a
-Server Component fails `next build` with "You're importing a module that depends on `createContext` into
-a React Server Component module". CI checks that exact failure, and that the same components build when
-used from a `"use client"` file.
-
-### components.json options
-
-The shadcn CLI rewrites files as it installs them, depending on `components.json`. CI installs every item
-with each of these set:
-
-| Option | Result |
-| --- | --- |
-| `rtl: true` | Works. The CLI turns physical classes into logical ones (`ml-2` → `ms-2`) where it can see them (in `className` and `cn(...)` there); classes in Kumo's variant objects stay physical. |
-| `tsx: false` | Works. Files are written as `.js`/`.jsx`, and the app builds. |
-| `rsc: false` | Works. (shadcn 4.23 leaves the one `"use client"` line in place; it does nothing outside Next.js.) |
-| `tailwind.cssVariables: false` | Works with `kumo-theme` and `kumo-cloudflare`. `kumo-binding` needs `true`: it reads your shadcn CSS variables, and with `false` there are none. |
-| `tailwind.prefix` | Not supported. The CLI adds the prefix to class strings in `className` attributes, but Kumo keeps most of its classes in variant objects (`classes: "..."`), which it doesn't reach. Those classes then produce no styles. |
+The full list of items is in https://kumo-shadcn.thomasricci.dev/r/registry.json. Kumo's providers
+(link, locale, portal) are in `@/lib/kumo`, e.g. `import { LinkProvider } from "@/lib/kumo/link-provider"`.
 
 ## Themes
 
-Every component installs `kumo-base`: Kumo's keyframes, a few helper classes, and the Tailwind setup that
-makes classes like `bg-kumo-base` and `text-kumo-subtle` work. The colors and the type scale come from a
-theme item. Install exactly one:
+Kumo isn't directly shadcn compatible: it uses its own design tokens, which don't map perfectly onto
+shadcn's. So the registry provides a few themes. Install exactly one. Each pulls in `kumo-base` and builds
+on it. `kumo-base` avoids touching *your* CSS: everything it adds is named `kumo-…`, so your `text-sm`,
+`transition` and class names stay yours.
 
-- **`kumo-theme`**: Kumo's own look, with Kumo's colors and type scale, as Kumo ships them. It also
-  includes Kumo's `fedramp` theme (`data-theme="fedramp"`).
-- **`kumo-cloudflare`**: like `kumo-theme`, plus the direction of the Cloudflare dashboard's design: one
-  highlight shade for hover and selected states, and a canvas-colored sidebar (see below).
-- **`kumo-binding`**: derives Kumo's colors from your shadcn variables, so Kumo components match your
-  theme and your other shadcn components.
+- **`kumo-theme`**: Kumo's default theme.
+- **`kumo-cloudflare`**: Cloudflare's products use slightly different colors than Kumo's defaults (one
+  highlight shade for hover/selected states, a canvas-colored sidebar). This is that.
+- **`kumo-binding`**: derives Kumo's design tokens from your shadcn tokens. It's a slightly lossy
+  conversion, but tuned to look good.
 
-Dark mode follows shadcn's `.dark` class. `kumo-theme` and `kumo-cloudflare` also keep Kumo's own
-selectors working for colors: `data-mode="dark"` and `data-theme="kumo"` / `data-theme="fedramp"`, on the
-page or on part of it. The few `dark:` classes in Kumo's code (in `Switch`) follow your app's dark
-variant, which is the `.dark` class in a shadcn project.
+To switch themes, delete the old theme's rules from `@layer base` in your CSS file, then add the new one
+(the CLI adds rules but never removes them).
 
-### What the items write
-
-Nothing outside Kumo's own names. Installing `kumo-base` or a theme item leaves the rest of your app
-exactly as it was: your `text-sm` is still your `text-sm`, `transition` still takes your default
-duration, and a class of yours called `skeleton` or `no-scrollbar` stays yours.
-
-| Item | Writes |
-| --- | --- |
-| `kumo-base` | Tailwind theme entries for Kumo's tokens (`--color-kumo-*`, `--text-color-kumo-*`, so `bg-kumo-base` and `text-kumo-subtle` work) and `--animate-kumo-*`, `--ease-kumo-*`; Kumo's palette shades (`--color-kumo-neutral-50`, `--color-kumo-red-650`, ...) and `--kumo-transition-duration` (100ms) on `:root`; keyframes and helper classes, all named `kumo-*` (`.kumo-skeleton`, `.kumo-no-scrollbar`, `.animate-kumo-refresh`, `@keyframes kumo-shimmer`, ...); rules for Kumo's own elements (`.kumo-shiki`, `[data-kumo-component]`, ...); and `color-scheme` (see below) |
-| `kumo-theme`, `kumo-cloudflare` | Kumo's color tokens (`--kumo-*`) for light, dark and fedramp, and Kumo's type scale as `--kumo-font-size-<size>` / `--kumo-line-height-<size>` (`xs` 12px, `sm` 13px, `base` 14px, `lg` 16px); `kumo-cloudflare` adds `--kumo-highlight` and `--kumo-sidebar-bg` |
-| `kumo-binding` | Kumo's color tokens and type scale (`--kumo-*`), set from your shadcn variables; it only reads yours |
-
-The one exception is `color-scheme`: a property, not a name, so it can't be namespaced. `kumo-base` sets
-`color-scheme: light` on `:root` and `dark` on `.dark` (and `data-mode="dark"`), so native scrollbars and
-form controls in Kumo's components follow the mode. In dark mode that is what next-themes, shadcn's dark
-mode for Next.js, already sets on `<html>`. `@custom-variant dark` is not written by any item; Kumo's few
-`dark:` classes use your project's (shadcn's `.dark`). The generator checks all of this on every build:
-anything an item writes outside Kumo's names fails it unless
-[`packages/registry/src/allowed-globals.txt`](packages/registry/src/allowed-globals.txt) lists it with a
-reason, and those two `color-scheme` rules are the only entries.
-
-Kumo's components read Kumo's sizes through those variables: the registry rewrites Kumo's `text-xs`,
-`text-sm`, `text-base` and `text-lg` classes to
-`text-(length:--kumo-font-size-sm)/[var(--tw-leading,var(--kumo-line-height-sm))]` (and so on), which is
-the same CSS as Tailwind's `text-sm` with Kumo's values, and which `cn` still merges as a font size. To
-match Kumo's sizes in your own code, use the same class or the variables (`font-size:
-var(--kumo-font-size-sm)`). There are no `text-kumo-<size>` utilities: `cn` would take them for a text
-color and drop one of `text-kumo-sm text-kumo-subtle`, and `text-kumo-base` is already the color
-`kumo-base`. Transitions in Kumo's components that had no duration get
-`duration-(--kumo-transition-duration)`, Kumo's 100ms.
-
-`kumo-binding` maps Kumo's sizes onto your sizes of the same name (`--kumo-font-size-sm` is your
-`--text-sm`, and so on, with Tailwind's defaults as fallbacks), so Kumo components use your type scale,
-as they did with `kumo-binding` before. Its status colors read your `--success`, `--warning` and `--info`
-if your theme defines them, and otherwise use Kumo's.
-
-**Breaking change** (from the release that added this): `kumo-theme` and `kumo-cloudflare` no longer set
-`--text-xs` to `--text-lg`, and `kumo-base` no longer sets `--default-transition-duration`,
-`--color-blue-400`, `--color-blue-800` or Kumo's extra palette shades under Tailwind's names. If your own
-code relied on Kumo's type scale (13px `text-sm`), Kumo's 100ms default transition, or Kumo's helper
-classes and keyframes by their old names (`no-scrollbar`, `skeleton`, `skeleton-line`, `link-current`,
-`animate-refresh`, `animate-bounce-in`, `@keyframes shimmer`, `--color-red-650`, ...), switch to the
-`kumo-` names above. `kumo-binding` no longer defines `--success`, `--warning` and `--info`; define them
-yourself if your code used them. To upgrade a project, add your theme item again along with the
-components (`shadcn add <theme item> <components> -o`): updated components need the theme's new
-`--kumo-font-size-*` variables. The CLI doesn't remove the old rules, so then delete them from your CSS
-file: Kumo's `--text-*` and `--default-transition-duration` in `@theme`, the old keyframes and helper
-classes, and (after `kumo-binding`) `--success`, `--warning` and `--info` in `@layer base`.
-
-To switch themes, delete the old theme's rules from `@layer base` in your CSS file, then add the new
-item. The CLI adds rules but doesn't remove them.
-
-### kumo-cloudflare
-
-Kumo has no "Cloudflare dashboard" theme. This one follows where the dashboard's design is going. It is
-based on measurements from November 2026: the CSS the live dashboard loads, and a survey of 49
-dashboard pages.
-
-- The dashboard's theme tokens all have Kumo's values.
-- The main sidebar uses the canvas color for its background (Kumo: base).
-- The dashboard is moving all hover and selected backgrounds to one highlight shade: light 96.5%, dark
-  21%, whatever surface they sit on. Kumo uses its tint color for these (97% / 26.9%). The dashboard has
-  done this first in the sidebar, popovers and dialog lists. `kumo-cloudflare` applies it to every
-  interactive state now.
-
-To make that possible, the registry's copies of Kumo's components read a `--kumo-highlight` variable
-first wherever a hover, highlighted, selected or open state uses the tint color (10 places in Kumo
-2.19.0, listed in [`packages/registry/src/expected-highlights.txt`](packages/registry/src/expected-highlights.txt)). The sidebar also
-reads `--kumo-sidebar-bg` and `--kumo-sidebar-active-bg`. Only `kumo-cloudflare` sets these, so with
-`kumo-theme` or `kumo-binding` the components look exactly as Kumo ships them. You can also set
-`--kumo-highlight` yourself.
-
-The dashboard has a few other overrides on single pages (a tinted notice, table striping, a scoped brand
-color). They are left out.
-
-### Button bevel
-
-Kumo's primary and destructive buttons have a bevel: a gradient that is lighter at the top, a 1px light
-line along the top edge, and a hover that lightens the top of the gradient. Earlier Kumo releases drew them
-flatter. The registry's `Button` (and `LinkButton`, and `Banner.Action`, which build on it) reads a
-`--kumo-button-bevel` variable to choose:
-
-- unset or `1`: Kumo's bevel, exactly as Kumo ships it;
-- `0`: flat. A solid color, no top line, and on hover a solid lighter color (the token mixed with 15%
-  white, the color at the top of Kumo's gradient);
-- anything between `0` and `1` scales the bevel. Values outside that range are clamped.
-
-It is an inherited CSS variable, so set it as widely or narrowly as you like:
-
-```css
-/* the whole app */
-:root {
-  --kumo-button-bevel: 0;
-}
-```
-
-```tsx
-{/* one part of the page */}
-<div style={{ "--kumo-button-bevel": 0 } as React.CSSProperties}>...</div>
-
-{/* one button */}
-<Button variant="primary" className="[--kumo-button-bevel:0]">Save</Button>
-```
-
-None of the theme items set it, so every theme looks as Kumo ships it; a theme of your own can set it in
-`:root`. The change to Kumo's `Button` is a source patch in
-[`packages/registry/src/generate.ts`](packages/registry/src/generate.ts) (`SOURCE_PATCHES`): four derived variables mixed from
-Kumo's own emphasis colors, and the overlay's classes pointed at them. If a Kumo release changes that
-code, generation fails until the patch is updated.
-
-### kumo-binding
-
-Each Kumo token is set from a shadcn variable. Where Kumo has more levels than shadcn (Kumo has four
-surface colors, shadcn has two), the binding mixes colors with `color-mix(in oklab, ...)` to keep the
-levels apart. The amounts are tuned so that, on shadcn's default neutral theme, the binding comes out
-within a small distance of Kumo's own colors (most tokens within 1 ΔE; `npm run compare-themes -w @kumo-shadcn/registry` prints
-the table). The exceptions are on purpose: brand follows your `--primary`, and focus follows your
-`--ring`.
-
-| Kumo token | Light | Dark |
-| --- | --- | --- |
-| canvas, elevated, recessed | `--background` mixed with 1.4 / 2.2 / 4% `--foreground` | `--background` mixed with 35 / 20 / 0% black |
-| base, control | `--card`, `--background` | `--card` halfway to `--background`, `--card` |
-| overlay | `--popover` with a little `--popover-foreground` | same, a bit more |
-| tint, fill, fill-hover, interact | `--muted`, `--secondary` (+6% fg), `--accent`, `--accent` (+13% fg) | `--muted`, `--secondary`, `--accent`, `--accent` (+14% fg) |
-| brand, brand-hover | `--primary`, brand darkened | same |
-| line, hairline | `--border`, `--border` toward background | `--border` (+4% fg), `--border` |
-| focus | `--ring` | `--ring` |
-| danger (+ tint, text) | `--destructive` | `--destructive` |
-| success, warning, info (+ tints, text, banners) | your `--success`, `--warning`, `--info` if defined, else Kumo's | same |
-| text default, strong, subtle | `--foreground` (6% toward bg), `--foreground`, `--muted-foreground` | same, default 2% toward bg |
-| text placeholder, inactive | `--muted-foreground` toward `--background` | same |
-| badge colors, shadows, brand text | Kumo's values | Kumo's values |
-
-shadcn has no standard `--success`, `--warning` or `--info`, so the binding reads them only if your theme
-defines them, and otherwise uses Kumo's colors; it never defines them. Kumo puts white text on brand and
-danger fills, so where the browser supports relative
-colors the binding caps their lightness (shadcn's default dark `--primary` is almost white).
-
-Every value is set in `@layer base`, so anything you set in your own `:root` or `.dark` wins. That
-includes the Kumo variables themselves (`--kumo-base`, `--kumo-text-subtle`, `--kumo-font-size-sm`, ...).
+**Button bevel.** Kumo's primary and destructive buttons have a bevel. Set `--kumo-button-bevel` to `0`
+for flat buttons (`1` or unset is Kumo's bevel; values in between scale it). It's an inherited CSS
+variable, so set it on `:root`, on part of the page, or on one button (`className="[--kumo-button-bevel:0]"`).
 
 ## Icons
 
-Kumo's components use [Phosphor](https://phosphoricons.com) icons. Here they import them from
-`@/lib/kumo/icons` instead (the only change to their icon code). That file is the `kumo-icons` item.
-It exports the same names (`CheckIcon`, `X`, `CaretDownIcon`, ...) plus Phosphor's `Icon` type,
-`IconProps` and `IconContext`. Each icon is written with shadcn's `IconPlaceholder`, so the shadcn CLI
-swaps in the icon library set as `iconLibrary` in your `components.json` when it writes the file:
-lucide, tabler, hugeicons, phosphor or remixicon.
+Kumo uses Phosphor icons. shadcn lets you choose an icon library, so every Phosphor icon Kumo uses is
+mapped to Lucide, Tabler, Hugeicons and Remix Icon too. kumo-shadcn uses whichever library is set as
+`iconLibrary` in `components.json`, so set it (and install its package; `shadcn init` does both) before
+adding Kumo components. To switch later, run `npx shadcn@latest migrate icons`, then re-add `kumo-icons`
+with `--overwrite`.
 
-- Set `iconLibrary` before you add Kumo components, and install that library's package. `shadcn init`
-  does both. If you change libraries later, run `npx shadcn@latest migrate icons` to switch the
-  package, then re-add `kumo-icons` with `--overwrite`.
-- Phosphor's props still work: `size` (default `1em`, as in Phosphor), `weight` (becomes a stroke width),
-  `mirrored` and `color`. Kumo's `icon={...}` props take a shim icon, an icon from your library, or any
-  element.
+## Caveats
 
-| Kumo (Phosphor) | lucide | tabler | hugeicons | remixicon |
-| --- | --- | --- | --- | --- |
-| ArrowRight | ArrowRightIcon | IconArrowRight | ArrowRight02Icon | RiArrowRightLine |
-| ArrowSquareOut | ExternalLinkIcon | IconExternalLink | LinkSquare02Icon | RiExternalLinkLine |
-| ArrowsClockwise | RefreshCwIcon | IconRefresh | RefreshIcon | RiRefreshLine |
-| CaretDoubleLeft | ChevronsLeftIcon | IconChevronsLeft | ArrowLeftDoubleIcon | RiArrowLeftDoubleLine |
-| CaretDoubleRight | ChevronsRightIcon | IconChevronsRight | ArrowRightDoubleIcon | RiArrowRightDoubleLine |
-| CaretDown | ChevronDownIcon | IconChevronDown | ArrowDown01Icon | RiArrowDownSLine |
-| CaretLeft | ChevronLeftIcon | IconChevronLeft | ArrowLeft01Icon | RiArrowLeftSLine |
-| CaretRight | ChevronRightIcon | IconChevronRight | ArrowRight01Icon | RiArrowRightSLine |
-| CaretUp | ChevronUpIcon | IconChevronUp | ArrowUp01Icon | RiArrowUpSLine |
-| CaretUpDown | ChevronsUpDownIcon | IconSelector | UnfoldMoreIcon | RiExpandUpDownLine |
-| Check | CheckIcon | IconCheck | Tick02Icon | RiCheckLine |
-| CheckCircle | CircleCheckIcon | IconCircleCheck | CheckmarkCircle02Icon | RiCheckboxCircleLine |
-| Copy, CopySimple | CopyIcon | IconCopy | Copy01Icon | RiFileCopyLine |
-| Eye | EyeIcon | IconEye | ViewIcon | RiEyeLine |
-| EyeSlash | EyeOffIcon | IconEyeOff | ViewOffIcon | RiEyeOffLine |
-| GlobeHemisphereWest | EarthIcon | IconWorld | Globe02Icon | RiEarthLine |
-| Info | InfoIcon | IconInfoCircle | InformationCircleIcon | RiInformationLine |
-| MagnifyingGlass | SearchIcon | IconSearch | Search01Icon | RiSearchLine |
-| Minus | MinusIcon | IconMinus | MinusSignIcon | RiSubtractLine |
-| Warning | TriangleAlertIcon | IconAlertTriangle | Alert02Icon | RiAlertLine |
-| WarningCircle | CircleAlertIcon | IconAlertCircle | AlertCircleIcon | RiErrorWarningLine |
-| WarningOctagon | OctagonAlertIcon | IconAlertOctagon | OctagonAlertIcon | RiSpam2Line |
-| X | XIcon | IconX | Cancel01Icon | RiCloseLine |
+- **Vite's strict TypeScript settings.** Kumo's code is copied as it is. Vite's default tsconfig rejects
+  parts of it: set `erasableSyntaxOnly`, `verbatimModuleSyntax` and `noUnusedParameters` to `false` in
+  `tsconfig.app.json`. Next.js builds as the template comes.
+- **React Server Components.** Kumo doesn't mark its components with `"use client"`, so render them from
+  your own client components, not directly from a Server Component.
+- **Tailwind prefix isn't supported.** Kumo keeps most of its classes in variant objects that the shadcn
+  CLI's prefix transform doesn't reach, so those classes produce no styles.
+- **`kumo-binding` requires CSS variables.** It reads your shadcn variables, so `tailwind.cssVariables`
+  must be `true` in `components.json`.
 
-With phosphor as your `iconLibrary` you get the original icons (`CheckIcon` and so on). The mapping is
-in [`packages/registry/src/icons.ts`](packages/registry/src/icons.ts).
+## Updates
 
-## How updates work
-
-A workflow ([`update.yml`](.github/workflows/update.yml)) runs every day. It takes the source of the
-latest Kumo release, regenerates the registry, and installs every item with the real shadcn CLI into fresh
-Vite and Next.js apps (lucide, tabler and hugeicons; all three themes; default and custom aliases; the
-`components.json` options above). In
-each app, the template as it comes must report exactly the errors listed under
-[TypeScript settings](#typescript-settings), so a change in either direction is noticed. With those
-settings relaxed, `tsc --noEmit` and a production build must pass. In the Vite apps, a headless Chrome
-also hovers a button, a dropdown item and a sidebar item and checks their backgrounds against the theme.
-It also checks the registry against the shadcn registry directory's requirements
-([`directory/SUBMISSION.md`](directory/SUBMISSION.md)). Only then does it commit the new registry to
-`main` and deploy it to the Worker. If anything fails,
-nothing is published and the run fails.
-
-So when Kumo adds or changes a component, the next `shadcn add` gives you the new version. Like any
+The registry is kept up to date with upstream Kumo: CI rebuilds it every day from the latest Kumo release,
+and new or changed components are ported automatically and tested before anything is published. Like any
 shadcn component, your copy doesn't change by itself: run `shadcn add <item> --overwrite` to take an
-update. That replaces your edits to those files, so check the diff.
+update, and check the diff.
 
-### How the registry is generated
+## Development
 
-[`packages/registry/src/generate.ts`](packages/registry/src/generate.ts) reads Kumo's source with the TypeScript compiler and
-PostCSS. It never runs Kumo's code, and it uses no AI. For each component it:
-
-- copies the source files (not tests or stories);
-- rewrites imports: other components to `@/components/ui/<name>/<file>`, helpers to `@/lib/kumo/<file>`,
-  `cn` to `@/lib/utils`, Phosphor to `@/lib/kumo/icons`; the CLI then maps these through your aliases.
-  Kumo's `utils/cn.ts` only re-exported `cn` next to `safeRandomId`, so it becomes
-  `lib/kumo/random-id.ts` without the re-export;
-- lists the npm packages the files import, with the version ranges Kumo declares;
-- lists the other items it needs as `registryDependencies` (full Worker URLs, which work without any
-  configuration; `--deps namespace` writes `@kumo-shadcn/<item>` instead, for once the namespace is
-  listed in the shadcn registry directory);
-- takes each item's title, description and category from Kumo's `ai/component-registry.json` (in Kumo's
-  npm package of the same version);
-- turns Kumo's CSS files into `kumo-base` and the theme items, with every name in Kumo's namespace (see
-  [What the items write](#what-the-items-write)): helper classes, keyframes, custom properties and
-  data attributes get a `kumo-` prefix, Tailwind's type scale and default duration become
-  `--kumo-font-size-*`, `--kumo-line-height-*` and `--kumo-transition-duration`, and Kumo's code is
-  rewritten to match.
-
-Kumo's logic is not changed, and nothing is suppressed (no `@ts-ignore`, no lint comments, no casts).
-Class names change only for the highlight, sidebar and button bevel hooks above and for namespacing (the
-type scale and duration classes, and the renamed helper classes, keyframes and `data-overflowing`; the
-date picker gives react-day-picker's root and animations `kumo-rdp-*` class names). Each file's header
-lists the edits. Every rewrite is listed in a file in `packages/registry/src/` (`expected-*.txt`); when a
-Kumo release changes what matches, generation fails until the list is reviewed and updated
-(`KUMO_RECORD=1` rewrites the lists). `"use client"` is exactly where Kumo's source has it. `lib/kumo/process-env.d.ts` gives `process.env.NODE_ENV`, which Kumo
-reads for development warnings, a type in apps without `@types/node`.
-
-The generator stops with an error instead of guessing: on an icon with no mapping
-(`unmapped icon: X`), an import it can't place, a package Kumo doesn't declare, or a type error under
-`strict` and `isolatedModules`.
-
-### Developing
-
-The repository is a [Turborepo](https://turborepo.com) with npm workspaces:
+A [Turborepo](https://turborepo.com) with npm workspaces:
 
 | Path | What |
 | --- | --- |
-| `packages/registry` | The generator and registry tooling: fetch Kumo, generate, `shadcn build`, type-check, icon shim and directory checks |
+| `packages/registry` | The generator and registry tooling: fetch Kumo, generate, `shadcn build`, type-check, icon and directory checks |
 | `apps/site` | The docs page, built with the registry itself |
-| `packages/verify` | The verification harness: test apps installed with the shadcn CLI, and the Worker check |
-| `registry.json`, `registry/`, `public/`, `wrangler.jsonc` | What is published. They stay at the repository root (the raw GitHub URLs, the `tom-ricci/kumo-shadcn/<item>` shorthand and the Worker read them there); the packages write them. |
+| `packages/verify` | The test harness: real shadcn-CLI installs into fresh Vite and Next.js apps, plus the Worker check |
+| `registry.json`, `registry/`, `public/`, `wrangler.jsonc` | What gets published. They stay at the repo root because the raw GitHub URLs, the `tom-ricci/kumo-shadcn/<item>` shorthand and the Worker read them there |
 
 ```bash
 npm ci --ignore-scripts
 npm run registry   # fetch the latest Kumo release, generate, shadcn build, type-check, icon and directory checks
 npm run site       # the same, plus the docs page
-npm run dev        # the docs page's dev server, straight from registry.json and registry/ in the checkout
-npm run check      # everything, plus wrangler dev on the result (needs a system workerd can run on)
+npm run dev        # the docs page's dev server, from registry.json and registry/ in the checkout
+npm run check      # everything, plus wrangler dev on the result
 npm run verify -- vite lucide kumo-theme   # one test app: framework, icon library, theme [aliases] [items|-] [transform]
+npm run compare-themes -w @kumo-shadcn/registry   # how close kumo-binding gets to Kumo's colors
 ```
 
-`turbo.json` runs them in order: `fetch-kumo` → `generate` → `build` (shadcn build) → the docs page →
-`check-worker`, with `typecheck`, `check-icons` and `check-directory` after `generate`/`build`, and
-`verify` after `build`.
+Turbo runs `fetch-kumo` → `generate` → `build` → the docs page → `check-worker`, with the checks after
+`generate`/`build`. `fetch-kumo` never caches; `generate`'s cache key includes the Kumo source it reads, so
+a new Kumo release rebuilds everything after it. CI runs with `--force`.
 
-Caching: `fetch-kumo` never caches, so every run takes the current Kumo release. `generate`'s cache key
-includes the Kumo source it reads (`.kumo/packages/kumo/src/**`, its `package.json` and `LICENSE`, and
-Kumo's component metadata) and the generator's own files, and each later task's key includes the keys of
-the tasks it depends on. A new Kumo release therefore rebuilds everything after it; an unchanged one
-replays from the cache (`.turbo/`, not committed). CI restores no cache and runs with `--force`, so a
-published registry is always built fresh.
+### How the registry is generated
 
-## Hosting
+[`packages/registry/src/generate.ts`](packages/registry/src/generate.ts) reads Kumo's source with the
+TypeScript compiler and PostCSS. It never runs Kumo's code and uses no AI. Per component it:
 
-The Worker serves two things from `public/`: the registry under `/r/` (committed, written by the
-generator and `shadcn build`) and a one-page docs site at `/` (`index.html` and `assets/`, built by
-[`apps/site/build.sh`](apps/site/build.sh) from [`apps/site/`](apps/site) and not committed). The site is a
-small Vite app that installs its Kumo components from the freshly built registry with the shadcn CLI,
-so it is also a test. The build fails if `public/r` changes, and
-[`packages/verify/check-worker.sh`](packages/verify/check-worker.sh) checks both with `wrangler dev`.
+- copies the source files (not tests or stories) and rewrites imports: components to
+  `@/components/ui/<name>/<file>`, helpers to `@/lib/kumo/<file>`, `cn` to `@/lib/utils`, Phosphor to
+  `@/lib/kumo/icons` (the icon shim, mapping in [`icons.ts`](packages/registry/src/icons.ts));
+- lists npm dependencies with Kumo's declared ranges, and other items as `registryDependencies` by Worker
+  URL (`--deps namespace` writes `@kumo-shadcn/<item>` instead);
+- takes titles, descriptions and categories from Kumo's `ai/component-registry.json`;
+- turns Kumo's CSS into `kumo-base` and the theme items, namespacing everything (`kumo-` classes,
+  keyframes, custom properties; Tailwind's type scale and default duration become `--kumo-font-size-*`,
+  `--kumo-line-height-*`, `--kumo-transition-duration`) and rewriting Kumo's code to match (`text-sm` →
+  `text-(length:--kumo-font-size-sm)/[…]`, which `cn` still merges as a size).
 
-The registry is static JSON in `public/`. A Cloudflare Worker serves it with
-[Workers Static Assets](https://developers.cloudflare.com/workers/static-assets/), configured in
-[`wrangler.jsonc`](wrangler.jsonc). There is no Worker script: [`public/_headers`](public/_headers) adds
-CORS (`Access-Control-Allow-Origin: *`) and a five-minute cache to `/r/*` (and a long cache to the docs
-page's hashed `/assets/*`), and item files are served as `application/json`.
+Kumo's logic isn't changed and nothing is suppressed (no `@ts-ignore`, lint comments or casts). The only
+class-name edits are namespacing and three hooks: `--kumo-highlight` (hover/selected states, set by
+`kumo-cloudflare`), the sidebar's `--kumo-sidebar-bg`/`--kumo-sidebar-active-bg`, and the
+`--kumo-button-bevel` source patch (`SOURCE_PATCHES`). Every rewrite is listed in
+`packages/registry/src/expected-*.txt`; when a Kumo release changes what matches, generation fails until
+the list is reviewed (`KUMO_RECORD=1` rewrites them). Anything an item writes outside Kumo's names fails
+the build unless [`allowed-globals.txt`](packages/registry/src/allowed-globals.txt) lists it with a reason
+(only `color-scheme`, which can't be namespaced). Each copied file's header lists its edits.
 
-The update workflow deploys it from `main` after every successful run. To turn that on, add two
-repository secrets (Settings → Secrets and variables → Actions):
+The generator stops instead of guessing: on an unmapped icon, an import it can't place, a package Kumo
+doesn't declare, or a type error under `strict` and `isolatedModules`.
 
-- `CLOUDFLARE_API_TOKEN`: an API token for your account with the **Workers Scripts: Edit** permission
-  (Cloudflare dashboard → My Profile → API Tokens → Create Token).
-- `CLOUDFLARE_ACCOUNT_ID`: your account ID (shown on the Workers & Pages overview).
+`kumo-binding` maps each Kumo token from a shadcn variable, using `color-mix(in oklab, …)` where Kumo has
+more levels than shadcn (e.g. four surfaces vs two). Brand follows `--primary`, focus `--ring`; status
+colors read `--success`/`--warning`/`--info` if your theme defines them, else Kumo's. Everything is set in
+`@layer base`, so a user's own `:root`/`.dark` wins.
 
-Until they exist, the deploy step is skipped with a notice and the rest of the workflow runs as usual.
-The Worker `kumo-shadcn` answers on the custom domain https://kumo-shadcn.thomasricci.dev (the `routes`
-entry in `wrangler.jsonc`).
+### CI
 
-Items refer to each other (`registryDependencies`) by their Worker URLs. The address, the namespace
-(`@kumo-shadcn`) and the repository URL are set in one place,
+[`update.yml`](.github/workflows/update.yml) runs daily: it regenerates from the latest Kumo release and
+installs every item with the real shadcn CLI into fresh Vite and Next.js apps (lucide, tabler and
+hugeicons; all three themes; default and custom aliases; `rtl`, `tsx: false`, `rsc: false`,
+`cssVariables: false`). Each app must report exactly the TypeScript errors in
+[`packages/verify/expected-errors-vite.txt`](packages/verify/expected-errors-vite.txt), then build with
+those settings relaxed; headless Chrome checks hover backgrounds against the theme. It also checks the
+shadcn registry directory's requirements. Only if everything passes does it commit the registry to `main`
+and deploy it.
+
+### Hosting
+
+A Cloudflare Worker serves `public/` with
+[Workers Static Assets](https://developers.cloudflare.com/workers/static-assets/) (no Worker script),
+configured in [`wrangler.jsonc`](wrangler.jsonc): the registry under `/r/` (committed) and the docs page
+at `/` (built by [`apps/site/build.sh`](apps/site/build.sh), not committed; it installs its components
+from the freshly built registry, so it's a test too). [`public/_headers`](public/_headers) adds CORS and a
+five-minute cache to `/r/*`. The domain is https://kumo-shadcn.thomasricci.dev.
+
+The workflow deploys from `main` when two repository secrets exist: `CLOUDFLARE_API_TOKEN` (Workers
+Scripts: Edit) and `CLOUDFLARE_ACCOUNT_ID`. Without them the deploy step is skipped. The address, the
+namespace and the repository URL are set in one place:
 [`packages/registry/src/config.ts`](packages/registry/src/config.ts).
 
 ## License
 
-The code in this repository that was written here (the generator, the icon shim, the theme items, the
-scripts) is released under the [MIT License](LICENSE), copyright (c) 2026 Thomas Ricci.
-
-The component, block and helper files in `registry/kumo` and `public/r` are copied from Kumo, which is
-also MIT licensed, copyright (c) 2026 Cloudflare, Inc. Each copied file carries Kumo's full license
-notice, right after its first statement: the shadcn CLI removes comments that come before a file's first
-statement when it installs it, and keeps the ones after. The text is also in [`registry/kumo/LICENSE-KUMO`](registry/kumo/LICENSE-KUMO). Keep those
-headers when you change the files in your project.
-
-The MIT License does not grant trademark rights. "Cloudflare", "Kumo" and the Cloudflare logo (which the
-`cloudflare-logo` item contains) belong to Cloudflare, Inc.
+The registry's own code is [MIT](LICENSE) licensed. The component files are copied from Kumo, which is
+also MIT licensed, copyright Cloudflare, Inc.; each file ships with Cloudflare's original license notice
+(placed after the file's first statement, because the shadcn CLI drops comments before it), also in
+[`registry/kumo/LICENSE-KUMO`](registry/kumo/LICENSE-KUMO). Keep those headers when you change the files.
+"Cloudflare" and "Kumo" are Cloudflare's trademarks.
