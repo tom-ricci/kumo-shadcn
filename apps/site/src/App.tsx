@@ -195,8 +195,8 @@ export function App() {
           description="It reads your shadcn CSS variables, so tailwind.cssVariables must be true in components.json. kumo-theme and kumo-cloudflare work either way."
         />
         <Banner
-          title="kumo-theme changes the type scale app-wide"
-          description="kumo-theme and kumo-cloudflare set Kumo's text sizes (12, 13, 14 and 16px) for the whole app. kumo-binding leaves yours alone."
+          title="Kumo's text sizes stay inside Kumo"
+          description="kumo-theme and kumo-cloudflare give Kumo's components Kumo's own text sizes (12, 13, 14 and 16px); your app's text-sm and friends keep Tailwind's. kumo-binding makes Kumo's components follow your type scale instead."
         />
       </Section>
 
