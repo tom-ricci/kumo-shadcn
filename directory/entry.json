@@ -1,7 +1,7 @@
 {
-  "name": "@kumo-shadcn",
-  "homepage": "https://kumo-shadcn.thomasricci.dev",
-  "url": "https://kumo-shadcn.thomasricci.dev/r/{name}.json",
-  "description": "Unofficial registry for Kumo, Cloudflare's React component library: Kumo's component source with your aliases and icon library, and a theme that follows your shadcn variables. Not affiliated with Cloudflare.",
-  "logo": "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32' fill='currentColor'><rect x='4' y='6' width='24' height='5' rx='2.5'/><rect x='4' y='13.5' width='18' height='5' rx='2.5'/><rect x='4' y='21' width='12' height='5' rx='2.5'/></svg>"
+    "name": "@kumo-shadcn",
+    "homepage": "https://kumo-shadcn.thomasricci.dev",
+    "url": "https://kumo-shadcn.thomasricci.dev/r/{name}.json",
+    "description": "Unofficial ShadCN port for Kumo, Cloudflare's React component library.",
+    "logo": "<svg width='42' height='54' viewBox='0 0 42 54' fill='none' xmlns='http://www.w3.org/2000/svg'><path d='M6 0V6H12V12H6V24H0V0H6ZM18 0V6H12V0H18ZM18 12V24H12V12H18ZM30 0V18H36V0H42V24H30V18H24V0H30ZM12 30V36H18V54H12V42H6V54H0V30H12ZM42 30V54H24V30H42ZM30 36V48H36V36H30Z' fill='currentColor'/></svg>"
 }
