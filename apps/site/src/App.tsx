@@ -187,7 +187,7 @@ export function App() {
                     onValueChange={setMethod}
                 />
                 {INSTALL[method].map((step) => (
-                    <div key={step.label} className="grid gap-2">
+                    <div key={step.code} className="grid gap-2">
                         <Text>{step.label}</Text>
                         <CodeBlock lang={step.lang} code={step.code} />
                     </div>
