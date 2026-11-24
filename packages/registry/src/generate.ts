@@ -1387,4 +1387,6 @@ writeFileSync(join(root, "registry", "kumo", "LICENSE-KUMO"), `${licenseText}\n`
 const counts = { ui: 0, block: 0 };
 for (const cs of groups.values()) if (cs[0].area.kind !== "lib") counts[cs[0].area.kind]++;
 console.log(`Generated ${counts.ui} components, ${counts.block} blocks, ${libCopies.length} helper files and ${iconImports.size} icon names from ${release}.`);
-if (bound.fallbacks.length) console.log(`notice: new Kumo tokens with no kumo-binding mapping yet (they use Kumo's value): ${bound.fallbacks.join(", ")}`);
+// kumo-binding exists to bind every Kumo token to the user's theme, so a token without a mapping
+// is a failure, not a notice. See CONTRIBUTING.md.
+if (bound.fallbacks.length) fail(`Kumo tokens with no kumo-binding mapping: ${bound.fallbacks.join(", ")}. Map each one in packages/registry/src/themes.ts (binding, light and dark), or add it to keepKumo if Kumo's own value is meant to stay (see CONTRIBUTING.md).`);

@@ -96,6 +96,8 @@ update, and check the diff.
 
 ## Development
 
+Read [CONTRIBUTING.md](CONTRIBUTING.md) first: it has the rules for changes, including what to do when a Kumo release fails CI.
+
 A [Turborepo](https://turborepo.com) with npm workspaces:
 
 | Path | What |
