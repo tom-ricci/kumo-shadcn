@@ -15,8 +15,8 @@ components/command-palette/command-palette.tsx:541 transition-opacity
 components/date-picker/date-picker.tsx:77 transition-colors
 components/dropdown/dropdown.tsx:502 transition-colors
 components/inline-copy-text/inline-copy-text.tsx:236 transition-opacity
-components/layer-dialog/layer-dialog.tsx:483 transition-opacity
-components/layer-dialog/layer-dialog.tsx:485 transition-opacity
+components/layer-dialog/layer-dialog.tsx:479 transition-opacity
+components/layer-dialog/layer-dialog.tsx:481 transition-opacity
 components/link/link.tsx:47 transition-colors
 components/link/link.tsx:52 transition-colors
 components/link/link.tsx:58 transition-colors
@@ -25,7 +25,7 @@ components/menubar/menubar.tsx:20 transition-colors
 components/menubar/menubar.tsx:51 transition-colors
 components/menubar/menubar.tsx:53 transition-colors
 components/sensitive-input/sensitive-input.tsx:447 transition-opacity
-components/sidebar/sidebar.tsx:2037 transition-all
-components/sidebar/sidebar.tsx:2182 after:transition-colors
-components/tabs/tabs.tsx:356 transition-colors
-components/toast/toast.tsx:417 transition-opacity
+components/sidebar/sidebar.tsx:2046 transition-all
+components/sidebar/sidebar.tsx:2191 after:transition-colors
+components/tabs/tabs.tsx:371 transition-colors
+components/toast/toast.tsx:431 transition-opacity

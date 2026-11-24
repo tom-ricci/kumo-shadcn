@@ -9,5 +9,5 @@ components/date-picker/date-picker.tsx:78 hover:bg-kumo-tint
 components/dropdown/dropdown.tsx:102 data-highlighted:bg-kumo-tint
 components/dropdown/dropdown.tsx:143 data-popup-open:bg-kumo-tint
 components/select/select.tsx:660 data-highlighted:bg-kumo-tint
-components/tabs/tabs.tsx:260 aria-selected:hover:bg-kumo-tint
-components/tabs/tabs.tsx:260 hover:bg-kumo-tint
+components/tabs/tabs.tsx:270 aria-selected:hover:bg-kumo-tint
+components/tabs/tabs.tsx:270 hover:bg-kumo-tint
