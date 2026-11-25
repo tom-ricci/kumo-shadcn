@@ -47,7 +47,7 @@ keyframes toast-bump -> kumo-toast-bump
 keyframes toast-bump-alternate -> kumo-toast-bump-alternate
 type scale --text-base (14px, line height 1.5) -> --kumo-font-size-base, --kumo-line-height-base
 type scale --text-lg (16px, line height 1.5) -> --kumo-font-size-lg, --kumo-line-height-lg
-type scale --text-sm (13px, line height calc(1 / 0.85)) -> --kumo-font-size-sm, --kumo-line-height-sm
+type scale --text-sm (13px, line height calc(1.25 / 0.875)) -> --kumo-font-size-sm, --kumo-line-height-sm
 type scale --text-xs (12px, line height calc(1 / 0.75)) -> --kumo-font-size-xs, --kumo-line-height-xs
 utility animate-refresh -> animate-kumo-refresh (1 uses)
 utility animate-right -> animate-kumo-right (0 uses)

@@ -144,6 +144,8 @@ export const binding: BindingTheme = {
       "color-kumo-banner-warning": alpha("var(--kumo-warning)", 9),
       "color-kumo-badge-neutral": "var(--muted-foreground)",
       "color-kumo-badge-inverted": "var(--foreground)",
+      // Kumo's secondary badge is a quiet neutral fill (neutral-125 light, neutral-800 dark): shadcn's secondary
+      "color-kumo-badge-secondary": "var(--secondary)",
       // Text
       "text-color-kumo-default": mix("var(--foreground)", "var(--background)", 6),
       "text-color-kumo-strong": "var(--foreground)",
@@ -190,6 +192,7 @@ export const binding: BindingTheme = {
       "color-kumo-banner-warning": alpha("var(--kumo-warning)", 40),
       "color-kumo-badge-neutral": mix("var(--muted-foreground)", "var(--background)", 48),
       "color-kumo-badge-inverted": "var(--foreground)",
+      "color-kumo-badge-secondary": "var(--secondary)",
       "text-color-kumo-default": mix("var(--foreground)", "var(--background)", 2),
       "text-color-kumo-strong": "var(--foreground)",
       "text-color-kumo-inverse": mix("var(--background)", "var(--foreground)", 7),
