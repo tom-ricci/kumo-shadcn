@@ -6,7 +6,7 @@ import {
 } from "@/lib/kumo/icons";
 
 // Kumo, packages/kumo/src/components/date-picker/date-picker.tsx from https://github.com/cloudflare/kumo
-// (release cloudflare/kumo@2.19.0), copied by the kumo-shadcn registry (https://github.com/tom-ricci/kumo-shadcn).
+// (release cloudflare/kumo@2.19.1), copied by the kumo-shadcn registry (https://github.com/tom-ricci/kumo-shadcn).
 // Changes from Kumo's file: import paths.
 // Also changed: hover/selected backgrounds that use Kumo's tint read --kumo-highlight first.
 // Also changed: react-day-picker's root and month animations get kumo-rdp-* class names, which Kumo's CSS styles.

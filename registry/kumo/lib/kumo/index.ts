@@ -1,7 +1,7 @@
 export { safeRandomId } from "./random-id";
 
 // Kumo, packages/kumo/src/utils/index.ts from https://github.com/cloudflare/kumo
-// (release cloudflare/kumo@2.19.0), copied by the kumo-shadcn registry (https://github.com/tom-ricci/kumo-shadcn).
+// (release cloudflare/kumo@2.19.1), copied by the kumo-shadcn registry (https://github.com/tom-ricci/kumo-shadcn).
 // Changes from Kumo's file: import paths.
 // Also changed: cn is no longer re-exported (it comes from your shadcn utils).
 // Unofficial; not affiliated with or endorsed by Cloudflare.

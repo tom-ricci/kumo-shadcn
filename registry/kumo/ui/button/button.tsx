@@ -1,7 +1,7 @@
 import React from "react";
 
 // Kumo, packages/kumo/src/components/button/button.tsx from https://github.com/cloudflare/kumo
-// (release cloudflare/kumo@2.19.0), copied by the kumo-shadcn registry (https://github.com/tom-ricci/kumo-shadcn).
+// (release cloudflare/kumo@2.19.1), copied by the kumo-shadcn registry (https://github.com/tom-ricci/kumo-shadcn).
 // Changes from Kumo's file: import paths.
 // Also changed: hover/selected backgrounds that use Kumo's tint read --kumo-highlight first.
 // Also changed: the emphasis gradient, inset line and hover read --kumo-button-bevel (unset: Kumo's bevel; 0: flat).

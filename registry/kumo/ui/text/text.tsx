@@ -8,7 +8,7 @@ import {
 } from "react";
 
 // Kumo, packages/kumo/src/components/text/text.tsx from https://github.com/cloudflare/kumo
-// (release cloudflare/kumo@2.19.0), copied by the kumo-shadcn registry (https://github.com/tom-ricci/kumo-shadcn).
+// (release cloudflare/kumo@2.19.1), copied by the kumo-shadcn registry (https://github.com/tom-ricci/kumo-shadcn).
 // Changes from Kumo's file: import paths.
 // Also changed: Kumo's type scale classes (text-xs, text-sm, text-base, text-lg) read --kumo-font-size-* and --kumo-line-height-*, not your theme's --text-*.
 // Also changed: cn comes from your shadcn utils (@/lib/utils).
@@ -91,19 +91,19 @@ export const KUMO_TEXT_VARIANTS = {
   },
   size: {
     xs: {
-      classes: "text-(length:--kumo-font-size-xs)/[inherit]",
+      classes: "text-(length:--kumo-font-size-xs)/[var(--tw-leading,var(--kumo-line-height-xs))]",
       description: "Extra small text",
     },
     sm: {
-      classes: "text-(length:--kumo-font-size-sm)/[inherit]",
+      classes: "text-(length:--kumo-font-size-sm)/[var(--tw-leading,var(--kumo-line-height-sm))]",
       description: "Small text",
     },
     base: {
-      classes: "text-(length:--kumo-font-size-base)/[inherit]",
+      classes: "text-(length:--kumo-font-size-base)/[var(--tw-leading,var(--kumo-line-height-base))]",
       description: "Default text size",
     },
     lg: {
-      classes: "text-(length:--kumo-font-size-lg)/[inherit]",
+      classes: "text-(length:--kumo-font-size-lg)/[var(--tw-leading,var(--kumo-line-height-lg))]",
       description: "Large text",
     },
   },

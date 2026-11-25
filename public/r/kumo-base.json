@@ -2,7 +2,7 @@
   "$schema": "https://ui.shadcn.com/schema/registry-item.json",
   "name": "kumo-base",
   "title": "Kumo base styles",
-  "description": "Kumo's keyframes, helper classes and Tailwind token registration (from @cloudflare/kumo@2.19.0), all under kumo- names. Every Kumo component installs it. Add a theme item too.",
+  "description": "Kumo's keyframes, helper classes and Tailwind token registration (from @cloudflare/kumo@2.19.1), all under kumo- names. Every Kumo component installs it. Add a theme item too.",
   "cssVars": {
     "theme": {
       "--ease-kumo-bounce": "cubic-bezier(0.2, 0, 0, 1.5)",
@@ -17,6 +17,7 @@
       "--color-kumo-badge-orange": "var(--kumo-badge-orange)",
       "--color-kumo-badge-purple": "var(--kumo-badge-purple)",
       "--color-kumo-badge-red": "var(--kumo-badge-red)",
+      "--color-kumo-badge-secondary": "var(--kumo-badge-secondary)",
       "--color-kumo-badge-teal": "var(--kumo-badge-teal)",
       "--color-kumo-banner-info": "var(--kumo-banner-info)",
       "--color-kumo-banner-warning": "var(--kumo-banner-warning)",
@@ -265,6 +266,7 @@
         "--color-kumo-badge-orange": "var(--kumo-badge-orange)",
         "--color-kumo-badge-purple": "var(--kumo-badge-purple)",
         "--color-kumo-badge-red": "var(--kumo-badge-red)",
+        "--color-kumo-badge-secondary": "var(--kumo-badge-secondary)",
         "--color-kumo-badge-teal": "var(--kumo-badge-teal)",
         "--color-kumo-banner-info": "var(--kumo-banner-info)",
         "--color-kumo-banner-warning": "var(--kumo-banner-warning)",
@@ -391,7 +393,7 @@
     },
     "@supports (animation-timeline: scroll())": {
       "[data-kumo-overflowing]": {
-        "mask-image": "linear-gradient(\n      to right,\n      transparent,\n      white calc(var(--kumo-fade-left-n) * var(--scroll-fade-width, 3rem)),\n      white calc(100% - var(--kumo-fade-right-n) * var(--scroll-fade-width, 3rem)),\n      transparent\n    )",
+        "mask-image": "linear-gradient(\n      var(--scroll-fade-direction, to right),\n      transparent,\n      white calc(var(--kumo-fade-left-n) * var(--scroll-fade-width, 3rem)),\n      white calc(100% - var(--kumo-fade-right-n) * var(--scroll-fade-width, 3rem)),\n      transparent\n    )",
         "animation-name": "kumo-scroll-fade-x-left, kumo-scroll-fade-x-right",
         "animation-timing-function": "linear, linear",
         "animation-timeline": "scroll(self x)",

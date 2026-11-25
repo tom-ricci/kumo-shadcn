@@ -1,7 +1,7 @@
 import { Tooltip } from "@/components/ui/tooltip/tooltip";
 
 // Kumo, packages/kumo/src/components/menubar/menubar.tsx from https://github.com/cloudflare/kumo
-// (release cloudflare/kumo@2.19.0), copied by the kumo-shadcn registry (https://github.com/tom-ricci/kumo-shadcn).
+// (release cloudflare/kumo@2.19.1), copied by the kumo-shadcn registry (https://github.com/tom-ricci/kumo-shadcn).
 // Changes from Kumo's file: import paths.
 // Also changed: transitions without a duration-* class use --kumo-transition-duration (Kumo's 100ms), not your theme's default duration.
 // Also changed: cn comes from your shadcn utils (@/lib/utils).

@@ -1,7 +1,7 @@
 import { forwardRef, useEffect, type SVGProps } from "react";
 
 // Kumo, packages/kumo/src/components/link/link.tsx from https://github.com/cloudflare/kumo
-// (release cloudflare/kumo@2.19.0), copied by the kumo-shadcn registry (https://github.com/tom-ricci/kumo-shadcn).
+// (release cloudflare/kumo@2.19.1), copied by the kumo-shadcn registry (https://github.com/tom-ricci/kumo-shadcn).
 // Changes from Kumo's file: import paths.
 // Also changed: transitions without a duration-* class use --kumo-transition-duration (Kumo's 100ms), not your theme's default duration.
 // Also changed: Kumo's helper classes, animations and data attributes carry a kumo- prefix.

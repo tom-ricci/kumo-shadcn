@@ -9,7 +9,7 @@ import {
 } from "react";
 
 // Kumo, packages/kumo/src/components/tabs/tabs.tsx from https://github.com/cloudflare/kumo
-// (release cloudflare/kumo@2.19.0), copied by the kumo-shadcn registry (https://github.com/tom-ricci/kumo-shadcn).
+// (release cloudflare/kumo@2.19.1), copied by the kumo-shadcn registry (https://github.com/tom-ricci/kumo-shadcn).
 // Changes from Kumo's file: import paths.
 // Also changed: hover/selected backgrounds that use Kumo's tint read --kumo-highlight first.
 // Also changed: Kumo's type scale classes (text-xs, text-sm, text-base, text-lg) read --kumo-font-size-* and --kumo-line-height-*, not your theme's --text-*.
@@ -81,15 +81,20 @@ export const KUMO_TABS_STYLING = {
 
 /** Labels for internationalization of Tabs component. */
 export interface TabsLabels {
-  /** Aria label for the button that scrolls to earlier tabs. @default "Scroll tabs left" */
+  /** Aria label for the button that scrolls to earlier tabs. @default "Scroll tabs left" ("Scroll tabs right" in RTL) */
   scrollStart?: string;
-  /** Aria label for the button that scrolls to later tabs. @default "Scroll tabs right" */
+  /** Aria label for the button that scrolls to later tabs. @default "Scroll tabs right" ("Scroll tabs left" in RTL) */
   scrollEnd?: string;
 }
 
 const DEFAULT_LABELS: Required<TabsLabels> = {
   scrollStart: "Scroll tabs left",
   scrollEnd: "Scroll tabs right",
+};
+
+const DEFAULT_RTL_LABELS: Required<TabsLabels> = {
+  scrollStart: "Scroll tabs right",
+  scrollEnd: "Scroll tabs left",
 };
 
 // Derived types from KUMO_TABS_VARIANTS
@@ -212,14 +217,18 @@ export function Tabs({
   const isSegmented = variant === "segmented";
   const isUnderline = variant === "underline";
   const isSm = size === "sm";
-  const labels = { ...DEFAULT_LABELS, ...labelsProp };
   const overflowWatchKey = items.map((item) => item.value).join("|");
   const {
     ref: listRef,
+    isRtl,
     isOverflowing,
     canScrollStart,
     canScrollEnd,
   } = useOverflowDetect(true, overflowWatchKey);
+  const labels = {
+    ...(isRtl ? DEFAULT_RTL_LABELS : DEFAULT_LABELS),
+    ...labelsProp,
+  };
   const bindDrag = useHorizontalDragScroll(listRef, isOverflowing);
 
   return (
@@ -257,6 +266,7 @@ export function Tabs({
           isSegmented && "rounded-lg bg-kumo-recessed px-0.5",
           isSegmented && (isSm ? "h-6.5 rounded-md" : "h-9"),
           isOverflowing && "cursor-grab active:cursor-grabbing",
+          isRtl && "[--scroll-fade-direction:to_left]",
           isUnderline && "gap-4 border-b border-kumo-hairline pb-2",
           isUnderline && (isSm ? "h-6.5" : "h-7.5"),
           listClassName,
@@ -321,6 +331,7 @@ export function Tabs({
         <>
           <TabsOverflowControl
             side="start"
+            isRtl={isRtl}
             visible={canScrollStart}
             variant={variant}
             size={size}
@@ -329,6 +340,7 @@ export function Tabs({
           />
           <TabsOverflowControl
             side="end"
+            isRtl={isRtl}
             visible={canScrollEnd}
             variant={variant}
             size={size}
@@ -343,6 +355,7 @@ export function Tabs({
 
 function TabsOverflowControl({
   side,
+  isRtl,
   visible,
   variant,
   size,
@@ -350,6 +363,7 @@ function TabsOverflowControl({
   onClick,
 }: {
   side: "start" | "end";
+  isRtl: boolean;
   visible: boolean;
   variant: NonNullable<TabsProps["variant"]>;
   size: NonNullable<TabsProps["size"]>;
@@ -357,6 +371,7 @@ function TabsOverflowControl({
   onClick: () => void;
 }) {
   const isStart = side === "start";
+  const isLeft = isStart !== isRtl;
   const isSegmented = variant === "segmented";
 
   return (
@@ -371,7 +386,7 @@ function TabsOverflowControl({
       onClick={onClick}
       className={cn(
         "absolute inset-y-0 z-3 flex items-center border-0 bg-transparent p-0 transition-opacity duration-150 focus:outline-hidden focus-visible:[&>span]:ring-2 focus-visible:[&>span]:ring-kumo-brand",
-        isStart
+        isLeft
           ? "left-0 justify-start bg-linear-to-r"
           : "right-0 justify-end bg-linear-to-l",
         visible
@@ -393,7 +408,7 @@ function TabsOverflowControl({
               ? "rounded-sm"
               : "rounded-md"
             : "rounded",
-          isStart ? "ml-1" : "mr-1",
+          isLeft ? "ml-1" : "mr-1",
         )}
       >
         <svg
@@ -404,7 +419,7 @@ function TabsOverflowControl({
         >
           <path
             d={
-              isStart
+              isLeft
                 ? "M9.25 4.25L5.75 8L9.25 11.75"
                 : "M6.75 4.25L10.25 8L6.75 11.75"
             }
@@ -430,11 +445,16 @@ function scrollTabs(
     el.querySelectorAll<HTMLElement>('[data-kumo-part="tab"]'),
   );
   const distance = getTabsScrollSize(el.clientWidth, tabEls);
+  const towardEnd = direction === "end" ? distance : -distance;
 
   el.scrollBy({
-    left: direction === "start" ? -distance : distance,
+    left: isRightToLeft(el) ? -towardEnd : towardEnd,
     behavior: "smooth",
   });
+}
+
+function isRightToLeft(el: HTMLElement) {
+  return getComputedStyle(el).direction === "rtl";
 }
 
 function getTabsScrollSize(containerWidth: number, tabs: HTMLElement[]) {
@@ -546,6 +566,7 @@ function useHorizontalDragScroll(
 function useOverflowDetect(enabled: boolean, watchKey: string) {
   const ref = useRef<HTMLDivElement>(null);
   const [overflowState, setOverflowState] = useState({
+    isRtl: false,
     isOverflowing: false,
     canScrollStart: false,
     canScrollEnd: false,
@@ -588,20 +609,28 @@ function useOverflowDetect(enabled: boolean, watchKey: string) {
 function getNextOverflowState(
   el: HTMLElement,
   prevState: {
+    isRtl: boolean;
     isOverflowing: boolean;
     canScrollStart: boolean;
     canScrollEnd: boolean;
   },
 ) {
-  const maxScrollLeft = Math.max(0, el.scrollWidth - el.clientWidth);
-  const scrollLeft = Math.min(Math.max(0, el.scrollLeft), maxScrollLeft);
+  const rtl = isRightToLeft(el);
+  const maxScroll = Math.max(0, el.scrollWidth - el.clientWidth);
+  // In RTL, scrollLeft runs from 0 at the first tab down to -maxScroll at the last.
+  const scrolled = Math.min(
+    Math.max(0, rtl ? -el.scrollLeft : el.scrollLeft),
+    maxScroll,
+  );
   const nextState = {
-    isOverflowing: maxScrollLeft > 1,
-    canScrollStart: scrollLeft > 1,
-    canScrollEnd: maxScrollLeft - scrollLeft > 1,
+    isRtl: rtl,
+    isOverflowing: maxScroll > 1,
+    canScrollStart: scrolled > 1,
+    canScrollEnd: maxScroll - scrolled > 1,
   };
 
-  return prevState.isOverflowing === nextState.isOverflowing &&
+  return prevState.isRtl === nextState.isRtl &&
+    prevState.isOverflowing === nextState.isOverflowing &&
     prevState.canScrollStart === nextState.canScrollStart &&
     prevState.canScrollEnd === nextState.canScrollEnd
     ? prevState

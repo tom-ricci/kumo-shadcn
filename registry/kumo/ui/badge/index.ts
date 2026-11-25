@@ -1,7 +1,7 @@
 export { Badge, KUMO_BADGE_BASE_STYLES, type BadgeVariant } from "./badge";
 
 // Kumo, packages/kumo/src/components/badge/index.ts from https://github.com/cloudflare/kumo
-// (release cloudflare/kumo@2.19.0), copied by the kumo-shadcn registry (https://github.com/tom-ricci/kumo-shadcn).
+// (release cloudflare/kumo@2.19.1), copied by the kumo-shadcn registry (https://github.com/tom-ricci/kumo-shadcn).
 // Changes from Kumo's file: import paths.
 // Unofficial; not affiliated with or endorsed by Cloudflare.
 //

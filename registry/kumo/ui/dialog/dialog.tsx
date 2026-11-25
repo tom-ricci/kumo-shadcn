@@ -7,7 +7,7 @@ import {
 } from "react";
 
 // Kumo, packages/kumo/src/components/dialog/dialog.tsx from https://github.com/cloudflare/kumo
-// (release cloudflare/kumo@2.19.0), copied by the kumo-shadcn registry (https://github.com/tom-ricci/kumo-shadcn).
+// (release cloudflare/kumo@2.19.1), copied by the kumo-shadcn registry (https://github.com/tom-ricci/kumo-shadcn).
 // Changes from Kumo's file: import paths.
 // Also changed: cn comes from your shadcn utils (@/lib/utils).
 // Unofficial; not affiliated with or endorsed by Cloudflare.
@@ -308,6 +308,14 @@ type StandardDialogRootProps = BaseDialogRootProps & {
 };
 
 type AlertDialogRootProps = BaseAlertDialogRootProps & {
+  /**
+   * Renders an alert dialog for destructive or confirmation flows. Outside
+   * clicks never dismiss it.
+   *
+   * Do not include a header close button (`Dialog.Close` with an X icon) in an
+   * alert dialog. Users must respond through explicit action buttons in the
+   * footer (for example, Cancel and Delete).
+   */
   role: "alertdialog";
 };
 
